@@ -11,8 +11,8 @@
   %body
     #container.container
       %header
-        = render 'layouts/navigation'
-        = render 'layouts/messages'
+        #nav.sixteen.columns= render 'layouts/navigation'
+        .sixteen.columns= render 'layouts/messages'
       #main{:role => "main"}
         = yield
       %footer
