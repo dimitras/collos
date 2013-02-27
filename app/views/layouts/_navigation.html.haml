@@ -1,1 +1,14 @@
-.brand=link_to(image_tag("logo.png"), root_path)
+.brand
+  %a(href="#{root_path}")
+    .four.columns
+      #bigtext CollOS
+      #smalltext <b>C</b>ollection <b>O</b>f <b>S</b>amples
+#headerlinks
+  .offset-by-twelve.three.colums.omega
+    = render "shared/login"
+    |
+    = link_to "Help", about_path
+    |
+    = link_to "About", about_path
+    |
+    = link_to "Contact", about_path

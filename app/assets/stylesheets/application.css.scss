@@ -37,5 +37,26 @@ ul.nav li {
 }
 
 #nav {
-  border-bottom: 3px solid 'lightblue';
+  border-bottom: 8px solid #06c;
+  margin-top: 10px;
+}
+
+#bigtext {
+  font-family: 'Helvetica', sans;
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 7px;
+  color: #700;
+}
+
+#smalltext {
+  color: #700;
+  font-family: 'Helvetica', sans;
+  font-size: 15px;
+  margin-left: 5px;
+}
+
+#headerlinks {
+  text-align: right;
+  vertical-align: bottom
 }

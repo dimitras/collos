@@ -1,6 +1,4 @@
-%h3 Welcome!
-.row
-  #bigsearchform.one.column
-    = form_tag(action: root_path) do |f| 
-      text_tag :barcode
-      submit_tag "Search"
+%h4 Search for Samples
+= form_tag("/search",method: 'get') do
+  =text_field_tag :barcode
+  =submit_tag "Search"
