@@ -1,12 +1,18 @@
 source 'https://rubygems.org'
 gem 'rails', '3.2.12'
-gem 'sqlite3'
+gem 'mysql2'
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
-  gem 'uglifier', '>= 1.0.3'
+  gem 'sass-rails'
+  gem 'coffee-rails'
+  gem 'uglifier'
 end
 gem 'jquery-rails'
-gem "haml", ">= 3.1.6"
-gem "haml-rails", ">= 0.3.4", :group => :development
-gem "will_paginate", ">= 3.0.3"
+gem "haml", "~> 4.0"
+gem "haml-rails", "~> 0.4"
+gem "will_paginate"
+gem 'ancestry'
+
+group :development do 
+  gem 'wirble'
+  gem 'awesome_print'
+end

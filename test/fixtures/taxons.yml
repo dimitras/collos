@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  ncbi_id: 1
+  parent_ncbi_id: 1
+  rank: MyString
+  ancestry: MyString
+  ancestry_depth: 1
+
+two:
+  ncbi_id: 1
+  parent_ncbi_id: 1
+  rank: MyString
+  ancestry: MyString
+  ancestry_depth: 1

@@ -1,0 +1,2 @@
+class OntologiesController < ApplicationController
+end

@@ -1,0 +1,2 @@
+class ContainerTypesController < ApplicationController
+end

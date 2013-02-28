@@ -1,0 +1,2 @@
+class SampleCharacteristicsController < ApplicationController
+end

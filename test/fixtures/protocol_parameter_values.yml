@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  protocol_application: 
+  protocol_parameter: 
+  value: MyString
+  unit: MyString
+
+two:
+  protocol_application: 
+  protocol_parameter: 
+  value: MyString
+  unit: MyString

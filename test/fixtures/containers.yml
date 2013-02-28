@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  barcode: MyString
+  container_type: 
+  ancestry: MyString
+  x: 1
+  y: 1
+
+two:
+  barcode: MyString
+  container_type: 
+  ancestry: MyString
+  x: 1
+  y: 1

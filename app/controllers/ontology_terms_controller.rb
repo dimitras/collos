@@ -1,0 +1,2 @@
+class OntologyTermsController < ApplicationController
+end

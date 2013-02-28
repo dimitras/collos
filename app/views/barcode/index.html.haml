@@ -1,0 +1,11 @@
+%h3 Request Barcodes:
+=form_tag( barcode_generate_path ) do 
+  = label_tag(:n, "Number of barcodes to create:")
+  = text_field_tag(:n, 1, size: 10)
+  = submit_tag "Create Barcodes"
+
+%h3 Fetch a Barcode Set:
+=form_tag( barcode_fetch_path ) do 
+  = label_tag(:sid, "Barcode Set ID")
+  = text_field_tag(:sid, nil, size: 10, placeholder: "Enter the barcode set ID here")
+  = submit_tag "Get Barcode Set"

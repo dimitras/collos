@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  ontology: 
+  accession: MyString
+  name: MyString
+  definition: MyString
+  obsolete: false
+
+two:
+  ontology: 
+  accession: MyString
+  name: MyString
+  definition: MyString
+  obsolete: false

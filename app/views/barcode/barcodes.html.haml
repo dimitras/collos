@@ -1,0 +1,16 @@
+%h3==Barcode Set [#{@barcode_set_id}]
+%table
+  %tr
+    %th Barcode
+    %th Barcode Set ID
+  -for bc in @barcodes
+    %tr
+      %td=bc.barcode
+      %td=bc.barcode_set
+%h4
+  Download as:
+  = link_to "CSV", barcode_fetch_path(@barcode_set_id, format: "csv")
+  | 
+  = link_to "XML", barcode_fetch_path(@barcode_set_id, format: "xml")
+  | 
+  = link_to "JSON", barcode_fetch_path(@barcode_set_id, format: "json")

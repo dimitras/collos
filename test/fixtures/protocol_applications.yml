@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  protocol: 
+  operator: 
+  procedure_date: 2013-02-28
+
+two:
+  protocol: 
+  operator: 
+  procedure_date: 2013-02-28

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  taxon: 
+  name: MyString
+  uniq_name: MyString
+  name_class: MyString
+
+two:
+  taxon: 
+  name: MyString
+  uniq_name: MyString
+  name_class: MyString

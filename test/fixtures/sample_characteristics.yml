@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  ontology_term: 
+  name: MyString
+  value: MyString
+  unit_type: 
+  unit: MyString
+
+two:
+  ontology_term: 
+  name: MyString
+  value: MyString
+  unit_type: 
+  unit: MyString

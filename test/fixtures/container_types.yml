@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  type: 
+  name: MyString
+  x_dimension: 1
+  y_dimension: 1
+  x_coord_labels: MyString
+  y_coord_labels: MyString
+
+two:
+  type: 
+  name: MyString
+  x_dimension: 1
+  y_dimension: 1
+  x_coord_labels: MyString
+  y_coord_labels: MyString

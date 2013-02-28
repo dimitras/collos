@@ -1,0 +1,2 @@
+class TaxonNamesController < ApplicationController
+end

@@ -1,0 +1,2 @@
+class ProtocolParameterValuesController < ApplicationController
+end
