@@ -230,6 +230,39 @@ ALTER SEQUENCE ontology_terms_id_seq OWNED BY ontology_terms.id;
 
 
 --
+-- Name: pg_search_documents; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE pg_search_documents (
+    id integer NOT NULL,
+    content text,
+    searchable_id integer,
+    searchable_type character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: pg_search_documents_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE pg_search_documents_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: pg_search_documents_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE pg_search_documents_id_seq OWNED BY pg_search_documents.id;
+
+
+--
 -- Name: protocol_applications; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -624,6 +657,13 @@ ALTER TABLE ONLY ontology_terms ALTER COLUMN id SET DEFAULT nextval('ontology_te
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY pg_search_documents ALTER COLUMN id SET DEFAULT nextval('pg_search_documents_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY protocol_applications ALTER COLUMN id SET DEFAULT nextval('protocol_applications_id_seq'::regclass);
 
 
@@ -736,6 +776,14 @@ ALTER TABLE ONLY ontologies
 
 ALTER TABLE ONLY ontology_terms
     ADD CONSTRAINT ontology_terms_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pg_search_documents_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY pg_search_documents
+    ADD CONSTRAINT pg_search_documents_pkey PRIMARY KEY (id);
 
 
 --
@@ -1105,3 +1153,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130228174055');
 INSERT INTO schema_migrations (version) VALUES ('20130301024914');
 
 INSERT INTO schema_migrations (version) VALUES ('20130301031746');
+
+INSERT INTO schema_migrations (version) VALUES ('20130301202201');
