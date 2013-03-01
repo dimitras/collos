@@ -1,7 +1,7 @@
 class CreateContainers < ActiveRecord::Migration
   def change
     create_table :containers do |t|
-      t.string :barcode, null: false
+      t.references :barcode
       t.references :container_type
       t.string :ancestry, null: false
       t.integer :ancestry_depth, default: 0
@@ -11,7 +11,7 @@ class CreateContainers < ActiveRecord::Migration
       t.timestamps
     end
     add_index :containers, :container_type_id
-    add_index :containers, :barcode, unique: true
+    add_index :containers, :barcode_id, unique: true
     add_index :containers, :ancestry
 
   end
