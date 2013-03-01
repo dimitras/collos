@@ -1,13 +1,4 @@
 Collos::Application.routes.draw do
-  resources :taxon_names
-
-
-  resources :taxons
-
-
-  resources :protocol_applications
-
-
   resources :users
 
 
@@ -16,36 +7,37 @@ Collos::Application.routes.draw do
   match "/barcode/fetch(/:sid)" =>  "barcode#fetch", as: "barcode_fetch"
   match "/barcode/" => "barcode#index",  as: "barcode"
 
+  resources :ontologies
+  resources :ontology_terms
 
-  # resources :protocol_parameter_values
-
-
-  # resources :protocol_parameters
-
+  resources :taxons
+  resources :taxon_names
 
   resources :protocols
+  # resources :protocol_parameters
+  resources :protocol_applications
+  # resources :protocol_parameter_values
 
-
+  resources :samples
   resources :sample_characteristics
 
 
-  resources :samples
-
-
   resources :containers
-
-
   resources :container_types
 
-
-  resources :ontology_terms
-
-
-  resources :ontologies
 
 
   root :to => "home#index"
   match "/about", to: "home#about", as: 'about', format: "html"
   match "/help", to: "home#help", as: 'help', format: "html"
   match "/contact", to: "home#contact", as: 'contact', format: "html"
+
+  # omniauth
+  match "/auth/:provider/callback" => "sessions#create"
+  match "/login", to: "sessions#new", as: :login
+  match "/logout", to: "sessions#destroy", as:  :logout
+  match "/register", to: "identities#new", as: :register
+  match "/auth/failure", to: "sessions#failure"
+
+  resources :identities
 end

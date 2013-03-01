@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130228174055) do
+ActiveRecord::Schema.define(:version => 20130301031746) do
 
   create_table "barcodes", :force => true do |t|
     t.string  "barcode"
@@ -49,6 +49,17 @@ ActiveRecord::Schema.define(:version => 20130228174055) do
   add_index "containers", ["ancestry"], :name => "index_containers_on_ancestry"
   add_index "containers", ["barcode"], :name => "index_containers_on_barcode", :unique => true
   add_index "containers", ["container_type_id"], :name => "index_containers_on_container_type_id"
+
+  create_table "identities", :force => true do |t|
+    t.string   "name",            :null => false
+    t.string   "email",           :null => false
+    t.string   "password_digest", :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "identities", ["email"], :name => "index_identities_on_email"
+  add_index "identities", ["name"], :name => "index_identities_on_name"
 
   create_table "ontologies", :force => true do |t|
     t.string "name",        :null => false
@@ -171,10 +182,26 @@ ActiveRecord::Schema.define(:version => 20130228174055) do
   add_index "taxons", ["parent_ncbi_id"], :name => "index_taxons_on_parent_ncbi_id"
 
   create_table "users", :force => true do |t|
-    t.string   "name"
-    t.string   "email"
+    t.string   "name",       :null => false
+    t.string   "email",      :null => false
+    t.string   "provider"
+    t.string   "uid"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  add_index "users", ["email"], :name => "index_users_on_email"
+  add_index "users", ["provider", "uid"], :name => "index_users_on_provider_and_uid"
+
+  create_table "versions", :force => true do |t|
+    t.string   "item_type",  :null => false
+    t.integer  "item_id",    :null => false
+    t.string   "event",      :null => false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.datetime "created_at"
+  end
+
+  add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
 
 end
