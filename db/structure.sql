@@ -29,6 +29,44 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: addresses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE addresses (
+    id integer NOT NULL,
+    line_1 character varying(255),
+    line_2 character varying(255),
+    line_3 character varying(255),
+    city character varying(255),
+    state character varying(255),
+    zip character varying(255),
+    province character varying(255),
+    country character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: addresses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE addresses_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: addresses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE addresses_id_seq OWNED BY addresses.id;
+
+
+--
 -- Name: barcodes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -56,6 +94,40 @@ CREATE SEQUENCE barcodes_id_seq
 --
 
 ALTER SEQUENCE barcodes_id_seq OWNED BY barcodes.id;
+
+
+--
+-- Name: contacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE contacts (
+    id integer NOT NULL,
+    fname character varying(255),
+    lname character varying(255),
+    email character varying(255),
+    address_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE contacts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE contacts_id_seq OWNED BY contacts.id;
 
 
 --
@@ -615,7 +687,21 @@ ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY addresses ALTER COLUMN id SET DEFAULT nextval('addresses_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY barcodes ALTER COLUMN id SET DEFAULT nextval('barcodes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY contacts ALTER COLUMN id SET DEFAULT nextval('contacts_id_seq'::regclass);
 
 
 --
@@ -731,11 +817,27 @@ ALTER TABLE ONLY versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq':
 
 
 --
+-- Name: addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY addresses
+    ADD CONSTRAINT addresses_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: barcodes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY barcodes
     ADD CONSTRAINT barcodes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY contacts
+    ADD CONSTRAINT contacts_pkey PRIMARY KEY (id);
 
 
 --
@@ -878,6 +980,13 @@ CREATE UNIQUE INDEX index_barcodes_on_barcode ON barcodes USING btree (barcode);
 --
 
 CREATE INDEX index_barcodes_on_barcode_set ON barcodes USING btree (barcode_set);
+
+
+--
+-- Name: index_contacts_on_address_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_contacts_on_address_id ON contacts USING btree (address_id);
 
 
 --
@@ -1155,3 +1264,9 @@ INSERT INTO schema_migrations (version) VALUES ('20130301024914');
 INSERT INTO schema_migrations (version) VALUES ('20130301031746');
 
 INSERT INTO schema_migrations (version) VALUES ('20130301202201');
+
+INSERT INTO schema_migrations (version) VALUES ('20130304171209');
+
+INSERT INTO schema_migrations (version) VALUES ('20130304171343');
+
+INSERT INTO schema_migrations (version) VALUES ('20130304171402');

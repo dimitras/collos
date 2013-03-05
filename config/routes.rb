@@ -1,4 +1,10 @@
 Collos::Application.routes.draw do
+  resources :contacts
+
+
+  resources :addresses
+
+
   resources :users
 
 

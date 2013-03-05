@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: taxon_names
+#
+#  id         :integer          not null, primary key
+#  taxon_id   :integer
+#  name       :string(255)
+#  uniq_name  :string(255)
+#  name_class :string(255)
+#
+
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:

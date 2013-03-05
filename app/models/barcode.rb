@@ -1,3 +1,12 @@
+# == Schema Information
+#
+# Table name: barcodes
+#
+#  id          :integer          not null, primary key
+#  barcode     :string(255)
+#  barcode_set :integer          default(0)
+#
+
 class Barcode < ActiveRecord::Base
   attr_accessible :barcode, :barcode_set
   validates :barcode, presence: true

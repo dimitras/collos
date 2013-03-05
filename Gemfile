@@ -9,9 +9,11 @@ group :assets do
   gem 'uglifier'
 end
 
-group :development do 
+group :development do
   gem 'wirble'
   gem 'awesome_print'
+  gem 'annotate'
+  gem 'railroady'
 end
 
 # View helpers
@@ -22,9 +24,9 @@ gem "will_paginate"
 gem 'simple_form'
 
 # for hierarchy relationships
-gem 'ancestry'            
+gem 'ancestry'
 
-# Full text search 
+# Full text search
 gem 'pg_search'
 
 # Authentication
@@ -38,5 +40,5 @@ gem 'cancan'              # for authorization
 # Audit trails
 gem 'paper_trail', '~> 2' # for audit trails
 
-#barcodes 
+#barcodes
 gem 'zint'
