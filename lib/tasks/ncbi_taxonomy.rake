@@ -9,14 +9,45 @@ namespace :ncbi_taxonomy do
   end
 
   desc "Loads the NCBI taxonomy into the DB"
-  task :load => :download do 
+  task :load => [:environment, :download] do 
     # load the nodes.dmp table
-    nodes={}
+    cols = "(ncbi_id,parent_ncbi_id,rank)"
+    count = 0
+    records = []
+    puts "Inserting Taxon nodes"
     File.open("#{Rails.root}/tmp/ncbi/nodes.dmp").each do |l|
-      entry = l.chomp.split(/\|/).map {|x| x.strip }
-      Taxon.create!(ncbi_id: e[0], parent_ncbi_id: e[1], rank: e[2])
-      # assign the parent 
-    end      
+      if count < 1000
+        e = l.chomp.split(/\|/).map {|x| x.strip }
+        records << "(#{e[0]},#{e[1]},#{e[2]})"
+      else
+        Taxon.sql("INSERT INTO taxons #{cols} VALUES #{records.join(',')}")
+        records = []
+        count = 0
+      end
+    end
+    Taxon.sql("INSERT INTO taxons #{cols} VALUES #{records.join(',')}")
+    records = []
+    count = 0
+    puts "Updating Taxon ancestry"
+    Taxon.find_each(batch_size: 1000) do |t|
+      t.parent = Taxon.where(ncbi_id: t.parent_ncbi_id).first
+      t.save
+      taxa[t.ncbi_id] = t.id
+    end
+    puts "Inserting TaxonName nodes"
+    cols = "(taxon_id,name,uniq_name,name_class)"
+    count = 0
+    records = []
+    File.open("#{Rails.root}/tmp/ncbi/names.dmp").each do |l|
+      if count < 1000
+        e = l.chomp.split(/\|/).map {|x| x.strip }
+        records << "(#{taxa[e[0]]},#{e[1]},#{e[2]},#{e[3]})"
+      else
+        TaxonName.sql("INSERT INTO taxon_names #{cols} VALUES #{records.join(',')}")
+        records = []
+        count = 0
+      end
+    end
+    TaxonName.sql("INSERT INTO taxons #{cols} VALUES #{records.join(',')}")
   end
-
 end
