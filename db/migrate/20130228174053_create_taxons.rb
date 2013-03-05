@@ -4,8 +4,8 @@ class CreateTaxons < ActiveRecord::Migration
       t.integer :ncbi_id
       t.integer :parent_ncbi_id
       t.string :rank
-      t.string :ancestry
-      t.integer :ancestry_depth
+      t.string :ancestry, length: 1000
+      t.integer :ancestry_depth, default: 0
     end
     add_index :taxons, :ncbi_id, :unique => true
     add_index :taxons, :parent_ncbi_id

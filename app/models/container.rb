@@ -1,5 +1,6 @@
 class Container < ActiveRecord::Base
   belongs_to :container_type
+  
   attr_accessible :ancestry, :barcode, :x, :y, :retired
 
   # Barcodes should be mandatory and unique

@@ -15,7 +15,8 @@
 class Sample < ActiveRecord::Base
   belongs_to :container
   belongs_to :protocol_application
-
+  belongs_to :taxon
+  
   attr_accessible :name
 
   validates :name, presence: true

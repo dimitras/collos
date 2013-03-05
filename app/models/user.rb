@@ -12,6 +12,8 @@
 #
 
 class User < ActiveRecord::Base
+  belongs_to :contact
+
   attr_accessible :email, :name
   @@email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
  
