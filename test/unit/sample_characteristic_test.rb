@@ -3,6 +3,7 @@
 # Table name: sample_characteristics
 #
 #  id               :integer          not null, primary key
+#  sample_id        :integer
 #  ontology_term_id :integer
 #  name             :string(255)
 #  value            :string(255)

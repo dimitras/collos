@@ -443,6 +443,7 @@ ALTER SEQUENCE protocol_parameters_id_seq OWNED BY protocol_parameters.id;
 
 CREATE TABLE protocols (
     id integer NOT NULL,
+    protocol_type_id integer,
     name character varying(255),
     description character varying(255),
     accession character varying(255),
@@ -477,6 +478,7 @@ ALTER SEQUENCE protocols_id_seq OWNED BY protocols.id;
 
 CREATE TABLE sample_characteristics (
     id integer NOT NULL,
+    sample_id integer,
     ontology_term_id integer,
     name character varying(255),
     value character varying(255),
@@ -513,10 +515,13 @@ ALTER SEQUENCE sample_characteristics_id_seq OWNED BY sample_characteristics.id;
 CREATE TABLE samples (
     id integer NOT NULL,
     name character varying(255),
+    barcode_id integer,
     container_id integer,
+    taxon_id integer,
     protocol_application_id integer,
     ancestry character varying(255),
     ancestry_depth integer DEFAULT 0,
+    notes text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -592,7 +597,7 @@ CREATE TABLE taxons (
     parent_ncbi_id integer,
     rank character varying(255),
     ancestry character varying(255),
-    ancestry_depth integer
+    ancestry_depth integer DEFAULT 0
 );
 
 
@@ -625,6 +630,7 @@ CREATE TABLE users (
     email character varying(255) NOT NULL,
     provider character varying(255),
     uid character varying(255),
+    contact_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1116,10 +1122,38 @@ CREATE INDEX index_protocol_parameters_on_unit_type_id ON protocol_parameters US
 
 
 --
+-- Name: index_protocols_on_accession; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_protocols_on_accession ON protocols USING btree (accession);
+
+
+--
+-- Name: index_protocols_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_protocols_on_name ON protocols USING btree (name);
+
+
+--
+-- Name: index_protocols_on_protocol_type_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_protocols_on_protocol_type_id ON protocols USING btree (protocol_type_id);
+
+
+--
 -- Name: index_sample_characteristics_on_ontology_term_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_sample_characteristics_on_ontology_term_id ON sample_characteristics USING btree (ontology_term_id);
+
+
+--
+-- Name: index_sample_characteristics_on_sample_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_sample_characteristics_on_sample_id ON sample_characteristics USING btree (sample_id);
 
 
 --
@@ -1134,6 +1168,13 @@ CREATE INDEX index_sample_characteristics_on_unit_type_id ON sample_characterist
 --
 
 CREATE INDEX index_samples_on_ancestry ON samples USING btree (ancestry);
+
+
+--
+-- Name: index_samples_on_barcode_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_barcode_id ON samples USING btree (barcode_id);
 
 
 --
@@ -1155,6 +1196,13 @@ CREATE INDEX index_samples_on_name ON samples USING btree (name);
 --
 
 CREATE INDEX index_samples_on_protocol_application_id ON samples USING btree (protocol_application_id);
+
+
+--
+-- Name: index_samples_on_taxon_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_taxon_id ON samples USING btree (taxon_id);
 
 
 --
@@ -1197,6 +1245,13 @@ CREATE UNIQUE INDEX index_taxons_on_ncbi_id ON taxons USING btree (ncbi_id);
 --
 
 CREATE INDEX index_taxons_on_parent_ncbi_id ON taxons USING btree (parent_ncbi_id);
+
+
+--
+-- Name: index_users_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_users_on_contact_id ON users USING btree (contact_id);
 
 
 --
@@ -1268,5 +1323,3 @@ INSERT INTO schema_migrations (version) VALUES ('20130301202201');
 INSERT INTO schema_migrations (version) VALUES ('20130304171209');
 
 INSERT INTO schema_migrations (version) VALUES ('20130304171343');
-
-INSERT INTO schema_migrations (version) VALUES ('20130304171402');

@@ -3,6 +3,7 @@
 # Table name: sample_characteristics
 #
 #  id               :integer          not null, primary key
+#  sample_id        :integer
 #  ontology_term_id :integer
 #  name             :string(255)
 #  value            :string(255)
@@ -13,7 +14,10 @@
 #
 
 class SampleCharacteristic < ActiveRecord::Base
+  attr_accessible :name, :unit, :value
+
   belongs_to :ontology_term
   belongs_to :unit_type, class_name: "OntologyTerm", foreign_key: "unit_type_id"
-  attr_accessible :name, :unit, :value
+  belongs_to :sample
+
 end

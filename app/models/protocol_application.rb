@@ -11,7 +11,10 @@
 #
 
 class ProtocolApplication < ActiveRecord::Base
+  attr_accessible :procedure_date
+
+  has_many :samples
   belongs_to :protocol
   belongs_to :operator, class_name: "Contact", foreign_key: 'operator_id'
-  attr_accessible :procedure_date
+
 end

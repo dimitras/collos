@@ -4,10 +4,13 @@
 #
 #  id                      :integer          not null, primary key
 #  name                    :string(255)
+#  barcode_id              :integer
 #  container_id            :integer
+#  taxon_id                :integer
 #  protocol_application_id :integer
 #  ancestry                :string(255)
 #  ancestry_depth          :integer          default(0)
+#  notes                   :text
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #

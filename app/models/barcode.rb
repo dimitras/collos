@@ -13,10 +13,13 @@ class Barcode < ActiveRecord::Base
   validates :barcode, uniqueness: true
   validates :barcode_set, numericality: { only_integer: true }
 
+  has_many :samples
+  has_many :containers
+
 
   # Generate a set of random barcode strings
   # @param n Integer The number of barcodes to create (default=1)
-  # @param l Integer The 
+  # @param l Integer The
   # @return Array  An array of random barcode strings.
   def self.generate_barcodes(n=1)
     barcodes = []

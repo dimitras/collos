@@ -14,7 +14,8 @@
 #
 
 class ProtocolParameter < ActiveRecord::Base
+  attr_accessible :default_value, :description, :name, :unit
   belongs_to :protocol
   belongs_to :unit_type, class_name: "OntologyTerm", foreign_key: "unit_type_id"
-  attr_accessible :default_value, :description, :name, :unit
+  has_many :protocol_parameter_values
 end

@@ -7,6 +7,7 @@
 #  email      :string(255)      not null
 #  provider   :string(255)
 #  uid        :string(255)
+#  contact_id :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

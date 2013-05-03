@@ -7,7 +7,7 @@
 #  parent_ncbi_id :integer
 #  rank           :string(255)
 #  ancestry       :string(255)
-#  ancestry_depth :integer
+#  ancestry_depth :integer          default(0)
 #
 
 require 'test_helper'

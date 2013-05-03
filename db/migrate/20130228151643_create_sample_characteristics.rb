@@ -1,6 +1,7 @@
 class CreateSampleCharacteristics < ActiveRecord::Migration
   def change
     create_table :sample_characteristics do |t|
+      t.references :sample
       t.references :ontology_term
       t.string :name
       t.string :value
@@ -9,6 +10,7 @@ class CreateSampleCharacteristics < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :sample_characteristics, :sample_id
     add_index :sample_characteristics, :ontology_term_id
     add_index :sample_characteristics, :unit_type_id
   end
