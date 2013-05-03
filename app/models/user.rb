@@ -12,10 +12,11 @@
 #  updated_at :datetime         not null
 #
 
-class User < ActiveRecord::Base
+class User <  OmniAuth::Identity::Models::ActiveRecord
+  attr_accessible :email, :name, :password, :password_confirmation
+
   belongs_to :contact
 
-  attr_accessible :email, :name
   @@email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
   validates :email, :presence   => true,
