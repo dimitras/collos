@@ -1,12 +1,7 @@
 Collos::Application.routes.draw do
-  resources :contacts
-
-
-  resources :addresses
-
-
   resources :users
-
+  resources :contacts
+  resources :addresses
 
   # resources :barcodes
   match "/barcode/generate(/:n)" => "barcode#generate", as: "barcode_generate"
@@ -32,8 +27,7 @@ Collos::Application.routes.draw do
   resources :container_types
 
 
-
-  root :to => "home#index"
+  # static content pages
   match "/about", to: "home#about", as: 'about', format: "html"
   match "/help", to: "home#help", as: 'help', format: "html"
   match "/contact", to: "home#contact", as: 'contact', format: "html"
@@ -45,5 +39,5 @@ Collos::Application.routes.draw do
   match "/register", to: "identities#new", as: :register
   match "/auth/failure", to: "sessions#failure"
 
-  resources :identities
+  root :to => "home#index"
 end
