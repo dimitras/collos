@@ -28,9 +28,10 @@ class User <  OmniAuth::Identity::Models::ActiveRecord
   end
 
   def self.create_with_omniauth(auth)
+    puts auth.to_yaml
     create! do |user|
       user.provider = auth["provider"]
-      user.uid = auth['email']
+      user.uid = auth['info']['email']
       user.email = auth["info"]["email"]
       user.name = auth["info"]["name"]
     end

@@ -1,14 +1,14 @@
-.brand
-  %a(href="#{root_path}")
-    .four.columns
-      #bigtext CollOS
-      #smalltext <b>C</b>ollection <b>O</b>f <b>S</b>amples
-#headerlinks
-  .offset-by-twelve.three.colums.omega
-    = render "shared/login"
-    |
-    = link_to "Help", about_path
-    |
-    = link_to "About", about_path
-    |
-    = link_to "Contact", about_path
+.navbar.navbar-inverse.navbar-static-top
+  .navbar-inner
+    %ul.nav
+      %li.active.inverse
+        %a.brand{ href: root_path}
+          CollOS
+      %li{ class: current_page?(params) ? "active"  : ''}
+        = render "shared/login"
+      %li{ class: current_page?(params) ? "active"  : ''}
+        = link_to "Help", help_path
+      %li{ class: current_page?(params) ? "active"  : ''}
+        = link_to "About", about_path
+      %li{ class: current_page?(params) ? "active"  : ''}
+        = link_to "Contact", contact_path

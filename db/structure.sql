@@ -204,39 +204,6 @@ ALTER SEQUENCE containers_id_seq OWNED BY containers.id;
 
 
 --
--- Name: identities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE identities (
-    id integer NOT NULL,
-    name character varying(255) NOT NULL,
-    email character varying(255) NOT NULL,
-    password_digest character varying(255) NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: identities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE identities_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: identities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
-
-
---
 -- Name: ontologies; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -628,9 +595,12 @@ CREATE TABLE users (
     id integer NOT NULL,
     name character varying(255) NOT NULL,
     email character varying(255) NOT NULL,
+    password_digest character varying(255) NOT NULL,
     provider character varying(255),
     uid character varying(255),
     contact_id integer,
+    admin boolean,
+    status character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -722,13 +692,6 @@ ALTER TABLE ONLY container_types ALTER COLUMN id SET DEFAULT nextval('container_
 --
 
 ALTER TABLE ONLY containers ALTER COLUMN id SET DEFAULT nextval('containers_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
 
 
 --
@@ -860,14 +823,6 @@ ALTER TABLE ONLY container_types
 
 ALTER TABLE ONLY containers
     ADD CONSTRAINT containers_pkey PRIMARY KEY (id);
-
-
---
--- Name: identities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY identities
-    ADD CONSTRAINT identities_pkey PRIMARY KEY (id);
 
 
 --
@@ -1021,20 +976,6 @@ CREATE UNIQUE INDEX index_containers_on_barcode_id ON containers USING btree (ba
 --
 
 CREATE INDEX index_containers_on_container_type_id ON containers USING btree (container_type_id);
-
-
---
--- Name: index_identities_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_identities_on_email ON identities USING btree (email);
-
-
---
--- Name: index_identities_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_identities_on_name ON identities USING btree (name);
 
 
 --
@@ -1269,6 +1210,13 @@ CREATE INDEX index_users_on_provider_and_uid ON users USING btree (provider, uid
 
 
 --
+-- Name: index_users_on_status; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_users_on_status ON users USING btree (status);
+
+
+--
 -- Name: index_versions_on_item_type_and_item_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1315,8 +1263,6 @@ INSERT INTO schema_migrations (version) VALUES ('20130228174053');
 INSERT INTO schema_migrations (version) VALUES ('20130228174055');
 
 INSERT INTO schema_migrations (version) VALUES ('20130301024914');
-
-INSERT INTO schema_migrations (version) VALUES ('20130301031746');
 
 INSERT INTO schema_migrations (version) VALUES ('20130301202201');
 

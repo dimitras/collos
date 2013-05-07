@@ -22,6 +22,7 @@ gem 'jquery-rails'
 gem "haml", "~> 4.0"
 gem "haml-rails", "~> 0.4"
 gem "will_paginate"
+gem 'will_paginate_twitter_bootstrap'
 gem 'simple_form'
 
 # for hierarchy relationships
