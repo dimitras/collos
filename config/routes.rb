@@ -28,9 +28,8 @@ Collos::Application.routes.draw do
 
 
   # static content pages
-  match "/about", to: "home#about", as: 'about', format: "html"
-  match "/help", to: "home#help", as: 'help', format: "html"
-  match "/contact", to: "home#contact", as: 'contact', format: "html"
+  match "/help", to: "pages#help", as: 'help', format: "html"
+  match "/about", to: "pages#about", as: 'about', format: "html"
 
   # omniauth
   match "/auth/:provider/callback" => "sessions#create"
@@ -39,5 +38,6 @@ Collos::Application.routes.draw do
   match "/register", to: "identities#new", as: :register
   match "/auth/failure", to: "sessions#failure"
 
-  root :to => "home#index"
+  root :to => "pages#index"
+
 end

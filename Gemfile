@@ -7,6 +7,7 @@ group :assets do
   gem 'sass-rails'
   gem 'coffee-rails'
   gem 'uglifier'
+  gem 'bootstrap-sass-rails'
 end
 
 group :development do
@@ -42,3 +43,8 @@ gem 'paper_trail', '~> 2' # for audit trails
 
 #barcodes
 gem 'zint'
+
+# admin panel
+gem 'activeadmin'
+gem 'sass-rails'
+gem "meta_search",    '>= 1.1.0.pre'
