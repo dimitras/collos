@@ -49,6 +49,9 @@ GEM
     arel (3.0.2)
     awesome_print (1.1.0)
     bcrypt-ruby (3.0.1)
+    bootstrap-sass-rails (2.3.1.1)
+      railties (>= 3.1.0)
+      sass-rails (>= 3.1.0)
     bourbon (3.1.6)
       sass (>= 3.2.0)
       thor
@@ -66,6 +69,7 @@ GEM
       orm_adapter (~> 0.1)
       railties (~> 3.1)
       warden (~> 1.2.1)
+    enumify (0.0.3)
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
@@ -190,8 +194,10 @@ DEPENDENCIES
   annotate
   awesome_print
   bcrypt-ruby
+  bootstrap-sass-rails
   cancan
   coffee-rails
+  enumify
   haml (~> 4.0)
   haml-rails (~> 0.4)
   jquery-rails

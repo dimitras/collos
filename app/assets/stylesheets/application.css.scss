@@ -11,6 +11,10 @@
  *= require_self
  *= require_tree .
 */
+
+@import 'twitter/bootstrap';
+@import 'twitter/bootstrap/responsive';
+
 .brand {
   float: left;
   padding-right: 8px;

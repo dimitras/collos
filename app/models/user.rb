@@ -24,7 +24,7 @@ class User <  OmniAuth::Identity::Models::ActiveRecord
             :uniqueness => { :case_sensitive => false }
 
   def self.from_omniauth(auth)
-    user = User.find_by_provider_and_email(auth["provider"], auth["email"]) || create_with_omniauth(auth)
+    user = User.find_by_provider_and_uid(auth["provider"], auth["uid"]) || create_with_omniauth(auth)
   end
 
   def self.create_with_omniauth(auth)
@@ -35,4 +35,8 @@ class User <  OmniAuth::Identity::Models::ActiveRecord
       user.name = auth["info"]["name"]
     end
   end
+
+  # User status flag
+  enum :status, [:pending,:active,:inactive]
+
 end

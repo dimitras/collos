@@ -1,5 +1,10 @@
 Collos::Application.routes.draw do
-  resources :users
+  resources :users do
+    member do
+      post 'activate'
+      post 'inactivate'
+    end
+  end
   resources :contacts
   resources :addresses
 

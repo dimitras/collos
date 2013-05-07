@@ -7,10 +7,13 @@ class CreateUsers < ActiveRecord::Migration
       t.string :provider
       t.string :uid
       t.references :contact
+      t.boolean :admin
+      t.string :status
       t.timestamps
     end
     add_index :users, :email
     add_index :users, [:provider, :uid]
     add_index :users, :contact_id
+    add_index :users, :status
   end
 end
