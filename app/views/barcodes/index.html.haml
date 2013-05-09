@@ -1,0 +1,9 @@
+%h3 Generate some barcodes:
+= render partial: 'generate_barcodes'
+
+%h3 Fetch a barcode set:
+= render partial: 'fetch_barcodes'
+/ =form_tag( barcode_fetch_path ) do
+/   = label_tag(:sid, "Barcode Set ID")
+/   = text_field_tag(:sid, nil, size: 10, placeholder: "Enter the barcode set ID here")
+/   = submit_tag "Get Barcode Set"

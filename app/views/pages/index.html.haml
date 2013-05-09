@@ -14,8 +14,6 @@
     =text_field_tag :barcode
     =submit_tag "Search"
 %h4 Generate barcodes
-= form_tag(generate_barcodes_path, method: 'post',class: 'form-inline') do
-    .fieldset
-        = label_tag :num, "Number of barcodes:"
-        = text_field_tag :num,nil, required: true, placeholder: 'A number from 0 to 1000'
-        =submit_tag "Generate", class:'btn btn-primary'
+= render partial: "barcodes/generate_barcodes"
+%h4 Fetch a barcode set
+= render partial: "barcodes/fetch_barcodes"

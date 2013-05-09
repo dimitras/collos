@@ -1,6 +1,5 @@
 class BarcodesController < ApplicationController
   def index
-    @barcodes = Barcode.paginate(page: params[:page])
   end
 
   def show
@@ -18,21 +17,22 @@ class BarcodesController < ApplicationController
 
   # Generates a set of barcodes for consumption
   def generate
-    @barcode_set_id , @barcodes = Barcode.generate_barcodes(n.to_i)
-    # render "barcodes"
-    respond_to do |format|
-      format.html
-      format.csv {render "barcodes", content_type: "text/csv", filename: "barcodes_#{@barcode_set_id}.csv"}
-      format.json {render "barcodes", content_type: "text/json", filename: "barcodes_#{@barcode_set_id}.json"}
-      format.xml {render "barcodes", content_type: "text/xml", filename: "barcodes_#{@barcode_set_id}.xml"}
+
+    if params[:num].to_i < 1
+      redirect_to action: "index", alert: "Invalid number [#{params[:num]}] given." and return
     end
+
+    @barcode_set_id, @barcodes = Barcode.generate_barcodes(params[:num].to_i)
+
+    redirect_to fetch_barcodes_path(barcode_set: @barcode_set_id)
   end
 
   def fetch
     @barcode_set_id = params[:barcode_set].to_i
-    @barcodes = Barcode.where(:barcode_set => @barcode_set_id).paginate(params[:page] || 1)
+    @barcodes = Barcode.where(:barcode_set => @barcode_set_id).all
     if @barcodes.empty?
-      redirect_to barcode_path, alert: "Invalid Barcode Set ID \"#{@barcode_set_id}\""
+      flash[:error] ="Invalid Barcode Set ID \"#{@barcode_set_id}\""
+      redirect_to barcodes_path
     else
       respond_to do |format|
         format.html {render "barcodes"}

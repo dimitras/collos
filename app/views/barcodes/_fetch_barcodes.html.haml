@@ -1,0 +1,4 @@
+= form_tag(fetch_barcodes_path, method: 'get',class: 'form-inline') do
+    .fieldset
+        = text_field_tag :barcode_set,nil, required: true, placeholder: "Barcode Set ID"
+        =submit_tag "Fetch Barcode Set", class:'btn btn-primary'
