@@ -15,9 +15,22 @@
 @import 'twitter/bootstrap';
 @import 'twitter/bootstrap/responsive';
 
-.brand {
+$darkBlue: #06c;
+$lightBlue: #AFDCEC;
+$red: #E41B17;
+$pink: #E6A9EC;
+.logoText {
   float: left;
   padding-right: 8px;
+  color: $red;
+  vertical-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  padding-top: 10px;
+}
+.logoText:hover {
+  color: #fff;
+  text-decoration: none;
 }
 ul.nav {
   list-style: none;
@@ -64,3 +77,4 @@ ul.nav li {
   text-align: right;
   vertical-align: bottom
 }
+

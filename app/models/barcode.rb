@@ -16,7 +16,6 @@ class Barcode < ActiveRecord::Base
   has_many :samples
   has_many :containers
 
-
   # Generate a set of random barcode strings
   # @param n Integer The number of barcodes to create (default=1)
   # @param l Integer The
@@ -26,14 +25,15 @@ class Barcode < ActiveRecord::Base
     retry_count = 0
     bcset = Barcode.maximum("barcode_set").to_i + 1
     1.upto(n) do |m|
+      retry_count = 0
       begin
-        bcid = "P#{ rand(16**5).to_s(16).upcase }"
-        bc = Barcode.where(barcode: bcid).first_or_create!
-        bc.barcode_set = bcset
-        bc.save!
+        bcid = "P#{ rand(16**6).to_s(16).upcase }"
+        bc = Barcode.create!(barcode: bcid, barcode_set: bcset)
         barcodes << bc
       rescue ActiveRecord::RecordInvalid => e
-        puts e.message
+        logger.error(e.message)
+        retry_count += 1
+        retry if retry_count < 5
       end
     end
     barcodes

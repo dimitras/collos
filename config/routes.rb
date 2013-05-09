@@ -8,10 +8,12 @@ Collos::Application.routes.draw do
   resources :contacts
   resources :addresses
 
-  # resources :barcodes
-  match "/barcode/generate(/:n)" => "barcode#generate", as: "barcode_generate"
-  match "/barcode/fetch(/:sid)" =>  "barcode#fetch", as: "barcode_fetch"
-  match "/barcode/" => "barcode#index",  as: "barcode"
+  resources :barcodes do
+    collection do
+      post 'generate'
+      get  'fetch'
+    end
+  end
 
   resources :ontologies
   resources :ontology_terms
@@ -24,7 +26,12 @@ Collos::Application.routes.draw do
   resources :protocol_applications
   # resources :protocol_parameter_values
 
-  resources :samples
+  resources :samples do
+    collection do
+      post 'upload'
+    end
+  end
+
   resources :sample_characteristics
 
 
