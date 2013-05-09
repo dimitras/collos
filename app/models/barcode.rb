@@ -20,11 +20,11 @@ class Barcode < ActiveRecord::Base
   # @param n Integer The number of barcodes to create (default=1)
   # @param l Integer The
   # @return Array  An array of random barcode strings.
-  def self.generate_barcodes(n=1)
+  def self.generate_barcodes(n)
     barcodes = []
     retry_count = 0
     bcset = Barcode.maximum("barcode_set").to_i + 1
-    1.upto(n) do |m|
+    (0...(n)) do |m|
       retry_count = 0
       begin
         bcid = "P#{ rand(16**6).to_s(16).upcase }"
@@ -36,6 +36,6 @@ class Barcode < ActiveRecord::Base
         retry if retry_count < 5
       end
     end
-    barcodes
+    return [bcset, barcodes]
   end
 end
