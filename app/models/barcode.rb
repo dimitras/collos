@@ -27,7 +27,7 @@ class Barcode < ActiveRecord::Base
     barcodes = []
     retry_count = 0
     barcode_set ||= Barcode.maximum("barcode_set").to_i + 1
-    (0...(n)).each do |m|
+    (0...(num)).each do |m|
       retry_count = 0
       begin
         bcid = "P#{ rand(16**6).to_s(16).upcase }"

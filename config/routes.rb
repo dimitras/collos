@@ -28,6 +28,8 @@ Collos::Application.routes.draw do
 
   resources :samples do
     collection do
+      post 'annotate'
+      post 'query'
       post 'upload'
     end
   end

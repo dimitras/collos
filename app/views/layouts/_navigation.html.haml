@@ -12,3 +12,8 @@
         = link_to "About", about_path
       %li{ class: current_page?(contact_path()) ? "active"  : ''}
         = link_to "Contact", contact_path
+      -if not current_page?(root_path)
+        %li.offset3
+          =form_tag query_samples_path, method: 'post', class: 'navbar-form navbar-search' do
+            .fieldset
+              =text_field_tag :query, nil, class: 'search-query  span3', placeholder: "Search"

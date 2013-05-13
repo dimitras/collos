@@ -1,0 +1,29 @@
+%h3
+  ==Barcode Set [#{@barcode_set_id}]
+%h4
+  Download
+  = link_to "CSV", fetch_barcodes_path(barcode_set: @barcode_set_id, format: "csv")
+  |
+  = link_to "XML", fetch_barcodes_path(barcode_set: @barcode_set_id, format: "xml")
+  |
+  = link_to "JSON", fetch_barcodes_path(barcode_set: @barcode_set_id, format: "json")
+  ==(Total Number of Barcodes = #{@barcodes.count})
+
+%table.table.table-striped.table-condensed.table-bordered
+  %thead
+    %tr
+      %th.span2 Barcode
+      %th Entity
+  %tbody
+    -for bc in @barcodes
+      %tr
+        %td=bc.barcode
+        %td
+          -if bc.barcodeable
+            == #{bc.barcodeable_type} : #{bc.barcodeable_id}
+          -else
+            %i --
+.pagination
+  =will_paginate(@barcodes, params: params)
+
+%h4

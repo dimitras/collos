@@ -30,16 +30,20 @@ class BarcodesController < ApplicationController
 
   def fetch
     @barcode_set_id = params[:barcode_set].to_i
-    @barcodes = Barcode.where(:barcode_set => @barcode_set_id).all
+    if params[:all]
+      @barcodes = Barcode.where(:barcode_set => @barcode_set_id).all
+    else
+      @barcodes = Barcode.where(:barcode_set => @barcode_set_id).paginate(page: params[:page] || 1, per_page: 15)
+    end
     if @barcodes.empty?
       flash[:error] ="Invalid Barcode Set ID \"#{@barcode_set_id}\""
       redirect_to barcodes_path
     else
       respond_to do |format|
-        format.html {render "barcodes"}
-        format.csv {render "barcodes", content_type: "text/csv", filename: "barcode_#{@barcodes_set_id}.csv"}
-        format.json {render "barcodes", content_type: "text/json", filename: "barcode_#{@barcodes_set_id}.json"}
-        format.xml {render "barcodes", content_type: "text/xml", filename: "barcode_#{@barcodes_set_id}.xml"}
+        format.html
+        format.csv { render 'fetch', content_type: "text/csv", filename: "barcode_#{@barcodes_set_id}.csv"}
+        format.json {render 'fetch', content_type: "text/json", filename: "barcode_#{@barcodes_set_id}.json"}
+        format.xml {render 'fetch', content_type: "text/xml", filename: "barcode_#{@barcodes_set_id}.xml"}
       end
     end
   end
