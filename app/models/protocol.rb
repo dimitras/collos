@@ -19,4 +19,6 @@ class Protocol < ActiveRecord::Base
   has_many :protocol_applications
   has_many :protocol_parameters
 
+  has_paper_trail
+
 end

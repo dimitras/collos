@@ -22,7 +22,7 @@ namespace :ncbi_taxonomy do
     print "Inserting Taxon nodes ..."
     conn = Taxon.connection
     File.open("#{Rails.root}/tmp/ncbi/nodes.dmp").each do |l|
-      if count < 100
+      if count < 1000
         e = l.chomp.split(/\|/).map {|x| x.strip }
         records << [e[0].to_i, e[1].to_i, e[2]]
         count += 1
@@ -44,7 +44,7 @@ namespace :ncbi_taxonomy do
     count = 0
     records = []
     File.open("#{Rails.root}/tmp/ncbi/names.dmp").each do |l|
-      if count < 100
+      if count < 1000
         e = l.chomp.split(/\|/).map {|x| x.strip }
         records << [e[0].to_i, e[1],e[3]]
         count += 1

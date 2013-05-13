@@ -28,4 +28,11 @@ class Sample < ActiveRecord::Base
 
   has_ancestry :orphan_strategy => :rootify, :cache_depth => true
   has_paper_trail
+
+  def scientific_name
+    taxon.scientific_name
+  end
+  def common_name
+    taxon.common_name
+  end
 end

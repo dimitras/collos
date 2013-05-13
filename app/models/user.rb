@@ -16,6 +16,9 @@ class User <  OmniAuth::Identity::Models::ActiveRecord
   attr_accessible :email, :name, :password, :password_confirmation
 
   belongs_to :contact
+  has_many :shipments, :class_name => "Shipment", :foreign_key => "shipper_id"
+  has_many :packages, :class_name => "Shipment", :foreign_key => "receiver_id"
+
 
   @@email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 

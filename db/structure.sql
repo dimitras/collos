@@ -207,6 +207,16 @@ ALTER SEQUENCE containers_id_seq OWNED BY containers.id;
 
 
 --
+-- Name: containers_shipments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE containers_shipments (
+    container_id integer,
+    shipment_id integer
+);
+
+
+--
 -- Name: ontologies; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -525,6 +535,41 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: shipments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE shipments (
+    id integer NOT NULL,
+    tracking_number character varying(255),
+    shipper_id integer,
+    receiver_id integer,
+    ship_date timestamp without time zone,
+    recieve_date timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: shipments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE shipments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: shipments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE shipments_id_seq OWNED BY shipments.id;
+
+
+--
 -- Name: taxon_names; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -762,6 +807,13 @@ ALTER TABLE ONLY samples ALTER COLUMN id SET DEFAULT nextval('samples_id_seq'::r
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY shipments ALTER COLUMN id SET DEFAULT nextval('shipments_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY taxon_names ALTER COLUMN id SET DEFAULT nextval('taxon_names_id_seq'::regclass);
 
 
@@ -899,6 +951,14 @@ ALTER TABLE ONLY samples
 
 
 --
+-- Name: shipments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY shipments
+    ADD CONSTRAINT shipments_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: taxon_names_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -977,6 +1037,20 @@ CREATE INDEX index_containers_on_ancestry ON containers USING btree (ancestry);
 --
 
 CREATE INDEX index_containers_on_container_type_id ON containers USING btree (container_type_id);
+
+
+--
+-- Name: index_containers_shipments_on_container_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_containers_shipments_on_container_id ON containers_shipments USING btree (container_id);
+
+
+--
+-- Name: index_containers_shipments_on_shipment_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_containers_shipments_on_shipment_id ON containers_shipments USING btree (shipment_id);
 
 
 --
@@ -1141,6 +1215,27 @@ CREATE INDEX index_samples_on_taxon_id ON samples USING btree (taxon_id);
 
 
 --
+-- Name: index_shipments_on_receiver_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_shipments_on_receiver_id ON shipments USING btree (receiver_id);
+
+
+--
+-- Name: index_shipments_on_shipper_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_shipments_on_shipper_id ON shipments USING btree (shipper_id);
+
+
+--
+-- Name: index_shipments_on_tracking_number; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_shipments_on_tracking_number ON shipments USING btree (tracking_number);
+
+
+--
 -- Name: index_taxon_names_on_name_and_name_class; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1263,3 +1358,7 @@ INSERT INTO schema_migrations (version) VALUES ('20130301202201');
 INSERT INTO schema_migrations (version) VALUES ('20130304171209');
 
 INSERT INTO schema_migrations (version) VALUES ('20130304171343');
+
+INSERT INTO schema_migrations (version) VALUES ('20130513144752');
+
+INSERT INTO schema_migrations (version) VALUES ('20130513144841');

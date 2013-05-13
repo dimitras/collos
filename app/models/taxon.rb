@@ -16,4 +16,11 @@ class Taxon < ActiveRecord::Base
   has_many :taxon_names
   belongs_to :parent, :class_name => "Taxon", :foreign_key => "parent_taxon_id"
 
+  def scientific_name
+    taxon_names.where(:name_class => 'scientific name').first.name
+  end
+  def common_name
+    taxon_names.where(:name_class => 'genbank common name').first.name
+  end
+
 end

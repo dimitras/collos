@@ -1,4 +1,7 @@
 Collos::Application.routes.draw do
+  resources :shipments
+
+
   resources :users do
     member do
       post 'activate'
