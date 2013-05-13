@@ -4,7 +4,6 @@
 #
 #  id                      :integer          not null, primary key
 #  name                    :string(255)
-#  barcode_id              :integer
 #  container_id            :integer
 #  taxon_id                :integer
 #  protocol_application_id :integer

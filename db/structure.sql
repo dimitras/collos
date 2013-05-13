@@ -73,7 +73,9 @@ ALTER SEQUENCE addresses_id_seq OWNED BY addresses.id;
 CREATE TABLE barcodes (
     id integer NOT NULL,
     barcode character varying(255),
-    barcode_set integer DEFAULT 0
+    barcode_set integer DEFAULT 0,
+    barcodeable_id integer,
+    barcodeable_type character varying(255)
 );
 
 
@@ -172,13 +174,14 @@ ALTER SEQUENCE container_types_id_seq OWNED BY container_types.id;
 
 CREATE TABLE containers (
     id integer NOT NULL,
-    barcode_id integer,
     container_type_id integer,
+    name character varying(255),
     ancestry character varying(255) NOT NULL,
     ancestry_depth integer DEFAULT 0,
     x integer DEFAULT 0,
     y integer DEFAULT 0,
     retired boolean DEFAULT false,
+    notes text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -482,7 +485,6 @@ ALTER SEQUENCE sample_characteristics_id_seq OWNED BY sample_characteristics.id;
 CREATE TABLE samples (
     id integer NOT NULL,
     name character varying(255),
-    barcode_id integer,
     container_id integer,
     taxon_id integer,
     protocol_application_id integer,
@@ -944,6 +946,13 @@ CREATE INDEX index_barcodes_on_barcode_set ON barcodes USING btree (barcode_set)
 
 
 --
+-- Name: index_barcodes_on_barcodeable_type_and_barcodeable_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_barcodes_on_barcodeable_type_and_barcodeable_id ON barcodes USING btree (barcodeable_type, barcodeable_id);
+
+
+--
 -- Name: index_contacts_on_address_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -962,13 +971,6 @@ CREATE INDEX index_container_types_on_type_id ON container_types USING btree (ty
 --
 
 CREATE INDEX index_containers_on_ancestry ON containers USING btree (ancestry);
-
-
---
--- Name: index_containers_on_barcode_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE UNIQUE INDEX index_containers_on_barcode_id ON containers USING btree (barcode_id);
 
 
 --
@@ -1109,13 +1111,6 @@ CREATE INDEX index_sample_characteristics_on_unit_type_id ON sample_characterist
 --
 
 CREATE INDEX index_samples_on_ancestry ON samples USING btree (ancestry);
-
-
---
--- Name: index_samples_on_barcode_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_samples_on_barcode_id ON samples USING btree (barcode_id);
 
 
 --

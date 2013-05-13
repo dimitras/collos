@@ -17,14 +17,15 @@ class BarcodesController < ApplicationController
 
   # Generates a set of barcodes for consumption
   def generate
-
     if params[:num].to_i < 1
       redirect_to action: "index", alert: "Invalid number [#{params[:num]}] given." and return
     end
-
-    @barcode_set_id, @barcodes = Barcode.generate_barcodes(params[:num].to_i)
-
-    redirect_to fetch_barcodes_path(barcode_set: @barcode_set_id)
+    barcode_set_id = nil
+    if params[:barcode_set].to_i > 0
+      barcode_set_id = params[:barcode_set].to_i
+    end
+    barcode_set_id, barcodes = Barcode.generate_barcodes(params[:num].to_i, barcode_set_id)
+    redirect_to fetch_barcodes_path(barcode_set: barcode_set_id)
   end
 
   def fetch

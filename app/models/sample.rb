@@ -4,7 +4,6 @@
 #
 #  id                      :integer          not null, primary key
 #  name                    :string(255)
-#  barcode_id              :integer
 #  container_id            :integer
 #  taxon_id                :integer
 #  protocol_application_id :integer
@@ -16,17 +15,17 @@
 #
 
 class Sample < ActiveRecord::Base
-  attr_accessible :name
-  validates :name, presence: true
+  attr_accessible :name, :notes, :taxon, :taxon_id,
+    :ancestry, :protocol_application, :protocol_application_id
 
+  # validates :name, presence: true
+
+  has_one :barcode, as: :barcodeable
   belongs_to :container
-  belongs_to :barcode
   belongs_to :protocol_application
   belongs_to :taxon
-
   has_many :sample_characteristics
 
   has_ancestry :orphan_strategy => :rootify, :cache_depth => true
-
-
+  has_paper_trail
 end

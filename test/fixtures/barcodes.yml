@@ -2,9 +2,11 @@
 #
 # Table name: barcodes
 #
-#  id          :integer          not null, primary key
-#  barcode     :string(255)
-#  barcode_set :integer          default(0)
+#  id               :integer          not null, primary key
+#  barcode          :string(255)
+#  barcode_set      :integer          default(0)
+#  barcodeable_id   :integer
+#  barcodeable_type :string(255)
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

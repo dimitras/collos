@@ -8,7 +8,7 @@ Collos::Application.routes.draw do
   resources :contacts
   resources :addresses
 
-  resources :barcodes do
+  resources :barcodes, except: :destroy do
     collection do
       post 'generate'
       get  'fetch'
