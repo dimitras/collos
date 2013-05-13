@@ -2,12 +2,11 @@
 #
 # Table name: taxons
 #
-#  id             :integer          not null, primary key
-#  ncbi_id        :integer
-#  parent_ncbi_id :integer
-#  rank           :string(255)
-#  ancestry       :string(255)
-#  ancestry_depth :integer          default(0)
+#  id              :integer          not null, primary key
+#  parent_taxon_id :integer
+#  ncbi_id         :integer          not null
+#  parent_ncbi_id  :integer
+#  rank            :string(255)
 #
 
 class Taxon < ActiveRecord::Base
@@ -15,7 +14,6 @@ class Taxon < ActiveRecord::Base
 
   has_many :samples
   has_many :taxon_names
+  belongs_to :parent, :class_name => "Taxon", :foreign_key => "parent_taxon_id"
 
-
-  has_ancestry :orphan_strategy => :rootify, :cache_depth => true
 end

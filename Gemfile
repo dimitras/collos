@@ -16,6 +16,7 @@ group :development do
   gem 'annotate'
   gem 'railroady'
   gem 'puma'
+  gem 'sequel'
 end
 
 # View helpers

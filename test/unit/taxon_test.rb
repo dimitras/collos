@@ -2,12 +2,11 @@
 #
 # Table name: taxons
 #
-#  id             :integer          not null, primary key
-#  ncbi_id        :integer
-#  parent_ncbi_id :integer
-#  rank           :string(255)
-#  ancestry       :string(255)
-#  ancestry_depth :integer          default(0)
+#  id              :integer          not null, primary key
+#  parent_taxon_id :integer
+#  ncbi_id         :integer          not null
+#  parent_ncbi_id  :integer
+#  rank            :string(255)
 #
 
 require 'test_helper'

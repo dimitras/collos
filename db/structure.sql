@@ -531,8 +531,8 @@ CREATE TABLE schema_migrations (
 CREATE TABLE taxon_names (
     id integer NOT NULL,
     taxon_id integer,
-    name character varying(255),
-    uniq_name character varying(255),
+    ncbi_taxon_id integer NOT NULL,
+    name character varying(255) NOT NULL,
     name_class character varying(255)
 );
 
@@ -562,11 +562,10 @@ ALTER SEQUENCE taxon_names_id_seq OWNED BY taxon_names.id;
 
 CREATE TABLE taxons (
     id integer NOT NULL,
-    ncbi_id integer,
+    parent_taxon_id integer,
+    ncbi_id integer NOT NULL,
     parent_ncbi_id integer,
-    rank character varying(255),
-    ancestry character varying(255),
-    ancestry_depth integer DEFAULT 0
+    rank character varying(255)
 );
 
 
@@ -1142,10 +1141,17 @@ CREATE INDEX index_samples_on_taxon_id ON samples USING btree (taxon_id);
 
 
 --
--- Name: index_taxon_names_on_name_and_uniq_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_taxon_names_on_name_and_name_class; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_taxon_names_on_name_and_uniq_name ON taxon_names USING btree (name, uniq_name);
+CREATE INDEX index_taxon_names_on_name_and_name_class ON taxon_names USING btree (name, name_class);
+
+
+--
+-- Name: index_taxon_names_on_ncbi_taxon_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_taxon_names_on_ncbi_taxon_id ON taxon_names USING btree (ncbi_taxon_id);
 
 
 --
@@ -1153,20 +1159,6 @@ CREATE INDEX index_taxon_names_on_name_and_uniq_name ON taxon_names USING btree 
 --
 
 CREATE INDEX index_taxon_names_on_taxon_id ON taxon_names USING btree (taxon_id);
-
-
---
--- Name: index_taxons_on_ancestry; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_taxons_on_ancestry ON taxons USING btree (ancestry);
-
-
---
--- Name: index_taxons_on_ancestry_depth; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_taxons_on_ancestry_depth ON taxons USING btree (ancestry_depth);
 
 
 --
@@ -1181,6 +1173,13 @@ CREATE UNIQUE INDEX index_taxons_on_ncbi_id ON taxons USING btree (ncbi_id);
 --
 
 CREATE INDEX index_taxons_on_parent_ncbi_id ON taxons USING btree (parent_ncbi_id);
+
+
+--
+-- Name: index_taxons_on_parent_taxon_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_taxons_on_parent_taxon_id ON taxons USING btree (parent_taxon_id);
 
 
 --
