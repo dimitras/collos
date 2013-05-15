@@ -34,7 +34,7 @@ class User <  OmniAuth::Identity::Models::ActiveRecord
     puts auth.to_yaml
     create! do |user|
       user.provider = auth["provider"]
-      user.uid = auth['info']['email']
+      user.uid = auth['uid']
       user.email = auth["info"]["email"]
       user.name = auth["info"]["name"]
     end
