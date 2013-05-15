@@ -9,7 +9,7 @@ Collos::Application.routes.draw do
     end
     collection do
       get 'register'
-      get 'review'
+      get 'approve'
     end
   end
 

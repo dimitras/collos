@@ -74,8 +74,9 @@ class UsersController < ApplicationController
     end
 
     # Review the list of pending registrations
-    def review
+    def approve
         @users = User.pending
     end
+
 
 end
