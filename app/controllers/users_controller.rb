@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+    before_filter :require_login, :except => [:register]
 
     @@per_page = 25
 
@@ -66,4 +67,15 @@ class UsersController < ApplicationController
         @user.save
         redirect_to edit_user_path(@user)
     end
+
+    # register a new account
+    def register
+        @user = User.new
+    end
+
+    # Review the list of pending registrations
+    def review
+        @users = User.pending
+    end
+
 end

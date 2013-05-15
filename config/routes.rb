@@ -7,7 +7,12 @@ Collos::Application.routes.draw do
       post 'activate'
       post 'inactivate'
     end
+    collection do
+      get 'register'
+      get 'review'
+    end
   end
+
   resources :contacts
   resources :addresses
 
