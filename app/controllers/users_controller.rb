@@ -18,9 +18,10 @@ class UsersController < ApplicationController
     # Regular edit functionality. If current_user.admin? then you can change
     # the active/inactive status of the supplied user
     def edit
-        @user = current_user
         if current_user.admin?
             @user = User.find(params[:id])
+        else
+            @user = current_user
         end
     end
 
@@ -38,7 +39,6 @@ class UsersController < ApplicationController
             render action: "new"
         end
     end
-
 
     def update
         @user = User.find(params[:id])
@@ -77,6 +77,4 @@ class UsersController < ApplicationController
     def approve
         @users = User.pending
     end
-
-
 end
