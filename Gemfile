@@ -39,8 +39,8 @@ gem 'pg_search'
 # Authentication
 gem 'bcrypt-ruby'
 gem 'omniauth-identity'
-gem 'enumify'
 gem 'omniauth-basecamp'
+gem 'enumify'
 
 # Authorization
 gem 'cancan'              # for authorization
