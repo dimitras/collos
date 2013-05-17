@@ -1,4 +1,4 @@
-- if Rails.env.development?
+- unless Rails.env.production?
   %h2 Use a developer account
   =button_to("Developer Login", "/auth/developer")
 
