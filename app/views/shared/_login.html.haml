@@ -1,6 +1,6 @@
 -if current_user
   %li{ class: current_page?(login_path()) ? "active"  : ''}
-    =link_to "Logout", logout_path
+    =link_to "Sign out", logout_path
 -else
   %li{ class: current_page?(login_path()) ? "active"  : ''}
-    = link_to "Login/Register" , login_path
+    = link_to "Sign in/Register" , login_path
