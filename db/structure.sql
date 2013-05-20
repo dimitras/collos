@@ -217,6 +217,39 @@ CREATE TABLE containers_shipments (
 
 
 --
+-- Name: identities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE identities (
+    id integer NOT NULL,
+    name character varying(255),
+    email character varying(255),
+    password_digest character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: identities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE identities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: identities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
+
+
+--
 -- Name: ontologies; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -641,12 +674,11 @@ CREATE TABLE users (
     id integer NOT NULL,
     name character varying(255) NOT NULL,
     email character varying(255) NOT NULL,
-    password_digest character varying(255) NOT NULL,
     provider character varying(255),
     uid character varying(255),
     contact_id integer,
     admin boolean,
-    status character varying(255),
+    status character varying(255) DEFAULT 'pending'::character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -738,6 +770,13 @@ ALTER TABLE ONLY container_types ALTER COLUMN id SET DEFAULT nextval('container_
 --
 
 ALTER TABLE ONLY containers ALTER COLUMN id SET DEFAULT nextval('containers_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
 
 
 --
@@ -876,6 +915,14 @@ ALTER TABLE ONLY container_types
 
 ALTER TABLE ONLY containers
     ADD CONSTRAINT containers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: identities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY identities
+    ADD CONSTRAINT identities_pkey PRIMARY KEY (id);
 
 
 --
@@ -1362,3 +1409,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130304171343');
 INSERT INTO schema_migrations (version) VALUES ('20130513144752');
 
 INSERT INTO schema_migrations (version) VALUES ('20130513144841');
+
+INSERT INTO schema_migrations (version) VALUES ('20130520175847');

@@ -8,6 +8,8 @@
 #  provider   :string(255)
 #  uid        :string(255)
 #  contact_id :integer
+#  admin      :boolean
+#  status     :string(255)      default("pending")
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
