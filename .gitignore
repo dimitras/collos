@@ -68,3 +68,6 @@ rerun.txt
 pickle-email-*.html 
 config/database.ymlscratch.txt
 .rake_t_cache
+
+# Ignore application configuration
+/config/application.yml
