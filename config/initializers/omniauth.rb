@@ -5,8 +5,11 @@ Rails.application.config.middleware.use OmniAuth::Builder do
         provider :developer, fields: [:email,:name]
     end
 
-    provider :identity, fields: [:email,:name], model: User, on_failed_registration:   UsersController.action(:register)
+    provider :identity, fields: [:email,:name],
+        on_failed_registration: lambda do |env|
+            IdentitiesController.action(:new).call(env)
+        end
 
-    provider :basecamp, ENV['BASECAMP_IDENTIFIER'], ENV['BASECAMP_SECRET']
+    provider :basecamp, ENV['BASECAMP_CLIENT_ID'], ENV['BASECAMP_SECRET']
 
 end

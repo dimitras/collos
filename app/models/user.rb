@@ -12,19 +12,19 @@
 #  updated_at :datetime         not null
 #
 
-class User <  OmniAuth::Identity::Models::ActiveRecord
-  attr_accessible :email, :name, :password, :password_confirmation
-
+class User <  ActiveRecord::Base
+  attr_accessible :email, :name
   belongs_to :contact
-  has_many :shipments, :class_name => "Shipment", :foreign_key => "shipper_id"
-  has_many :packages, :class_name => "Shipment", :foreign_key => "receiver_id"
+  has_many :shipments, class_name: "Shipment", foreign_key: "shipper_id"
+  has_many :packages, class_name: "Shipment", foreign_key: "receiver_id"
 
 
   @@email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
-  validates :email, :presence   => true,
-            :format     => { :with => @@email_regex },
-            :uniqueness => { :case_sensitive => false }
+  validates :email, presence: true,
+            format:  { with:  @@email_regex },
+            uniqueness: { case_sensitive: false }
+  validates :name, presence: true
 
   def self.from_omniauth(auth)
     user = User.find_by_provider_and_uid(auth["provider"], auth["uid"]) || create_with_omniauth(auth)

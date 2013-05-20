@@ -12,6 +12,7 @@ Collos::Application.routes.draw do
       get 'approve'
     end
   end
+  resources :identities, only: 'new'
 
   resources :contacts
   resources :addresses
