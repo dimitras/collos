@@ -77,6 +77,9 @@ GEM
       multipart-post (~> 1.1)
     fastercsv (1.5.5)
     ffi (1.8.1)
+    figaro (0.6.4)
+      bundler (~> 1.0)
+      rails (>= 3, < 5)
     formtastic (2.2.1)
       actionpack (>= 3.0)
     haml (4.0.2)
@@ -137,6 +140,7 @@ GEM
     paper_trail (2.7.1)
       activerecord (~> 3.0)
       railties (~> 3.0)
+    parsley-rails (1.1.16.0)
     pg (0.15.1)
     pg_search (0.6.2)
       activerecord (>= 3.1)
@@ -220,6 +224,7 @@ DEPENDENCIES
   cancan
   coffee-rails
   enumify
+  figaro
   haml (~> 4.0)
   haml-rails (~> 0.4)
   jquery-rails
@@ -227,6 +232,7 @@ DEPENDENCIES
   omniauth-basecamp
   omniauth-identity
   paper_trail (~> 2)
+  parsley-rails
   pg
   pg_search
   puma

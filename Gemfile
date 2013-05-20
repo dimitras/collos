@@ -28,7 +28,10 @@ gem 'will_paginate_twitter_bootstrap'
 gem 'simple_form'
 
 # JS form validation
-# gem "parsley-rails"
+gem "parsley-rails"
+
+# YAML application configuration
+gem 'figaro'
 
 # for hierarchy relationships
 gem 'ancestry'
