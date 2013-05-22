@@ -3,12 +3,11 @@ class CreateUsers < ActiveRecord::Migration
     create_table :users do |t|
       t.string :name, null: false
       t.string :email, null: false
-      t.string :password_digest, null: false
       t.string :provider
       t.string :uid
       t.references :contact
       t.boolean :admin
-      t.string :status
+      t.string :status, default: 'pending'
       t.timestamps
     end
     add_index :users, :email

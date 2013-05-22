@@ -1,12 +1,17 @@
 class SessionsController < ApplicationController
+
   def new
   end
 
   def create
-    puts env["omniauth.auth"]
-    user = User.from_omniauth(env["omniauth.auth"])
-    session[:user_id] = user.id
-    redirect_to root_url, notice: "Signed in!"
+    logger.debug(env["omniauth.auth"])
+    begin
+      user = User.from_omniauth(env["omniauth.auth"])
+      session[:user_id] = user.id
+      redirect_to root_url, notice: "Signed in!"
+    rescue OmniAuth::Error => e
+      redirect_to login_url, alert:  "Authentication failed, please try again."
+    end
   end
 
   def destroy
@@ -15,6 +20,6 @@ class SessionsController < ApplicationController
   end
 
   def failure
-    redirect_to root_url, alert: "Authentication failed, please try again."
+    redirect_to login_url, alert: "Authentication failed, please try again."
   end
 end

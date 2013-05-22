@@ -7,7 +7,13 @@ Collos::Application.routes.draw do
       post 'activate'
       post 'inactivate'
     end
+    collection do
+      get 'register'
+      get 'approve'
+    end
   end
+  resources :identities, only: 'new'
+
   resources :contacts
   resources :addresses
 

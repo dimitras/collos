@@ -28,7 +28,10 @@ gem 'will_paginate_twitter_bootstrap'
 gem 'simple_form'
 
 # JS form validation
-# gem "parsley-rails"
+gem "parsley-rails"
+
+# YAML application configuration
+gem 'figaro'
 
 # for hierarchy relationships
 gem 'ancestry'
@@ -39,8 +42,8 @@ gem 'pg_search'
 # Authentication
 gem 'bcrypt-ruby'
 gem 'omniauth-identity'
+gem 'omniauth-basecamp'
 gem 'enumify'
-# gem 'omniauth-basecamp' # for later usage
 
 # Authorization
 gem 'cancan'              # for authorization

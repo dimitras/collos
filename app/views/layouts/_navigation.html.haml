@@ -1,11 +1,9 @@
-.navbar.navbar-inverse.navbar-static-top
+.navbar.navbar-static-top
   .navbar-inner
     %a.logoText{ href: root_path}
       CollOS
     %ul.nav
-      %li.active.inverse
-      %li{ class: current_page?(login_path()) ? "active"  : ''}
-        = render "shared/login"
+      = render "shared/login"
       %li{ class: current_page?(help_path()) ? "active"  : ''}
         = link_to "Help", help_path
       %li{ class: current_page?(about_path()) ? "active"  : ''}

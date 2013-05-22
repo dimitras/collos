@@ -1,6 +1,6 @@
 -if current_user
-  == Welcome #{current_user.name}
-  |
-  =link_to "Logout", logout_path
+  %li{ class: current_page?(login_path()) ? "active"  : ''}
+    =link_to "Sign out", logout_path
 -else
-  = link_to "Login" , login_path
+  %li{ class: current_page?(login_path()) ? "active"  : ''}
+    = link_to "Sign in/Register" , login_path

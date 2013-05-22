@@ -1,0 +1,7 @@
+BASECAMP_KEY: XXXXX
+BASECAMP_SECRET: XXXXX
+
+# Add app env vars below
+# development:
+# test:
+# production:
