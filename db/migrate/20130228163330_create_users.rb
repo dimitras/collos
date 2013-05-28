@@ -6,7 +6,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :provider
       t.string :uid
       t.references :contact
-      t.boolean :admin
+      t.boolean :admin, default: false
       t.string :status, default: 'pending'
       t.timestamps
     end

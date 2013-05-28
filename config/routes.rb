@@ -8,7 +8,7 @@ Collos::Application.routes.draw do
       post 'inactivate'
     end
     collection do
-      get 'register'
+      # get 'register'
       get 'approve'
     end
   end

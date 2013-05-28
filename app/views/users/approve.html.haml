@@ -1,0 +1,15 @@
+%h3 Approve pending users
+
+%table.table.table-striped.table-condensed.table-bordered
+    %theader
+        %tr
+            %th Name
+            %th E-mail
+            %th Register
+    %tbody
+        -for user in @users
+            %tr
+                %td=user.name
+                %td=user.email
+                %td=link_to "Approve User", activate_user_path(user), method: 'post'
+
