@@ -1,9 +1,6 @@
 - if current_user.nil?
     %h4
         =link_to("Sign in", login_path)
-        or
-        =link_to("register", register_users_path)
-        to do something interesting
 -else
     %h4 Search CollOS
     = form_tag("/search",method: 'get', class: 'form-inline form-search') do

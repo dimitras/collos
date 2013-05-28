@@ -58,3 +58,9 @@ gem 'zint'
 gem 'activeadmin'
 gem 'sass-rails'
 gem "meta_search",    '>= 1.1.0.pre'
+
+# background processing
+gem 'sidekiq'
+gem 'sinatra', :require =>  false
+gem 'slim'
+
