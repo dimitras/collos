@@ -14,5 +14,5 @@
 class Contact < ActiveRecord::Base
   has_one :user
   belongs_to :address
-  attr_accessible :email, :fname, :lname
+  attr_accessible :email, :fname, :lname, :user, :address, :address_id
 end

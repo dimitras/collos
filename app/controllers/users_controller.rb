@@ -55,23 +55,25 @@ class UsersController < ApplicationController
     end
 
     def activate
-        @user = User.find(params[:user_id])
+        @user = User.find(params[:id])
         @user.active!
         @user.save
-        redirect_to edit_user_path(@user)
+        flash[:success] = "User #{@user.name} now active"
+        redirect_to user_path(@user)
     end
 
     def inactivate
-        @user = User.find(params[:user_id])
+        @user = User.find(params[:id])
         @user.inactive!
         @user.save
-        redirect_to edit_user_path(@user)
+        flash[:success]= "User #{@user.name} now inactive"
+        redirect_to user_path(@user)
     end
 
-    # register a new account
-    def register
-        @user = User.new
-    end
+    # # register a new account
+    # def register
+    #     @user = User.new
+    # end
 
     # Review the list of pending registrations
     def approve
