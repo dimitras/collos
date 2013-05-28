@@ -1,26 +1,24 @@
-/ - if current_user.nil?
-/     %h3
-/         =link_to("Login", login_path)
-/         to do something interesting
-/ -else
+- if current_user.nil?
+    %h4
+        =link_to("Sign in", login_path)
+        or
+        =link_to("register", register_users_path)
+        to do something interesting
+-else
+    %h4 Search CollOS
+    = form_tag("/search",method: 'get', class: 'form-inline form-search') do
+        .fieldset
+            =text_field_tag :query, nil,class: 'span4', placeholder: '"PBF78E5" or "zfish123"'
+            =submit_tag "Search", class:'btn btn-primary'
 
-%h4 Search CollOS
+    %h4 Generate barcodes
+    = render partial: "barcodes/generate_barcodes"
 
-= form_tag("/search",method: 'get', class: 'form-inline form-search') do
-    .fieldset
-        =text_field_tag :barcode, nil,class: 'span4', placeholder: '"PBF78E5" or "zfish123"'
-        =submit_tag "Search", class:'btn btn-primary'
+    %h4 Fetch a barcode set
+    = render partial: "barcodes/fetch_barcodes"
 
-
-
-%h4 Generate barcodes
-= render partial: "barcodes/generate_barcodes"
-
-%h4 Fetch a barcode set
-= render partial: "barcodes/fetch_barcodes"
-
-%h4 Upload CSV of Annotations
-= form_tag(upload_samples_path,method: 'post', class: 'form-horizontal') do
-    .fieldset
-        =file_field_tag :annotation_file,  class: 'file-field span4'
-        =submit_tag "Upload Annotations", class:'btn btn-primary'
+    %h4 Upload CSV of Annotations
+    = form_tag(upload_samples_path,method: 'post', class: 'form-horizontal') do
+        .fieldset
+            =file_field_tag :annotation_file,  class: 'file-field span4'
+            =submit_tag "Upload Annotations", class:'btn btn-primary'

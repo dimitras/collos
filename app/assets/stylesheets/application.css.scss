@@ -19,6 +19,7 @@ $darkBlue: #06c;
 $lightBlue: #AFDCEC;
 $red: #E41B17;
 $pink: #E6A9EC;
+
 .logoText {
   float: left;
   padding-right: 8px;
@@ -28,8 +29,9 @@ $pink: #E6A9EC;
   font-weight: bold;
   padding-top: 10px;
 }
+
 .logoText:hover {
-  color: #fff;
+  color: $darkBlue;
   text-decoration: none;
 }
 ul.nav {

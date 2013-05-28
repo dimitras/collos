@@ -1,0 +1,5 @@
+# Contains the basecamp application credentials needed for
+# OAuth2 access using Basecamp accounts
+basecamp:
+    client_id: XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    secret: XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
