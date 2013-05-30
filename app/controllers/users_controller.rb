@@ -56,8 +56,11 @@ class UsersController < ApplicationController
 
     def activate
         @user = User.find(params[:id])
+        send_mail = @user.pending?
         @user.active!
-        @user.save
+        if send_mail
+            UserRegistrationMailer.delay.welcome(@user.id)
+        end
         flash[:success] = "User #{@user.name} now active"
         redirect_to user_path(@user)
     end
