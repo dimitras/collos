@@ -46,7 +46,7 @@ gem 'omniauth-basecamp'
 gem 'enumify'
 
 # Authorization
-gem 'cancan'              # for authorization
+gem 'cancan'
 
 # Audit trails
 gem 'paper_trail', '~> 2' # for audit trails
