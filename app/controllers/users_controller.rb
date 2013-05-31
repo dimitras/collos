@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
     skip_before_filter :require_login, :only => [:register]
+    skip_authorization_check :only => [:register]
+
     load_and_authorize_resource
 
     @@per_page = 25

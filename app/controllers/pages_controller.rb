@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
     skip_before_filter :require_login
+    skip_authorization_check
 
     caches_page :index,:help,:about,:contact
     def index; end
