@@ -1,7 +1,14 @@
-BASECAMP_KEY: XXXXX
-BASECAMP_SECRET: XXXXX
+# These are the necessary environment variables needed by the application.
+# Fill in the proper values
 
-# Add app env vars below
-# development:
-# test:
-# production:
+BASECAMP_CLIENT_ID: XXXXXXXXX
+BASECAMP_SECRET: XXXXXXXXX
+GMAIL_USERNAME: donotreply@gmail.com
+GMAIL_PASSWORD: secretpw123
+
+development:
+    REDIS_PROVIDER: redis://localhost:6379
+test:
+    REDIS_PROVIDER: redis://localhost:6379
+production:
+    REDIS_PROVIDER: redis://localhost:6379
