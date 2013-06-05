@@ -1,0 +1,7 @@
+=simple_form_for @ontology_term, :html => {:class => 'form-horizontal' } do |f|
+    = f.association :ontology, :label => "Source Ontology"
+    = f.input :name, :label => "Term Name"
+    = f.input :accession
+    = f.input :definition, :label => "Term Definition"
+    = f.input :obsolete
+    = f.button :submit

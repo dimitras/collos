@@ -1,16 +1,12 @@
 class BarcodesController < ApplicationController
-  # load_and_authorize_resource
+  load_and_authorize_resource
 
   def index
   end
 
-  def show
-    @barcode = Barcode.find(params[:id])
-  end
+  def show; end
 
-  def new
-    redirect_to :create
-  end
+  def new; end
 
   def create
     @barcode = Barcode.generate_barcodes(1)[0]

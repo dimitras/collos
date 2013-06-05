@@ -20,7 +20,7 @@ class OntologiesController < ApplicationController
         if @ontology.update_attributes(params[:ontology])
             redirect_to @ontology, notice: 'Ontology was successfully updated.'
         else
-        render action: "edit"
+            render action: "edit"
         end
     end
 
