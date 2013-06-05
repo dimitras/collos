@@ -11,9 +11,9 @@
 
 class Ontology < ActiveRecord::Base
   attr_accessible :name, :description, :prefix, :uri
-  validates :name, presence: true, on: :create
-  validates :prefix, presence: true,  :on => :create
-  validates :uri, presence: true, :on => :create
+  validates :name, presence: true
+  validates :prefix, presence: true
+  validates :uri, presence: true
 
   has_many :ontology_terms
 end
