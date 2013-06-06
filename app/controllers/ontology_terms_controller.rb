@@ -29,4 +29,10 @@ class OntologyTermsController < ApplicationController
         @ontology_term.destroy
         redirect_to ontology_terms_url, notice: "OntologyTerm was deleted"
     end
+
+    # Autocomplete query
+    def query
+        @ontology_terms = OntologyTerm.order(:name).where("lower(name) like ?", "%#{params[:term].downcase}%")
+        render json: @ontology_terms.map{|t| t.pretty_string }
+    end
 end

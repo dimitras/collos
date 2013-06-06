@@ -28,7 +28,11 @@ Collos::Application.routes.draw do
   end
 
   resources :ontologies
-  resources :ontology_terms
+  resources :ontology_terms do
+    collection do
+      get 'query'
+    end
+  end
 
   resources :taxons
   resources :taxon_names
