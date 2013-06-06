@@ -1,5 +1,7 @@
 class OntologyTermsController < ApplicationController
+
     load_and_authorize_resource
+
     def index
         @ontology_terms = OntologyTerm.page(params[:page])
         if params[:ontology_id]
@@ -28,5 +30,11 @@ class OntologyTermsController < ApplicationController
     def destroy
         @ontology_term.destroy
         redirect_to ontology_terms_url, notice: "OntologyTerm was deleted"
+    end
+
+    # Autocomplete query
+    def query
+        @ontology_terms = OntologyTerm.order(:name).where("lower(name) like ?", "%#{params[:term].downcase}%")
+        render json: @ontology_terms.map{|t| t.pretty_string }
     end
 end

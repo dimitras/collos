@@ -1,0 +1,28 @@
+%h3= @container_type.name
+
+%table.table.table-bordered
+    %tr
+        %th.span3 Name
+        %td=@container_type.name
+    %tr
+        %th Container Type Term
+
+        %td
+            =link_to "#{@type.name} [#{@type.ontology.prefix}: #{@type.accession}]", ontology_term_url(@type)
+    %tr
+        %th X Dimension
+        %td=@container_type.x_dimension
+    %tr
+        %th Y Dimension
+        %td=@container_type.y_dimension
+    %tr
+        %th X Labels
+        %td=@container_type.x_coord_labels
+    %tr
+        %th Y Labels
+        %td=@container_type.y_coord_labels
+
+- if can? :edit , @container_type
+    =button_to "Edit container_type", edit_container_type_path(@container_type), method: 'get', class: 'btn btn-success'
+- if can? :destroy , @container_type
+    =button_to "Delete container_type", container_type_path(@container_type), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."

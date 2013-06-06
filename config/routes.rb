@@ -28,7 +28,11 @@ Collos::Application.routes.draw do
   end
 
   resources :ontologies
-  resources :ontology_terms
+  resources :ontology_terms do
+    collection do
+      get 'query'
+    end
+  end
 
   resources :taxons
   resources :taxon_names
@@ -50,7 +54,12 @@ Collos::Application.routes.draw do
 
 
   resources :containers
-  resources :container_types
+  resources :container_types do
+    collection do
+      get 'autocomplete_ontology_term_name', format: 'json'
+    end
+  end
+
 
   # static content pages
   match "/help", to: "pages#help", as: 'help', format: "html"
@@ -71,6 +80,6 @@ Collos::Application.routes.draw do
   mount Sidekiq::Web, at: '/sidekiq', constraints: SidekiqAuth.new
 
   # Any path that is not found get re-directed to the root path
-  match ':not_found' => redirect('/'), :constraints => { :not_found => /.*/ }
+  # match ':not_found' => redirect('/'), :constraints => { :not_found => /.*/ }
 
 end

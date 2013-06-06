@@ -16,11 +16,12 @@
 #
 
 class Container < ActiveRecord::Base
-    belongs_to :container_type
+    attr_accessible :name, :notes, :ancestry, :x, :y, :retired, :barcode
+
+    belongs_to :container_type, inverse_of: :containers
     has_many :samples
     has_one :barcode, as: :barcodeable
     has_and_belongs_to_many :shipments
-    attr_accessible :name, :notes, :ancestry, :x, :y, :retired, :barcode
 
     # Barcodes should be mandatory and unique
     # validates :barcode, presence: true

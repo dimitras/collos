@@ -1,0 +1,25 @@
+%h3 Container Types
+%table.table.table-striped.table-condensed.table-bordered
+    %thead
+        %tr
+            %th.span2 Container Type
+            %th.span2 Container Type Term
+            %th.span2 Dimensions
+            %th.span3 Labels
+            %th.span2 &nbsp;
+    %tbody
+        -for container_type in @container_types
+            %tr
+                %td=container_type.name
+                %td=link_to container_type.type.name, ontology_term_url(container_type.type)
+                %td==#{ container_type.x_dimension} x #{container_type.y_dimension}
+
+                %td==X:(#{ container_type.x_coord_labels}) Y:(#{container_type.y_coord_labels})
+                %td
+                    =link_to "Show", container_type_path(container_type), class: 'btn'
+                    - if can?(:edit, container_type)
+                        =link_to "Edit", edit_container_type_path(container_type), class: 'btn btn-success'
+                    -if can?(:destroy, container_type)
+                        = link_to "Destroy", container_type_path(container_type), method: 'delete', class: 'btn btn-danger'
+=will_paginate(@container_types)
+= link_to "Create new Container Type", new_container_type_path, class: 'btn btn-primary btn-large'

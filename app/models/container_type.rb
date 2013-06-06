@@ -14,8 +14,16 @@
 #
 
 class ContainerType < ActiveRecord::Base
-  belongs_to :type, class_name: "OntologyTerm", foreign_key: "type_id"
-  attr_accessible :name, :x_coord_labels, :x_dimension, :y_coord_labels, :y_dimension
-  has_many :containers
+    attr_accessible :name, :x_coord_labels, :x_dimension, :y_coord_labels, :y_dimension, :type_term
 
+    belongs_to :type, class_name: "OntologyTerm", foreign_key: "type_id"
+    has_many :containers, inverse_of: :container_types
+
+    def type_term
+        type.try(:pretty_string)
+    end
+
+    def type_term=(term)
+        self.type = OntologyTerm.from_pretty_string(term).first
+    end
 end
