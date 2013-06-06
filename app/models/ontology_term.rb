@@ -11,9 +11,12 @@
 #
 
 class OntologyTerm < ActiveRecord::Base
-  belongs_to :ontology
+  belongs_to :ontology, inverse_of: :ontology_terms
+
   attr_accessible :accession, :definition, :name, :obsolete, :ontology_id, :ontology
+
   validates :ontology_id, :presence => true
   validates :accession, :presence => true
   validates :name, :presence => true
+
 end

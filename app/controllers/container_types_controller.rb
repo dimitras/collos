@@ -1,3 +1,36 @@
 class ContainerTypesController < ApplicationController
-    # load_and_authorize_resource
+    load_and_authorize_resource
+    def index
+        @container_types = ContainerType.includes(:type).page(params[:page])
+    end
+    def show
+        @container_types.includes(:type)
+    end
+
+    def new
+        @ontology_terms = OntologyTerm.where(:ontology => )
+    end
+    def create
+        if @container_type.save
+            flash[:success] = "ContainerType successfully created."
+            redirect_to @container_type
+        else
+            render action: 'new'
+        end
+    end
+
+    def edit; end
+    def update
+        if @container_type.update_attributes(params[:container_type])
+            flash[:success] = "ContainerType successfully updated."
+            redirect_to @container_type
+        else
+            render action: 'edit'
+        end
+    end
+
+    def destroy
+        @container_type.destroy
+        redirect_to container_types_url, notice: "ContainerType was deleted."
+    end
 end

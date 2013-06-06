@@ -14,8 +14,9 @@
 #
 
 class ContainerType < ActiveRecord::Base
-  belongs_to :type, class_name: "OntologyTerm", foreign_key: "type_id"
   attr_accessible :name, :x_coord_labels, :x_dimension, :y_coord_labels, :y_dimension
-  has_many :containers
+
+  belongs_to :type, class_name: "OntologyTerm", foreign_key: "type_id"
+  has_many :containers, inverse_of: :container_types
 
 end
