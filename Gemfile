@@ -21,6 +21,7 @@ end
 
 # View helpers
 gem 'jquery-rails'
+gem 'rails3-jquery-autocomplete'
 gem "haml", "~> 4.0"
 gem "haml-rails", "~> 0.4"
 gem "will_paginate"

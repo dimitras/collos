@@ -20,14 +20,14 @@ class OntologyTerm < ActiveRecord::Base
     validates :name, :presence => true
 
     def pretty_string
-        "[#{ontology.prefix}:#{accession}] #{name}"
+        "[#{self.accession}] #{self.name}"
     end
+
     def self.from_pretty_string(term)
         # "[#{type.ontology.prefix}:#{type.accession}] #{type.name}"
-        term =~ /\[(\w+)\:(\w+)\]\s(.+)/
-        prf = $1
-        acc = $2
-        tn = $3
-        OntologyTerm.where("ontology_terms.name like ? and ontology_terms.accession like ? ",tn, acc).joins(:ontology).where("ontologies.prefix = ?", prf)
+        term =~ /\[(\w+)\]\s(.+)/
+        acc = $1
+        tn = $2
+        OntologyTerm.where("ontology_terms.name like ? and ontology_terms.accession like ? ",tn, acc).includes(:ontology).all
     end
 end

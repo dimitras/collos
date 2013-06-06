@@ -1,5 +1,7 @@
 class ContainerTypesController < ApplicationController
     load_and_authorize_resource
+    autocomplete :ontology_term, :name, display_value: :pretty_string, full: true, extra_data: [:accession]
+
     def index
         @container_types = ContainerType.includes(:type => [:ontology]).page(params[:page])
     end

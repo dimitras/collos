@@ -1,5 +1,7 @@
 class OntologyTermsController < ApplicationController
+
     load_and_authorize_resource
+
     def index
         @ontology_terms = OntologyTerm.page(params[:page])
         if params[:ontology_id]

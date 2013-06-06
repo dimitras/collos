@@ -1,5 +1,7 @@
-=simple_form_for @container_type, :html => {:class => 'form-inline' } do |f|
-    = f.input :type_term, data: {autocomplete_source: query_ontology_terms_path}
+=simple_form_for @container_type, :html => {:class => 'form-horizontal' } do |f|
+    .control-group
+        = f.label :type_term, "Container Type Ontology Term", class: 'control-label'
+        .controls= f.autocomplete_field :type_term, autocomplete_ontology_term_name_container_types_path
     = f.input :name
     = f.input :x_dimension
     = f.input :x_coord_labels
