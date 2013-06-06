@@ -1,0 +1,20 @@
+%h3= @ontology.name
+
+%table.table.table-bordered
+    %tr
+        %th.span3 Name
+        %td=@ontology.name
+    %tr
+        %th Prefix
+        %td=@ontology.prefix
+    %tr
+        %th URI
+        %td=@ontology.uri
+    %tr
+        %th Description
+        %td=@ontology.description
+
+- if can? :edit , @ontology
+    =button_to "Edit Ontology", edit_ontology_path(@ontology), method: 'get', class: 'btn btn-success'
+- if can? :destroy , @ontology
+    =button_to "Delete Ontology", ontology_path(@ontology), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."

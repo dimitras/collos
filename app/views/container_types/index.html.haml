@@ -1,0 +1,20 @@
+%h3 Container Types
+%table.table.table-striped.table-condensed.table-bordered
+    %thead
+        %tr
+            %th Name
+            %th URI
+            %th &nbsp;
+    %tbody
+        -for container_type in @container_types
+            %tr
+                %td=container_type.name
+                %td=container_type.uri
+                %td
+                    =link_to "Show", container_type_path(container_type), class: 'btn'
+                    - if can?(:edit, container_type)
+                        =link_to "Edit", edit_container_type_path(container_type), class: 'btn btn-success'
+                    -if can?(:destroy, container_type)
+                        = link_to "Destroy", container_type_path(container_type), method: 'delete', class: 'btn btn-danger'
+=will_paginate(@container_types)
+= link_to "Create new Container Type", new_container_type_path, class: 'btn btn-primary btn-large'
