@@ -3,10 +3,10 @@ class ContainerTypesController < ApplicationController
     autocomplete :ontology_term, :name, display_value: :pretty_string, full: true, extra_data: [:accession]
 
     def index
-        @container_types = ContainerType.includes(:type => [:ontology]).page(params[:page])
+        @container_types = @container_types.includes(:type => [:ontology]).page(params[:page])
     end
     def show
-        @container_type = ContainerType.includes(:type => [ :ontology ]).find(params[:id])
+        @container_type = @container_type.includes(:type => [ :ontology ]).find(params[:id])
         @type = @container_type.type
     end
 
