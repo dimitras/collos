@@ -53,7 +53,11 @@ Collos::Application.routes.draw do
   resources :sample_characteristics
 
 
-  resources :containers
+  resources :containers do
+    collection do
+      get 'autocomplete_container_type_name', format: 'json'
+    end
+  end
   resources :container_types do
     collection do
       get 'autocomplete_ontology_term_name', format: 'json'
