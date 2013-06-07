@@ -7,44 +7,19 @@ class UsersController < ApplicationController
     @@per_page = 25
 
     def index
-        @users = User.paginate(per_page: params[:per_page] || @@per_page,
+        @users = @users.paginate(per_page: params[:per_page] || @@per_page,
             page:  params[:page])
         if params[:status]
             @user.where(status: params[:status])
         end
     end
 
-    def show
-        @user = User.find(params[:id])
-    end
+    def show; end
 
     # Regular edit functionality. If current_user.admin? then you can change
     # the active/inactive status of the supplied user
-    def edit
-        if current_user.admin?
-            @user = User.find(params[:id])
-        else
-            @user = current_user
-        end
-    end
-
-    def new
-        @user = User.new
-    end
-
-    def create
-        @user  = User.new(params[:user])
-        @user.status = :pending
-
-        if @user.save
-            redirect_to @user, notice: 'Successfully registered. We will email a confirmation once your account is active'
-        else
-            render action: "new"
-        end
-    end
-
+    def edit; end
     def update
-        @user = User.find(params[:id])
         if @user.update_attributes(params[:user])
             redirect_to @user, notice: "User was successfully updated"
         else
@@ -52,8 +27,18 @@ class UsersController < ApplicationController
         end
     end
 
+    def new; end
+    def create
+        @user.status = :pending
+        if @user.save
+            redirect_to @user, notice: 'Successfully registered. We will email a confirmation once your account is active'
+        else
+            render action: "new"
+        end
+    end
+
+
     def destroy
-        @user = User.find(params[:id])
         redirect_to user_inactivate_path(@user)
     end
 
@@ -69,20 +54,14 @@ class UsersController < ApplicationController
     end
 
     def inactivate
-        @user = User.find(params[:id])
         @user.inactive!
         @user.save
         flash[:success]= "User #{@user.name} now inactive"
         redirect_to user_path(@user)
     end
 
-    # # register a new account
-    # def register
-    #     @user = User.new
-    # end
-
     # Review the list of pending registrations
     def approve
-        @users = User.pending
+        @users = @users.pending
     end
 end
