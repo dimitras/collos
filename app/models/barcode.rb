@@ -19,19 +19,34 @@ class Barcode < ActiveRecord::Base
   # has_many :samples
   # has_many :containers
 
+
+  # Generate a single uniq barcode
+  def self.generate(barcode_set_id=nil)
+      barcode_set_id ||= Barcode.maximum("barcode_set").to_i + 1
+      retry_count = 0
+      barcode = nil
+      begin
+        bcid = "P#{ rand(16**6).to_s(16).upcase }"
+        barcode = Barcode.create!(barcode: bcid, barcode_set: barcode_set_id)
+      rescue ActiveRecord::RecordInvalid => e
+        logger.error(e.message)
+        retry_count += 1
+        retry if retry_count < 5
+      end
+      barcode
+  end
   # Generate a set of random barcode strings
   # @param n Integer The number of barcodes to create (default=1)
   # @param l Integer The
   # @return Array  An array of random barcode strings.
-  def self.generate_barcodes(num,barcode_set=nil)
+  def self.generate_barcodes(num,barcode_set_id=nil)
     barcodes = []
     retry_count = 0
-    barcode_set ||= Barcode.maximum("barcode_set").to_i + 1
+    barcode_set_id ||= Barcode.maximum("barcode_set").to_i + 1
     (0...(num)).each do |m|
       retry_count = 0
       begin
-        bcid = "P#{ rand(16**6).to_s(16).upcase }"
-        bc = Barcode.create!(barcode: bcid, barcode_set: barcode_set)
+        bc = self.generate(barcode_set_id)
         barcodes << bc
       rescue ActiveRecord::RecordInvalid => e
         logger.error(e.message)
@@ -39,6 +54,6 @@ class Barcode < ActiveRecord::Base
         retry if retry_count < 5
       end
     end
-    return [barcode_set, barcodes]
+    return [barcode_set_id, barcodes]
   end
 end

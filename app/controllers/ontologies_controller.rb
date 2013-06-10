@@ -1,7 +1,7 @@
 class OntologiesController < ApplicationController
     load_and_authorize_resource
     def index
-        @ontologies = Ontology.page(params[:page])
+        @ontologies = @ontologies.page(params[:page])
     end
     def show; end
 
