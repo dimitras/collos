@@ -26,4 +26,16 @@ class ContainerType < ActiveRecord::Base
     def type_term=(term)
         self.type = OntologyTerm.from_pretty_string(term).first
     end
+
+    def pretty_string
+        "[#{self.id}] #{self.name}"
+    end
+
+    def self.from_pretty_string(term)
+        # "[#{id}:] #{name}"
+        term =~ /\[(\w+)\]\s(.+)/
+        id = $1
+        ContainerType.find(id)
+    end
+
 end

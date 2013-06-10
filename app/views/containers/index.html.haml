@@ -1,0 +1,24 @@
+%h3 Container Types
+%table.table.table-striped.table-condensed.table-bordered
+    %thead
+        %tr
+            %th.span2 Barcode
+            %th.span2 Name
+            %th.span2 Container Type
+            %th.span1 Retired?
+            %th.span2 &nbsp;
+    %tbody
+        -for container in @containers
+            %tr
+                %td=container.name
+                %td=link_to container.barcode.barcode, barcode_url(container.barcode)
+                %td=link_to container.container_type.name, container_type_url(container.container_type)
+                %td=container.retired? ? "Yes" : "No"
+                %td
+                    =link_to "Show", container_path(container), class: 'btn'
+                    - if can?(:edit, container)
+                        =link_to "Edit", edit_container_path(container), class: 'btn btn-success'
+                    -if can?(:destroy, container)
+                        = link_to "Destroy", container_path(container), method: 'delete', class: 'btn btn-danger'
+=will_paginate(@containers)
+= link_to "Create a new Container", new_container_path, class: 'btn btn-primary btn-large'

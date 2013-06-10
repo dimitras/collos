@@ -6,7 +6,7 @@ class ContainerTypesController < ApplicationController
         @container_types = @container_types.includes(:type => [:ontology]).page(params[:page])
     end
     def show
-        @container_type = @container_type.includes(:type => [ :ontology ]).find(params[:id])
+        @container_type = ContainerType.includes(:type => [ :ontology ]).find(@container_type)
         @type = @container_type.type
     end
 
