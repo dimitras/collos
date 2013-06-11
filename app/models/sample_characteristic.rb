@@ -14,7 +14,7 @@
 #
 
 class SampleCharacteristic < ActiveRecord::Base
-  attr_accessible :name, :unit, :value
+  attr_accessible :name, :unit, :value, :sample_id
 
   belongs_to :ontology_term
   belongs_to :unit_type, class_name: "OntologyTerm", foreign_key: "unit_type_id"
