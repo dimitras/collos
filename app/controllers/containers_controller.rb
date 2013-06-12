@@ -1,13 +1,13 @@
 class ContainersController < ApplicationController
-    load_and_authorize_resource
+    load_and_authorize_resource includes: [:barcode,:container_type]
     autocomplete :container_type, :name, display_value: :pretty_string, full: true
 
     def index
-        @containers = @containers.includes(:container_type => [ :type ] ).page(params[:page])
+        @containers = @containers.includes([:barcode,:container_type]).page(params[:page])
     end
-    def show
-        @container = Container.includes(:container_type => [ :type ] ).find(@container)
-    end
+    def show; end
+    #     @container = Container.includes(:container_type => [ :type ] ).find(@container)
+    # end
     def new; end
     def create
         @container.parent = nil

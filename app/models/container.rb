@@ -37,7 +37,7 @@ class Container < ActiveRecord::Base
 
     before_create :assign_barcode
     def assign_barcode
-        self.barcode = Barcode.generate()
+        self.barcode ||= Barcode.generate()
     end
 
     def container_type_name
