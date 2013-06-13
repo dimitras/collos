@@ -3,15 +3,21 @@
     %a.logoText{ href: root_path}
       CollOS
     %ul.nav
-      = render "shared/login"
+      -if current_user
+        %li.dropdown
+          =link_to(raw("Categories <b class=caret></b>"), '#', class: 'dropdown-toggle', "data-toggle" => 'dropdown')
+          %ul.dropdown-menu
+            %li=link_to 'Samples',samples_url
+            %li=link_to 'Containers',containers_url
+            %li=link_to 'Container Types',container_types_url
+            %li=link_to 'Barcodes', barcodes_url
       %li{ class: current_page?(help_path()) ? "active"  : ''}
         = link_to "Help", help_path
       %li{ class: current_page?(about_path()) ? "active"  : ''}
         = link_to "About", about_path
-      %li{ class: current_page?(contact_path()) ? "active"  : ''}
-        = link_to "Contact", contact_path
       -if not current_page?(root_path)
-        %li.offset3
-          =form_tag query_samples_path, method: 'post', class: 'navbar-form navbar-search' do
-            .fieldset
-              =text_field_tag :query, nil, class: 'search-query  span3', placeholder: "Search"
+        %li
+          =form_tag query_samples_path, method: 'post', class: 'navbar-search' do
+            =text_field_tag :query, nil, class: 'search-query  span3', placeholder: "Search"
+      = render "shared/login"
+
