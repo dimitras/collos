@@ -1,6 +1,8 @@
 .navbar.navbar-static-top
   .navbar-inner
+
     %a.logoText{ href: root_path}
+      =image_tag('collos_icon.png')
       CollOS
     %ul.nav
       -if current_user
