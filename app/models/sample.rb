@@ -30,9 +30,12 @@ class Sample < ActiveRecord::Base
   has_paper_trail
 
   def scientific_name
-    taxon.scientific_name
+    taxon.try(:scientific_name)
   end
   def common_name
-    taxon.common_name
+    taxon.try(:common_name)
+  end
+  def scientific_name=(sn)
+    self.taxon = TaxonName.where("name_class like ? and name like ?", 'scientific', sn).taxon
   end
 end

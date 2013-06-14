@@ -2,6 +2,5 @@
     .control-group
         = f.label :container_type_name, "Container Type", class: 'control-label'
         .controls= f.autocomplete_field :container_type_name, autocomplete_container_type_name_containers_path
-    = f.input :barcode
     = f.input :name
     = f.button :submit

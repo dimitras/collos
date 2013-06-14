@@ -19,6 +19,7 @@ class Taxon < ActiveRecord::Base
   def scientific_name
     taxon_names.where(:name_class => 'scientific name').first.name
   end
+
   def common_name
     taxon_names.where(:name_class => 'genbank common name').first.name
   end

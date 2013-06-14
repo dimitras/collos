@@ -1,0 +1,23 @@
+%h3 Samples
+%table.table.table-striped.table-condensed.table-bordered
+    %thead
+        %tr
+            %th.span2 Barcode
+            %th.span2 Name
+            %th.span2 Taxon
+            %th.span2 Container
+            %th.span2 &nbsp;
+    %tbody
+        -for sample in @samples
+            %tr
+                %td=link_to sample.barcode.barcode, barcode_url(sample.barcode)
+                %td=sample.name
+                %td=link_to sample.container.name, container_url(sample.container)
+                %td
+                    =link_to "Show", sample_path(sample), class: 'btn'
+                    - if can?(:edit, sample)
+                        =link_to "Edit", edit_sample_path(sample), class: 'btn btn-success'
+                    -if can?(:destroy, sample)
+                        = link_to "Destroy", sample_path(sample), method: 'delete', class: 'btn btn-danger'
+=will_paginate(@samples)
+= link_to "Create a new Sample", new_sample_path, class: 'btn btn-primary btn-large'
