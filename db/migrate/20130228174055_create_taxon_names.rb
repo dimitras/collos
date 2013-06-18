@@ -8,6 +8,7 @@ class CreateTaxonNames < ActiveRecord::Migration
     end
     add_index :taxon_names, :taxon_id
     add_index :taxon_names, :ncbi_taxon_id
-    add_index :taxon_names, [:name, :name_class]
+    add_index :taxon_names, :name_class
+    add_index :taxon_names, :name
   end
 end

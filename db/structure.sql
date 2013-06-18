@@ -176,7 +176,7 @@ CREATE TABLE containers (
     id integer NOT NULL,
     container_type_id integer,
     name character varying(255),
-    ancestry character varying(255) NOT NULL,
+    ancestry character varying(255),
     ancestry_depth integer DEFAULT 0,
     x integer DEFAULT 0,
     y integer DEFAULT 0,
@@ -643,7 +643,9 @@ CREATE TABLE taxons (
     parent_taxon_id integer,
     ncbi_id integer NOT NULL,
     parent_ncbi_id integer,
-    rank character varying(255)
+    rank character varying(255),
+    scientific_name character varying(255),
+    common_name character varying(255)
 );
 
 
@@ -1411,3 +1413,7 @@ INSERT INTO schema_migrations (version) VALUES ('20130513144752');
 INSERT INTO schema_migrations (version) VALUES ('20130513144841');
 
 INSERT INTO schema_migrations (version) VALUES ('20130520175847');
+
+INSERT INTO schema_migrations (version) VALUES ('20130618170441');
+
+INSERT INTO schema_migrations (version) VALUES ('20130618170453');
