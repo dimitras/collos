@@ -60,5 +60,8 @@ namespace :ncbi_taxonomy do
 
     puts "Updating TaxonName entries with FK to Taxon"
     DB.execute("UPDATE taxon_names tn set taxon_id = (select t.id from taxons t where t.ncbi_id = tn.ncbi_taxon_id limit 1)")
+    puts "Updating Taxon with scientific and common names"
+    DB.execute("UPDATE taxons t set scientific_name = (select tn.name from taxon_names tn where tn.taxon_id = t.id and tn.name_class like 'scientific name')" )
+    DB.execute("UPDATE taxons t set common_name = (select tn.name from taxon_names tn where tn.taxon_id = t.id and tn.name_class like 'genbank common name'")
   end
 end
