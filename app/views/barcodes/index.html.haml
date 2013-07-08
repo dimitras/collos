@@ -7,3 +7,22 @@
 /   = label_tag(:sid, "Barcode Set ID")
 /   = text_field_tag(:sid, nil, size: 10, placeholder: "Enter the barcode set ID here")
 /   = submit_tag "Get Barcode Set"
+
+%h3 Barcodes
+%table.table.table-striped.table-condensed.table-bordered
+    %thead
+        %tr
+            %th.span2 Barcode Set ID
+            %th.span2 Barcode
+            %th.span2 Object
+    %tbody
+        -for barcode in @barcodes
+            %tr
+                %td=link_to barcode.barcode_set, fetch_barcodes_path(barcode_set: barcode.barcode_set)
+                %td=link_to barcode.barcode, barcode_path(barcode)
+                %td
+                    -if barcode.barcodeable
+                        = link_to barcode.barcodeable.name, url_for(barcode.barcodeable)
+                    -else
+                        None
+=will_paginate(@barcodes)
