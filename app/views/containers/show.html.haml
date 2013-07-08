@@ -9,7 +9,12 @@
         %td=link_to @container.container_type.pretty_string, container_type_path(@container.container_type)
     %tr
         %th Barcode
-        %td=link_to @container.barcode.barcode, barcode_path(@container.barcode)
+        %td
+            =@container.barcode.barcode
+            [
+            =link_to("Barcode set #{@container.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @container.barcode.barcode_set))
+            ]
+
 
 - if can? :edit , @container
     =button_to "Edit container", edit_container_path(@container), method: 'get', class: 'btn btn-success'
