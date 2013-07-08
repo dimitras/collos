@@ -1,5 +1,6 @@
 class SamplesController < ApplicationController
     load_and_authorize_resource
+
     autocomplete :taxon, :scientific_name, full: true, extra_data: [:scientific_name]
 
     def index
@@ -9,6 +10,7 @@ class SamplesController < ApplicationController
 
     def new;end
     def create
+        logger.info(@sample.to_yaml)
         if @sample.save
             redirect_to @sample, success: "Sample created successfully"
         else

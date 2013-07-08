@@ -16,7 +16,7 @@
 
 class Sample < ActiveRecord::Base
   attr_accessible :name, :notes, :taxon, :taxon_id,
-    :ancestry, :protocol_application, :protocol_application_id
+    :ancestry, :protocol_application, :protocol_application_id, :scientific_name, :common_name
 
   # validates :name, presence: true
 
@@ -36,6 +36,7 @@ class Sample < ActiveRecord::Base
     taxon.try(:common_name)
   end
   def scientific_name=(sn)
-    self.taxon = TaxonName.where("name_class like ? and name like ?", 'scientific', sn).taxon
+    t = TaxonName.where("name_class like ? and name like ?", 'scientific', sn).first
+    logger.info("TAXON: #{t}")
   end
 end
