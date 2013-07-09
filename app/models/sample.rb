@@ -35,8 +35,14 @@ class Sample < ActiveRecord::Base
   def common_name
     taxon.try(:common_name)
   end
+
   def scientific_name=(sn)
-    t = TaxonName.where("name_class like ? and name like ?", 'scientific', sn).first
-    logger.info("TAXON: #{t}")
+    self.taxon = Taxon.find_by_scientific_name(sn)
   end
+
+  before_create :assign_barcode
+  def assign_barcode
+      self.barcode ||= Barcode.generate()
+  end
+
 end

@@ -1,0 +1,17 @@
+%h3= @sample.name
+
+%table.table.table-bordered
+    %tr
+        %th Name
+        %td=@sample.name
+    %tr
+        %th.span3 Species
+        %td=@sample.taxon.scientific_name
+    %tr
+        %th Notes
+        %td=@sample.notes
+
+- if can? :edit , @sample
+    =button_to "Edit sample", edit_sample_path(@sample), method: 'get', class: 'btn btn-success'
+- if can? :destroy , @sample
+    =button_to "Delete sample", sample_path(@sample), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."

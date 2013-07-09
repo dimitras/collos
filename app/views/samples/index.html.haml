@@ -12,7 +12,12 @@
             %tr
                 %td=link_to sample.barcode.barcode, barcode_url(sample.barcode)
                 %td=sample.name
-                %td=link_to sample.container.name, container_url(sample.container)
+                %td=sample.taxon.scientific_name
+                %td
+                    -if sample.container
+                        =link_to sample.container.name, container_url(sample.container)
+                    -else
+                        %i None
                 %td
                     =link_to "Show", sample_path(sample), class: 'btn'
                     - if can?(:edit, sample)

@@ -10,7 +10,9 @@ class SamplesController < ApplicationController
 
     def new;end
     def create
-        logger.info(@sample.to_yaml)
+        # scientific_name = params[:sample].delete(:scientific_name)
+        # @sample = Sample.new(params[:sample])
+        # @sample.taxon = Taxon.find_by_scientific_name(scientific_name)
         if @sample.save
             redirect_to @sample, success: "Sample created successfully"
         else
