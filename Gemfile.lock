@@ -50,6 +50,8 @@ GEM
       execjs
     coffee-script-source (1.6.3)
     connection_pool (1.1.0)
+    doorkeeper (0.6.7)
+      railties (~> 3.1)
     enumify (0.0.3)
     erubis (2.7.0)
     execjs (1.4.0)
@@ -114,6 +116,8 @@ GEM
     polyglot (0.3.3)
     puma (2.3.1)
       rack (>= 1.1, < 2.0)
+    rabl (0.8.6)
+      activesupport (>= 2.3.14)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -203,6 +207,7 @@ DEPENDENCIES
   bootstrap-sass-rails
   cancan
   coffee-rails
+  doorkeeper (~> 0.6.7)
   enumify
   figaro
   haml (~> 4.0)
@@ -215,6 +220,7 @@ DEPENDENCIES
   pg
   pg_search
   puma
+  rabl
   railroady
   rails (= 3.2.12)
   rails3-jquery-autocomplete

@@ -2,6 +2,8 @@ require 'sidekiq/web'
 
 Collos::Application.routes.draw do
 
+  use_doorkeeper
+
   resources :shipments
 
 
