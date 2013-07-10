@@ -55,10 +55,9 @@ gem 'paper_trail', '~> 2' # for audit trails
 #barcodes
 gem 'zint'
 
-# admin panel
-# gem 'activeadmin'
-# gem 'sass-rails'
-# gem "meta_search",    '>= 1.1.0.pre'
+# Oauth 2 API
+gem 'doorkeeper', '~> 0.6.7'
+gem 'rabl'
 
 # background processing
 gem 'sidekiq'

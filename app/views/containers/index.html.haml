@@ -2,16 +2,20 @@
 %table.table.table-striped.table-condensed.table-bordered
     %thead
         %tr
-            %th.span2 Barcode
             %th.span2 Name
+            %th.span2 Barcode
             %th.span2 Container Type
             %th.span1 Retired?
             %th.span2 &nbsp;
     %tbody
         -for container in @containers
             %tr
-                %td=container.name
-                %td=link_to container.barcode.barcode, barcode_url(container.barcode)
+                %td=link_to container.name, container
+                %td
+                    =container.barcode.barcode
+                    [
+                    =link_to("Barcode set #{container.barcode.barcode_set}", fetch_barcodes_url(barcode_set: container.barcode.barcode_set))
+                    ]
                 %td=link_to container.container_type.name, container_type_url(container.container_type)
                 %td=container.retired? ? "Yes" : "No"
                 %td

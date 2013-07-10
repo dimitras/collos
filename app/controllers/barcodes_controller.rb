@@ -2,6 +2,7 @@ class BarcodesController < ApplicationController
   load_and_authorize_resource
 
   def index
+    @barcodes = @barcodes.includes(:barcodeable).page(params[:page] || 1).per_page(10)
   end
 
   def show; end

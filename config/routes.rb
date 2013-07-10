@@ -2,6 +2,8 @@ require 'sidekiq/web'
 
 Collos::Application.routes.draw do
 
+  use_doorkeeper
+
   resources :shipments
 
 
@@ -47,6 +49,7 @@ Collos::Application.routes.draw do
       post 'annotate'
       post 'query'
       post 'upload'
+      get 'autocomplete_taxon_scientific_name', format: 'json'
     end
   end
 

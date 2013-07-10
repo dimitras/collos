@@ -16,7 +16,7 @@
 
 class Sample < ActiveRecord::Base
   attr_accessible :name, :notes, :taxon, :taxon_id,
-    :ancestry, :protocol_application, :protocol_application_id
+    :ancestry, :protocol_application, :protocol_application_id, :scientific_name, :common_name
 
   # validates :name, presence: true
 
@@ -30,9 +30,19 @@ class Sample < ActiveRecord::Base
   has_paper_trail
 
   def scientific_name
-    taxon.scientific_name
+    taxon.try(:scientific_name)
   end
   def common_name
-    taxon.common_name
+    taxon.try(:common_name)
   end
+
+  def scientific_name=(sn)
+    self.taxon = Taxon.find_by_scientific_name(sn)
+  end
+
+  before_create :assign_barcode
+  def assign_barcode
+      self.barcode ||= Barcode.generate()
+  end
+
 end

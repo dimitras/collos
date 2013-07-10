@@ -19,5 +19,4 @@ class Taxon < ActiveRecord::Base
   has_many :taxon_names
   belongs_to :parent, :class_name => "Taxon", :foreign_key => "parent_taxon_id"
 
-
 end
