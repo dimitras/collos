@@ -1,11 +1,28 @@
 require 'sidekiq/web'
+require 'api_constraints'
 
 Collos::Application.routes.draw do
 
-  use_doorkeeper
+  # API, based on http://railscasts.com/episodes/350-rest-api-versioning
+  namespace :api, defaults: {format: 'json'} do
+    scope module: :v1 , constraints: ApiConstraints.new(version: 1, default: true) do
+
+      resources :barcodes, except: :destroy  do
+        collection do
+          post 'generate'
+          get 'fetch'
+        end
+      end
+
+      # resources :shipments
+      # resources :samples
+    end
+
+    # further versions of the API can be added as above. See http://railscasts.com/episodes/350-rest-api-versioning for more information
+  end
+
 
   resources :shipments
-
 
   resources :users do
     member do

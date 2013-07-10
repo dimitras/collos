@@ -8,6 +8,7 @@ group :assets do
   gem 'coffee-rails'
   gem 'uglifier'
   gem 'bootstrap-sass-rails'
+  gem 'jquery-ui-sass-rails'
 end
 
 group :development do
