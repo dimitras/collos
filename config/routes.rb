@@ -13,9 +13,15 @@ Collos::Application.routes.draw do
           get 'fetch'
         end
       end
+      resources :samples, except :destroy, controller: 'smp' do
+      end
+      resources :containers, except :destroy, controller: 'cnt' do
+      end
+      resources :container_types, except :destroy, controller: 'ctt' do
+      end
 
-      # resources :shipments
-      # resources :samples
+      # resources :shipments, except :destroy, controller: 'smp' do
+      # end
     end
 
     # further versions of the API can be added as above. See http://railscasts.com/episodes/350-rest-api-versioning for more information
