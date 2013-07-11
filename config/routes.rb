@@ -13,11 +13,11 @@ Collos::Application.routes.draw do
           get 'fetch'
         end
       end
-      resources :samples, except :destroy, controller: 'smp' do
+      resources :samples, except: :destroy, controller: 'smp' do
       end
-      resources :containers, except :destroy, controller: 'cnt' do
+      resources :containers, except: :destroy, controller: 'cnt' do
       end
-      resources :container_types, except :destroy, controller: 'ctt' do
+      resources :container_types, except: :destroy, controller: 'ctt' do
       end
 
       # resources :shipments, except :destroy, controller: 'smp' do
