@@ -3,38 +3,6 @@ require 'api_constraints'
 
 Collos::Application.routes.draw do
 
-  # API, based on http://railscasts.com/episodes/350-rest-api-versioning
-  namespace :api, defaults: {format: 'json'} do
-    scope module: :v1 , constraints: ApiConstraints.new(version: 1, default: true) do
-
-      # resources :bc, except: [:edit,:new,:destroy] do
-      #   collection do
-      #     post 'generate'
-      #     get 'fetch'
-      #   end
-      # end
-      resources :barcodes, except: [:edit,:new,:destroy], controller: 'barcodes' do
-        collection do
-          post 'generate'
-          get 'fetch'
-        end
-      end
-
-      # resources :samples, except: :destroy, controller: 'smp' do
-      # end
-      # resources :containers, except: :destroy, controller: 'cnt' do
-      # end
-      # resources :container_types, except: :destroy, controller: 'ctt' do
-      # end
-
-      # resources :shipments, except :destroy, controller: 'smp' do
-      # end
-    end
-
-    # further versions of the API can be added as above. See http://railscasts.com/episodes/350-rest-api-versioning for more information
-  end
-
-
   resources :shipments
 
   resources :users do
