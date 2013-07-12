@@ -1,11 +1,9 @@
 require 'sidekiq/web'
+require 'api_constraints'
 
 Collos::Application.routes.draw do
 
-  use_doorkeeper
-
   resources :shipments
-
 
   resources :users do
     member do
