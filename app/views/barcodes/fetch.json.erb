@@ -1,8 +1,0 @@
-{
-  "barcodeSet": {
-    "barcodeSetId": <%= @barcode_set_id %>,
-    "barcodes": [
-      <%= raw(@barcodes.collect {|bc| "\"#{bc.barcode}\""}.join(",")) %>
-    ]
-  }
-}
