@@ -4,24 +4,24 @@ taxons = Taxon.create(
     [
         {
             ncbi_id: 9606,
-            scientifif_name: "Homo sapiens",
+            scientific_name: "Homo sapiens",
             common_name: "human"
         },
         {
             ncbi_id: 10090,
-            scientifif_name: "Mus musculus",
+            scientific_name: "Mus musculus",
             common_name: "house mouse"
         },
 
         {
             ncbi_id: 4932,
-            scientifif_name: "Saccharomyces cerevisiae",
+            scientific_name: "Saccharomyces cerevisiae",
             common_name: "baker's yeast"
         },
 
         {
             ncbi_id:  7955,
-            scientifif_name: "Danio rerio",
+            scientific_name: "Danio rerio",
             common_name: "zebrafish"
         },
 
