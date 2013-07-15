@@ -16,23 +16,24 @@
 #
 
 class Container < ActiveRecord::Base
-    attr_accessible :name, :notes, :ancestry, :x, :y, :retired, :barcode,
-                    :container_type_name, :container_type
+    attr_accessible :name, :notes,  :barcode,
+        :ancestry, :container_x, :container_y,
+        :container_type_name, :container_type, :container_type_id,
+        :retired
 
     belongs_to :container_type, inverse_of: :containers
     has_many :samples
     has_one :barcode, as: :barcodeable
     has_and_belongs_to_many :shipments
 
-    # Barcodes should be mandatory and unique
-    # validates :barcode, presence: true
-    # validates :barcode, unique: true
-
     # Sets the default scope to only find containers that are active.
     # To find all entries, use "Container.unscoped.find" or some derivative.
     default_scope where(retired: false)
 
+    # parent-child-sibling relationships
     has_ancestry :orphan_strategy => :rootify, :cache_depth => true
+
+    # version information
     has_paper_trail
 
     before_create :assign_barcode

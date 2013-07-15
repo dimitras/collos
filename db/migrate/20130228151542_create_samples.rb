@@ -2,8 +2,10 @@ class CreateSamples < ActiveRecord::Migration
   def change
     create_table :samples do |t|
       t.string :name
-      t.references :container
       t.references :taxon
+      t.references :container
+      t.integer :container_x
+      t.integer :container_y
       t.references :protocol_application
       t.string :ancestry, length: 500
       t.integer :ancestry_depth, default: 0

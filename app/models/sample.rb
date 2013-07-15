@@ -15,8 +15,11 @@
 #
 
 class Sample < ActiveRecord::Base
-  attr_accessible :name, :notes, :taxon, :taxon_id,
-    :ancestry, :protocol_application, :protocol_application_id, :scientific_name, :common_name
+  attr_accessible :name,
+    :notes, :taxon, :taxon_id,
+    :scientific_name, :common_name,
+    :ancestry,:container_x, :container_y,
+    :protocol_application, :protocol_application_id
 
   # validates :name, presence: true
 
@@ -27,6 +30,8 @@ class Sample < ActiveRecord::Base
   has_many :sample_characteristics
 
   has_ancestry :orphan_strategy => :rootify, :cache_depth => true
+
+  # version information
   has_paper_trail
 
   def scientific_name
