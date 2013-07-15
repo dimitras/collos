@@ -12,11 +12,7 @@
 #
 
 class Taxon < ActiveRecord::Base
-  attr_accessible :ancestry, :ancestry_depth, :ncbi_id, :parent_ncbi_id, :rank,
+  attr_accessible :ncbi_id,
     :scientific_name, :common_name
-
   has_many :samples
-  has_many :taxon_names
-  belongs_to :parent, :class_name => "Taxon", :foreign_key => "parent_taxon_id"
-
 end

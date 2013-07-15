@@ -41,6 +41,7 @@ class Sample < ActiveRecord::Base
   end
 
   before_create :assign_barcode
+
   def assign_barcode
       self.barcode ||= Barcode.generate()
   end

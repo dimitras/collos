@@ -35,8 +35,6 @@ Collos::Application.routes.draw do
   end
 
   resources :taxons
-  resources :taxon_names
-
   resources :protocols
   # resources :protocol_parameters
   resources :protocol_applications

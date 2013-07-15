@@ -10,10 +10,9 @@
 #
 
 class Ontology < ActiveRecord::Base
-  attr_accessible :name, :description, :prefix, :uri
+  attr_accessible :name, :description, :prefix, :uri, :release
   validates :name, presence: true
   validates :prefix, presence: true
   validates :uri, presence: true
-
   has_many :ontology_terms
 end

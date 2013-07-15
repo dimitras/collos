@@ -7,12 +7,15 @@ class Ability
         can :manage, :all
     else
         can :read, :all
+
         can :manage, [Sample, SampleCharacteristic,
                       Container, ContainerType,
                       Protocol, ProtocolApplication, ProtocolParameter,
                       ProtocolParameterValue, Shipment,
                       Contact, Address]
+
         can :create, Barcode
+
         can :update, User, :id => user.id
     end
   end
