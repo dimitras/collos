@@ -11,25 +11,48 @@ The site itself has documentation on usage, refer to the `About` and `Help` page
 
 The site depends on two core technologies:
 
-* Rails 3
-* PostgreSQL
+* [Rails 3](http://rubyonrails.org/)
+* [PostgreSQL](http://www.postgresql.org/)
+* [redis](http://redis.io/)
 
 In particular we are taking advantage of PostgreSQL's native full-text-search capabilities. The Rails engines and plugins are itemized in the Gemfile. Both are discussed below.
 
 
-## PostgreSQL and Full Text Search
-
-TODO: finish this section
-
-## Major Rails Functionality
+## Major Application Functionality
 
 There are several major subsystems in CollOS. They are described below.
 
 ### Environment configuration
 
+We use the [Figaro gem](https://github.com/laserlemon/figaro) as a simple method of passing environment variables to the application.
+
 ### Authentication
+
+Authentication is handled using the Oauth 2 protocal, via [OmniAuth gem](https://github.com/intridea/omniauth/wiki) and the [omniauth-basecamp](https://github.com/Verano/omniauth-basecamp) strategy.
 
 ### Authorization
 
+Authorization uses the [CanCan](https://github.com/ryanb/cancan) gem.
+
 ### Background Processing
 
+Background processing is accomplished using [Sidekiq](http://sidekiq.org/)
+
+You can see the processing queue and other Sidekiq information in the dashboard at `root_url()/sidekiq`. __Note:__ you need to be logged in first.
+
+You can find more information about the Sidekiq workers and how to deploy them at [the background processing page](doc/background_processing.md)
+
+## PostgreSQL and Full Text Search
+
+TODO: finish this section
+
+## INSTALL
+
+Like you would any other Rails application.
+
+```
+cd $RAILS_ROOT
+bundle
+```
+
+Then make sure Postgres and redis are running, etc.
