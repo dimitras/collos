@@ -43,8 +43,8 @@ gem 'pg_search'
 
 # Authentication
 gem 'bcrypt-ruby'
-gem 'omniauth-identity'
 gem 'omniauth-basecamp'
+# gem 'omniauth-identity'
 gem 'enumify'
 
 # Authorization
@@ -55,6 +55,9 @@ gem 'paper_trail', '~> 2' # for audit trails
 
 #barcodes
 gem 'zint'
+
+# Excel file support
+gem 'roo'
 
 # Oauth 2 API
 gem 'doorkeeper', '~> 0.6.7'
