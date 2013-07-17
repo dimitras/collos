@@ -2,13 +2,5 @@
   %h2 Use a developer account
   =button_to("Developer Login", "/auth/developer")
 
-%h2 Use a password account
-= form_tag "/auth/identity/callback" do
-  .field
-    = label_tag :auth_key, "Email"
-    = text_field_tag :auth_key
-  .field
-    = label_tag :password
-    = password_field_tag :password
-  .actions
-    = submit_tag "Login"
+%h2 Log in with Basecamp
+=link_to(image_tag("basecamp.png"), url_for("auth/basecamp"), class: 'btn btn-large')
