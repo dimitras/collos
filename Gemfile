@@ -28,7 +28,6 @@ gem "haml-rails", "~> 0.4"
 gem "will_paginate"
 gem 'will_paginate_twitter_bootstrap'
 gem 'simple_form'
-
 # JS form validation
 gem "parsley-rails"
 
@@ -43,8 +42,8 @@ gem 'pg_search'
 
 # Authentication
 gem 'bcrypt-ruby'
-gem 'omniauth-basecamp'
-# gem 'omniauth-identity'
+gem 'omniauth-37signals'
+
 gem 'enumify'
 
 # Authorization

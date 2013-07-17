@@ -106,6 +106,9 @@ GEM
     omniauth (1.1.4)
       hashie (>= 1.2, < 3)
       rack
+    omniauth-37signals (1.0.5)
+      omniauth (~> 1.0)
+      omniauth-oauth2 (~> 1.0)
     omniauth-basecamp (0.1.0)
       omniauth-oauth2 (~> 1.0.0)
     omniauth-oauth2 (1.0.3)
@@ -229,6 +232,7 @@ DEPENDENCIES
   haml-rails (~> 0.4)
   jquery-rails
   jquery-ui-sass-rails
+  omniauth-37signals
   omniauth-basecamp
   paper_trail (~> 2)
   parsley-rails

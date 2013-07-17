@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    raise request.env["omniauth.auth"].to_yaml
+    # raise request.env["omniauth.auth"].to_yaml
     logger.debug(env["omniauth.auth"])
     begin
       user = User.from_omniauth(env["omniauth.auth"])

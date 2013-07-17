@@ -1,10 +1,22 @@
 # These are the necessary environment variables needed by the application.
 # Fill in the proper values
 
+# 37 signals application identifiers for use with omniauth-37signals strategy
 BASECAMP_CLIENT_ID: XXXXXXXXX
 BASECAMP_SECRET: XXXXXXXXX
+
+# valid 37signals project IDs to accept user accounts from
+VALID_37SIGNALS_PROJECTS:
+    - 12345
+    - 67890
+
+# Gmail credentials to send out mail as
 GMAIL_USERNAME: donotreply@gmail.com
 GMAIL_PASSWORD: secretpw123
+
+## Runtime environment specific attributes
+# REDIS_PROVIDER - redis database URI
+
 
 development:
     REDIS_PROVIDER: redis://localhost:6379
