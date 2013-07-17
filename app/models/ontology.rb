@@ -4,6 +4,7 @@
 #
 #  id          :integer          not null, primary key
 #  name        :string(255)      not null
+#  release     :string(255)
 #  description :string(255)
 #  uri         :string(255)      not null
 #  prefix      :string(255)      not null

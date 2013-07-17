@@ -4,8 +4,10 @@
 #
 #  id                      :integer          not null, primary key
 #  name                    :string(255)
-#  container_id            :integer
 #  taxon_id                :integer
+#  container_id            :integer
+#  container_x             :integer
+#  container_y             :integer
 #  protocol_application_id :integer
 #  ancestry                :string(255)
 #  ancestry_depth          :integer          default(0)
@@ -18,7 +20,7 @@ class Sample < ActiveRecord::Base
   attr_accessible :name,
     :notes, :taxon, :taxon_id,
     :scientific_name, :common_name,
-    :ancestry,:container_x, :container_y,
+    :ancestry, :container_x, :container_y,
     :protocol_application, :protocol_application_id
 
   # validates :name, presence: true

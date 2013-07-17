@@ -15,3 +15,5 @@
     =button_to "Edit sample", edit_sample_path(@sample), method: 'get', class: 'btn btn-success'
 - if can? :destroy , @sample
     =button_to "Delete sample", sample_path(@sample), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
+
+=button_to "See all samples", samples_path, method: 'get', class: 'btn'

@@ -1,12 +1,3 @@
-%h3 Generate some barcodes:
-= render partial: 'generate_barcodes'
-
-%h3 Fetch a barcode set:
-= render partial: 'fetch_barcodes'
-/ =form_tag( barcode_fetch_path ) do
-/   = label_tag(:sid, "Barcode Set ID")
-/   = text_field_tag(:sid, nil, size: 10, placeholder: "Enter the barcode set ID here")
-/   = submit_tag "Get Barcode Set"
 
 %h3 Barcodes
 %table.table.table-striped.table-condensed.table-bordered
@@ -14,7 +5,7 @@
         %tr
             %th.span2 Barcode Set ID
             %th.span2 Barcode
-            %th.span2 Object
+            %th.span2 Related Entity
     %tbody
         -for barcode in @barcodes
             %tr
@@ -26,3 +17,9 @@
                     -else
                         None
 =will_paginate(@barcodes)
+
+%h3 Generate some barcodes:
+= render partial: 'generate_barcodes'
+
+%h3 Fetch a barcode set:
+= render partial: 'fetch_barcodes'

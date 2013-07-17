@@ -6,7 +6,7 @@
         %td=@container.name
     %tr
         %th Container Type
-        %td=link_to @container.container_type.pretty_string, container_type_path(@container.container_type)
+        %td=link_to @container.container_type.name, container_type_path(@container.container_type)
     %tr
         %th Barcode
         %td
@@ -14,6 +14,12 @@
             [
             =link_to("Barcode set #{@container.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @container.barcode.barcode_set))
             ]
+    %tr
+        %th Retired
+        %td=@container.retired? ? "Yes" : "No"
+    %tr
+        %th Notes
+        %th=@container.notes
 
 
 - if can? :edit , @container
@@ -21,4 +27,4 @@
 - if can? :destroy , @container
     =button_to "Delete container", container_path(@container), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
 
-=button_to "Go back to all containers", containers_path(), class: 'btn', method: 'get'
+=button_to "See all containers", containers_path(), class: 'btn', method: 'get'

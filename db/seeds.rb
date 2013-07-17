@@ -47,37 +47,83 @@ nci = Ontology.where(
 # OntologieTerm
 
 # containers
+container = OntologyTerm.where(
+            name: "container",
+            accession: "obo:OBI_0000967",
+            definition: "A device that can be used to restrict the location of material entities over time",
+            ontology_id: obi.id
+    ).first_or_create()
 plate = OntologyTerm.where(
             name: "microtiter plate",
             accession: "obo:OBI_0000192",
             definition: "A microtiter_plate is a flat plate with multiple wells used as small test tubes.",
             ontology_id: obi.id
         ).first_or_create()
+plate.parent = container
+plate.save
 tube =  OntologyTerm.where(
             name: "test tube",
             accession: "obo:OBI_0000836",
             definition: "A test tube is a device consisting of a glass or plastic tubing, open at the top, usually with a rounded U-shaped bottom which has the function to contain material",
             ontology_id: obi.id
         ).first_or_create()
+tube.parent = container
+tube.save
+freezer =  OntologyTerm.where(
+            name: "freezer",
+            accession: "C84327",
+            definition: "A refrigerated cabinet or room for preserving materials at or below 32F (0C).",
+            ontology_id: nci.id
+        ).first_or_create()
+freezer.parent = container
+freezer.save
+box = OntologyTerm.where(
+            name: "box",
+            accession: "C43178",
+            definition: "A square or rectangular vessel, usually made of cardboard or plastic.",
+            ontology_id: nci.id
+        ).first_or_create()
+box.parent = container
+box.save
+bag = OntologyTerm.where(
+            name: "bag",
+            accession: "C43167",
+            definition: "A sac or pouch.",
+            ontology_id: nci.id
+        ).first_or_create()
+bag.parent = container
+bag.save
+
 
 # SampleCharacteristic OntologyTerm
 # gender
+gender = OntologyTerm.where(name: "biological sex",
+        accession: 'obo:PATO_0000047',
+        definition: 'An organismal quality inhering in a bearer by virtue of the bearer\'s ability to undergo sexual reproduction in order to differentiate the individuals or types involved.',
+        ontology_id: obi.id
+    ).first_or_create()
 s = OntologyTerm.where(name: "male",
         accession: 'obo:PATO_0000384',
         definition: 'A biological sex quality inhering in an individual or a population whose sex organs contain only male gametes.',
         ontology_id: obi.id
     ).first_or_create()
+s.parent = gender
+s.save
 s = OntologyTerm.where(name: "female",
         accession: 'obo:PATO_0000383',
         definition: 'A biological sex quality inhering in an individual or a population that only produces gametes that can be fertilised by male gametes.',
         ontology_id: obi.id
     ).first_or_create()
+s.parent = gender
+s.save
 
 s = OntologyTerm.where(name: 'hermaphrodite',
         accession: 'obo:PATO_0001340',
         definition: 'A biological sex quality inhering in an organism or a population with both male and female sexual organs in one individual.',
         ontology_id: obi.id
     ).first_or_create()
+s.parent = gender
+s.save
 
 # ContainerType
 [
@@ -108,6 +154,18 @@ s = OntologyTerm.where(name: 'hermaphrodite',
         x_dimension: 1,
         y_dimension: 1,
         type_id: tube.id
+    },
+    {
+        name: '-80 freezer',
+        x_dimension: 1,
+        y_dimension: 4,
+        type_id: freezer.id
+    },
+    {
+        name: 'freezer box',
+        x_dimension: 10,
+        y_dimension: 5,
+        type_id: box.id
     }
 ].each do |ct|
     ContainerType.where(ct).first_or_create()

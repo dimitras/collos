@@ -1,14 +1,21 @@
-# These are the necessary environment variables needed by the application.
-# Fill in the proper values
+###############################################################################
+# Application settings. Settings are accomplished using the configulations    #
+# gem. See https://github.com/leongersing/configulations for more info.       #
+# E.g. how to override settings using the Rails environment.                  #
+###############################################################################
 
-BASECAMP_CLIENT_ID: XXXXXXXXX
-BASECAMP_SECRET: XXXXXXXXX
-GMAIL_USERNAME: donotreply@gmail.com
-GMAIL_PASSWORD: secretpw123
+# 37 signals application identifiers for use with omniauth-37signals strategy
+basecamp_client_id: xxxxxxxxx
+basecamp_secret: xxxxxxxxx
 
-development:
-    REDIS_PROVIDER: redis://localhost:6379
-test:
-    REDIS_PROVIDER: redis://localhost:6379
-production:
-    REDIS_PROVIDER: redis://localhost:6379
+# Array of valid 37signals project ids to accept user accounts from
+valid_37signals_projects:
+    - 12345
+    - 67890
+
+# gmail credentials to send out mail as
+gmail_username: donotreply@gmail.com
+gmail_password: secretpw123
+
+# redis database for Sidekiq background work processes
+redis_provider: redis://localhost:6379

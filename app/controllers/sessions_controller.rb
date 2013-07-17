@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    raise request.env["omniauth.auth"].to_yaml
+    # raise request.env["omniauth.auth"].to_yaml
     logger.debug(env["omniauth.auth"])
     begin
       user = User.from_omniauth(env["omniauth.auth"])
@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
         redirect_to root_path and return
       else
         session[:user_id] = user.id
-        redirect_to env['omniauth.origin'], notice: "Signed in!"
+        redirect_to root_path, notice: "Signed in!"
       end
     rescue OmniAuth::Error => e
       redirect_to login_url, alert:  "Authentication failed, please try again.", params: params
