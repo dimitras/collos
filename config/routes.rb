@@ -15,7 +15,6 @@ Collos::Application.routes.draw do
       get 'approve'
     end
   end
-  resources :identities, only: 'new'
 
   resources :contacts
   resources :addresses
@@ -64,7 +63,7 @@ Collos::Application.routes.draw do
   match "/auth/:provider/callback" => "sessions#create"
   match "/login", to: "sessions#new", as: :login
   match "/logout", to: "sessions#destroy", as:  :logout
-  match "/register", to: "identities#new", as: :register
+  # match "/register", to: "identities#new", as: :register
   match "/auth/failure", to: "sessions#failure", as: :login_failure
 
   root :to => "pages#index"

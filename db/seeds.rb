@@ -160,7 +160,7 @@ s.save
         x_dimension: 1,
         y_dimension: 4,
         type_id: freezer.id
-    }
+    },
     {
         name: 'freezer box',
         x_dimension: 10,

@@ -2,12 +2,14 @@
 #
 # Table name: ontology_terms
 #
-#  id          :integer          not null, primary key
-#  ontology_id :integer          not null
-#  accession   :string(255)      not null
-#  name        :string(255)      not null
-#  definition  :string(255)
-#  obsolete    :boolean          default(FALSE)
+#  id             :integer          not null, primary key
+#  ontology_id    :integer          not null
+#  accession      :string(255)      not null
+#  name           :string(255)      not null
+#  definition     :string(255)
+#  ancestry       :string(255)
+#  ancestry_depth :integer          default(0)
+#  obsolete       :boolean          default(FALSE)
 #
 
 class OntologyTerm < ActiveRecord::Base

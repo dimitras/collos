@@ -7,8 +7,8 @@
 #  name              :string(255)
 #  ancestry          :string(255)
 #  ancestry_depth    :integer          default(0)
-#  x                 :integer          default(0)
-#  y                 :integer          default(0)
+#  container_x       :integer          default(0)
+#  container_y       :integer          default(0)
 #  retired           :boolean          default(FALSE)
 #  notes             :text
 #  created_at        :datetime         not null

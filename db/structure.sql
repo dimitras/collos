@@ -217,39 +217,6 @@ CREATE TABLE containers_shipments (
 
 
 --
--- Name: identities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE identities (
-    id integer NOT NULL,
-    name character varying(255),
-    email character varying(255),
-    password_digest character varying(255),
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: identities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE identities_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: identities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE identities_id_seq OWNED BY identities.id;
-
-
---
 -- Name: oauth_access_grants; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -398,6 +365,8 @@ CREATE TABLE ontology_terms (
     accession character varying(255) NOT NULL,
     name character varying(255) NOT NULL,
     definition character varying(255),
+    ancestry character varying(255),
+    ancestry_depth integer DEFAULT 0,
     obsolete boolean DEFAULT false
 );
 
@@ -852,13 +821,6 @@ ALTER TABLE ONLY containers ALTER COLUMN id SET DEFAULT nextval('containers_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY identities ALTER COLUMN id SET DEFAULT nextval('identities_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY oauth_access_grants ALTER COLUMN id SET DEFAULT nextval('oauth_access_grants_id_seq'::regclass);
 
 
@@ -1005,14 +967,6 @@ ALTER TABLE ONLY container_types
 
 ALTER TABLE ONLY containers
     ADD CONSTRAINT containers_pkey PRIMARY KEY (id);
-
-
---
--- Name: identities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY identities
-    ADD CONSTRAINT identities_pkey PRIMARY KEY (id);
 
 
 --
@@ -1267,6 +1221,13 @@ CREATE INDEX index_ontologies_on_uri ON ontologies USING btree (uri);
 --
 
 CREATE INDEX index_ontology_terms_on_accession ON ontology_terms USING btree (accession);
+
+
+--
+-- Name: index_ontology_terms_on_ancestry; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_ontology_terms_on_ancestry ON ontology_terms USING btree (ancestry);
 
 
 --
@@ -1527,7 +1488,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130304171343');
 INSERT INTO schema_migrations (version) VALUES ('20130513144752');
 
 INSERT INTO schema_migrations (version) VALUES ('20130513144841');
-
-INSERT INTO schema_migrations (version) VALUES ('20130520175847');
 
 INSERT INTO schema_migrations (version) VALUES ('20130709202649');
