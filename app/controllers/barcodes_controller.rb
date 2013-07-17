@@ -39,7 +39,7 @@ class BarcodesController < ApplicationController
     else
       respond_to do |format|
         format.html
-        format.csv { render 'fetch', content_type: "text/csv", filename: "barcode_#{@barcodes_set_id}.csv"}
+        format.csv { render file: 'barcodes/fetch.csv.haml', content_type: "text/csv", filename: "barcode_#{@barcodes_set_id}.csv"}
         format.json {render 'fetch', content_type: "text/json", filename: "barcode_#{@barcodes_set_id}.json"}
         format.xml {render 'fetch', content_type: "text/xml", filename: "barcode_#{@barcodes_set_id}.xml"}
       end

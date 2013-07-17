@@ -52,17 +52,8 @@ Collos::Application.routes.draw do
   resources :sample_characteristics
 
 
-  resources :containers do
-    collection do
-      get 'autocomplete_container_type_name', format: 'json'
-    end
-  end
-  resources :container_types do
-    collection do
-      get 'autocomplete_ontology_term_name', format: 'json'
-    end
-  end
-
+  resources :containers
+  resources :container_types
 
   # static content pages
   match "/help", to: "pages#help", as: 'help', format: "html"
@@ -74,7 +65,7 @@ Collos::Application.routes.draw do
   match "/login", to: "sessions#new", as: :login
   match "/logout", to: "sessions#destroy", as:  :logout
   match "/register", to: "identities#new", as: :register
-  match "/auth/failure", to: "sessions#failure"
+  match "/auth/failure", to: "sessions#failure", as: :login_failure
 
   root :to => "pages#index"
 

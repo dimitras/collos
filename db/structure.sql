@@ -178,8 +178,8 @@ CREATE TABLE containers (
     name character varying(255),
     ancestry character varying(255),
     ancestry_depth integer DEFAULT 0,
-    x integer DEFAULT 0,
-    y integer DEFAULT 0,
+    container_x integer DEFAULT 0,
+    container_y integer DEFAULT 0,
     retired boolean DEFAULT false,
     notes text,
     created_at timestamp without time zone NOT NULL,
@@ -362,6 +362,7 @@ ALTER SEQUENCE oauth_applications_id_seq OWNED BY oauth_applications.id;
 CREATE TABLE ontologies (
     id integer NOT NULL,
     name character varying(255) NOT NULL,
+    release character varying(255),
     description character varying(255),
     uri character varying(255) NOT NULL,
     prefix character varying(255) NOT NULL
@@ -634,8 +635,10 @@ ALTER SEQUENCE sample_characteristics_id_seq OWNED BY sample_characteristics.id;
 CREATE TABLE samples (
     id integer NOT NULL,
     name character varying(255),
-    container_id integer,
     taxon_id integer,
+    container_id integer,
+    container_x integer,
+    container_y integer,
     protocol_application_id integer,
     ancestry character varying(255),
     ancestry_depth integer DEFAULT 0,
@@ -709,47 +712,12 @@ ALTER SEQUENCE shipments_id_seq OWNED BY shipments.id;
 
 
 --
--- Name: taxon_names; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE taxon_names (
-    id integer NOT NULL,
-    taxon_id integer,
-    ncbi_taxon_id integer NOT NULL,
-    name character varying(255) NOT NULL,
-    name_class character varying(255)
-);
-
-
---
--- Name: taxon_names_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE taxon_names_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: taxon_names_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE taxon_names_id_seq OWNED BY taxon_names.id;
-
-
---
 -- Name: taxons; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE taxons (
     id integer NOT NULL,
-    parent_taxon_id integer,
     ncbi_id integer NOT NULL,
-    parent_ncbi_id integer,
-    rank character varying(255),
     scientific_name character varying(255),
     common_name character varying(255)
 );
@@ -785,7 +753,7 @@ CREATE TABLE users (
     provider character varying(255),
     uid character varying(255),
     contact_id integer,
-    admin boolean,
+    admin boolean DEFAULT false,
     status character varying(255) DEFAULT 'pending'::character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -982,13 +950,6 @@ ALTER TABLE ONLY shipments ALTER COLUMN id SET DEFAULT nextval('shipments_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY taxon_names ALTER COLUMN id SET DEFAULT nextval('taxon_names_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY taxons ALTER COLUMN id SET DEFAULT nextval('taxons_id_seq'::regclass);
 
 
@@ -1156,14 +1117,6 @@ ALTER TABLE ONLY samples
 
 ALTER TABLE ONLY shipments
     ADD CONSTRAINT shipments_pkey PRIMARY KEY (id);
-
-
---
--- Name: taxon_names_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY taxon_names
-    ADD CONSTRAINT taxon_names_pkey PRIMARY KEY (id);
 
 
 --
@@ -1471,27 +1424,6 @@ CREATE INDEX index_shipments_on_tracking_number ON shipments USING btree (tracki
 
 
 --
--- Name: index_taxon_names_on_name_and_name_class; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_taxon_names_on_name_and_name_class ON taxon_names USING btree (name, name_class);
-
-
---
--- Name: index_taxon_names_on_ncbi_taxon_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_taxon_names_on_ncbi_taxon_id ON taxon_names USING btree (ncbi_taxon_id);
-
-
---
--- Name: index_taxon_names_on_taxon_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_taxon_names_on_taxon_id ON taxon_names USING btree (taxon_id);
-
-
---
 -- Name: index_taxons_on_common_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1506,24 +1438,10 @@ CREATE UNIQUE INDEX index_taxons_on_ncbi_id ON taxons USING btree (ncbi_id);
 
 
 --
--- Name: index_taxons_on_parent_ncbi_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_taxons_on_parent_ncbi_id ON taxons USING btree (parent_ncbi_id);
-
-
---
--- Name: index_taxons_on_parent_taxon_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_taxons_on_parent_taxon_id ON taxons USING btree (parent_taxon_id);
-
-
---
 -- Name: index_taxons_on_scientific_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_taxons_on_scientific_name ON taxons USING btree (scientific_name);
+CREATE UNIQUE INDEX index_taxons_on_scientific_name ON taxons USING btree (scientific_name);
 
 
 --
@@ -1559,13 +1477,6 @@ CREATE INDEX index_users_on_status ON users USING btree (status);
 --
 
 CREATE INDEX index_versions_on_item_type_and_item_id ON versions USING btree (item_type, item_id);
-
-
---
--- Name: taxon_scientific_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX taxon_scientific_name ON taxons USING btree (scientific_name);
 
 
 --
@@ -1605,8 +1516,6 @@ INSERT INTO schema_migrations (version) VALUES ('20130228163332');
 
 INSERT INTO schema_migrations (version) VALUES ('20130228174053');
 
-INSERT INTO schema_migrations (version) VALUES ('20130228174055');
-
 INSERT INTO schema_migrations (version) VALUES ('20130301024914');
 
 INSERT INTO schema_migrations (version) VALUES ('20130301202201');
@@ -1620,11 +1529,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130513144752');
 INSERT INTO schema_migrations (version) VALUES ('20130513144841');
 
 INSERT INTO schema_migrations (version) VALUES ('20130520175847');
-
-INSERT INTO schema_migrations (version) VALUES ('20130618170441');
-
-INSERT INTO schema_migrations (version) VALUES ('20130618170453');
-
-INSERT INTO schema_migrations (version) VALUES ('20130618185027');
 
 INSERT INTO schema_migrations (version) VALUES ('20130709202649');
