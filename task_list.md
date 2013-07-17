@@ -6,6 +6,7 @@
 * Export/Import CSV documentation
 * Possible integration with Roo gem for import
     * likely this will be in `lib/import_worksheet.rb` or something similar
+* change user reg for default active. Have forms for deactivating users.
 
 ## barcodes
 
