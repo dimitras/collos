@@ -24,7 +24,7 @@ There are several major subsystems in CollOS. They are described below.
 
 ### Environment configuration
 
-We use the [Figaro gem](https://github.com/laserlemon/figaro) as a simple method of passing environment variables to the application.
+We use the [configulations gem](https://github.com/leongersing/configulations) as a simple method of passing environment variables to the application.
 
 ### Authentication
 

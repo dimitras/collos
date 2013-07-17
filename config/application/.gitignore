@@ -1,0 +1,5 @@
+# ignore all YAML files in this dir...
+*.yml
+
+# ... except for this one.
+!.gitignore

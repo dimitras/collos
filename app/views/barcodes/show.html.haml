@@ -1,0 +1,17 @@
+%table.table.table-bordered
+    %tr
+        %th.span3 Barcode
+        %td=@barcode.barcode
+    %tr
+        %th BarcodeSet
+        %td=link_to @barcode.barcode_set, fetch_barcodes_url(barcode_set: @barcode.barcode_set)
+    %tr
+        %th Related Entity
+        %td
+            -if @barcode.barcodeable
+                = link_to @barcode.barcodeable.name, url_for(@barcode.barcodeable)
+            -else
+                None
+
+
+=button_to "See all barcodes", barcodes_path(), class: 'btn', method: 'get'

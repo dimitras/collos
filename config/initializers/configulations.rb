@@ -1,0 +1,1 @@
+CONFIG = Configulations.new

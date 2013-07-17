@@ -33,7 +33,7 @@ class User <  ActiveRecord::Base
   end
 
   def self.create_with_omniauth(auth)
-    if valid_37signals_project(auth)
+    if self.valid_37signals_project(auth)
       create! do |user|
         user.provider = auth["provider"]
         user.uid = auth['uid']
@@ -48,11 +48,10 @@ class User <  ActiveRecord::Base
   # User status flag
   enum :status, [:pending,:active,:inactive]
 
-  private
-  def valid_37signals_project(auth)
+  def self.valid_37signals_project(auth)
     valid = false
     auth["extra"]["accounts"].each do |a|
-      if ENV["VALID_37SIGNALS_PROJECTS"].find_index(a["id"])
+      if CONFIG.application.valid_37signals_projects.find_index(a["id"])
         valid = true
         break
       end

@@ -1,0 +1,4 @@
+# Override settings in config/application.yml,
+# or add new ones, here for RACK_ENV=production
+
+redis_provider: redis://localhost:6379

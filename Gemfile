@@ -32,7 +32,7 @@ gem 'simple_form'
 gem "parsley-rails"
 
 # YAML application configuration
-gem 'figaro'
+gem 'configulations'
 
 # for hierarchy relationships
 gem 'ancestry'

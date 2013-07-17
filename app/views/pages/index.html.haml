@@ -1,6 +1,5 @@
 - if current_user.nil?
-    %h4
-        =link_to("Sign in", login_path)
+    =render "sessions/form"
 -else
     %h4 Search CollOS
     = form_tag("/search",method: 'get', class: 'form-inline form-search') do

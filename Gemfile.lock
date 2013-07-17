@@ -49,6 +49,9 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
+    configulations (0.2.2)
+      json
+      json_pure
     connection_pool (1.1.0)
     doorkeeper (0.6.7)
       railties (~> 3.1)
@@ -59,9 +62,6 @@ GEM
     faraday (0.8.7)
       multipart-post (~> 1.1)
     ffi (1.9.0)
-    figaro (0.7.0)
-      bundler (~> 1.0)
-      rails (>= 3, < 5)
     haml (4.0.3)
       tilt
     haml-rails (0.4)
@@ -85,6 +85,7 @@ GEM
       jquery-ui-rails (= 4.0.3)
       railties (>= 3.1.0)
     json (1.8.0)
+    json_pure (1.8.0)
     jwt (0.1.8)
       multi_json (>= 1.5)
     mail (2.4.4)
@@ -109,8 +110,6 @@ GEM
     omniauth-37signals (1.0.5)
       omniauth (~> 1.0)
       omniauth-oauth2 (~> 1.0)
-    omniauth-basecamp (0.1.0)
-      omniauth-oauth2 (~> 1.0.0)
     omniauth-oauth2 (1.0.3)
       oauth2 (~> 0.8.0)
       omniauth (~> 1.0)
@@ -225,15 +224,14 @@ DEPENDENCIES
   bootstrap-sass-rails
   cancan
   coffee-rails
+  configulations
   doorkeeper (~> 0.6.7)
   enumify
-  figaro
   haml (~> 4.0)
   haml-rails (~> 0.4)
   jquery-rails
   jquery-ui-sass-rails
   omniauth-37signals
-  omniauth-basecamp
   paper_trail (~> 2)
   parsley-rails
   pg

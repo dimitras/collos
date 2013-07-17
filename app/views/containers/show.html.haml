@@ -6,7 +6,7 @@
         %td=@container.name
     %tr
         %th Container Type
-        %td=link_to @container.container_type.pretty_string, container_type_path(@container.container_type)
+        %td=link_to @container.container_type.name, container_type_path(@container.container_type)
     %tr
         %th Barcode
         %td

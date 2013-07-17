@@ -2,7 +2,9 @@
     = f.input :name
     - if @container.barcode
         =f.input :barcode, disabled: true, hint: "Barcodes are permanent. If you really want to change it, then contact the site admin."
+    - else
+        =f.input :barcode, disabled: true, hint: "Barcodes are automatically generated"
     = f.association :container_type
     = f.input :notes
-    = f.input :retired, as: :radio_button
+    = f.input :retired, as: :radio_buttons
     = f.button :submit
