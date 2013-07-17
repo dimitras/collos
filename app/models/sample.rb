@@ -18,7 +18,7 @@ class Sample < ActiveRecord::Base
   attr_accessible :name,
     :notes, :taxon, :taxon_id,
     :scientific_name, :common_name,
-    :ancestry,:container_x, :container_y,
+    :ancestry, :container_x, :container_y,
     :protocol_application, :protocol_application_id
 
   # validates :name, presence: true

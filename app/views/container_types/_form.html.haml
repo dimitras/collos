@@ -1,6 +1,6 @@
 =simple_form_for @container_type, :html => {:class => 'form-horizontal' } do |f|
     = f.input :name
-    = f.input :type
+    = f.association :type, collection: @container_type_terms
     = f.input :x_dimension
     = f.input :x_coord_labels
     = f.input :y_dimension

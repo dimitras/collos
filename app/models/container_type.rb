@@ -18,5 +18,10 @@ class ContainerType < ActiveRecord::Base
 
     belongs_to :type, class_name: "OntologyTerm", foreign_key: "type_id"
     has_many :containers, inverse_of: :container_types
-
+    def container_type_terms
+        OntologyTerm.where(
+            name: "container",
+            accession: "obo:OBI_0000967"
+        ).first.children()
+    end
 end

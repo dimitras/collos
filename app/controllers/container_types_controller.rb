@@ -5,11 +5,13 @@ class ContainerTypesController < ApplicationController
         @container_types = @container_types.includes(:type => [:ontology]).page(params[:page])
     end
     def show
-        @container_type = ContainerType.includes(:type => [ :ontology ]).find(@container_type)
         @type = @container_type.type
     end
 
-    def new; end
+    def new
+        # grab container type ontology terms
+        @container_type_terms = @container.container_type_terms()
+    end
     def create
         if @container_type.save
             flash[:success] = "ContainerType successfully created."
@@ -19,7 +21,10 @@ class ContainerTypesController < ApplicationController
         end
     end
 
-    def edit; end
+    def edit
+        # grab container type ontology terms
+        @container_type_terms = @container.container_type_terms()
+    end
     def update
         if @container_type.update_attributes(params[:container_type])
             flash[:success] = "ContainerType successfully updated."

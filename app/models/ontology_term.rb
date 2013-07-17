@@ -19,6 +19,8 @@ class OntologyTerm < ActiveRecord::Base
     validates :accession, :presence => true
     validates :name, :presence => true
 
+    has_ancestry :orphan_strategy => :rootify, :cache_depth => true
+
     def pretty_string
         "[#{self.accession}] #{self.name}"
     end
