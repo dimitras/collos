@@ -7,7 +7,7 @@
 #  shipper_id      :integer
 #  receiver_id     :integer
 #  ship_date       :datetime
-#  receive_date    :datetime
+#  recieve_date    :datetime
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #

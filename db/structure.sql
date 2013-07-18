@@ -562,42 +562,6 @@ ALTER SEQUENCE protocols_id_seq OWNED BY protocols.id;
 
 
 --
--- Name: sample_characteristics; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE sample_characteristics (
-    id integer NOT NULL,
-    sample_id integer,
-    ontology_term_id integer,
-    name character varying(255),
-    value character varying(255),
-    unit_type_id integer,
-    unit character varying(255),
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: sample_characteristics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE sample_characteristics_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: sample_characteristics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE sample_characteristics_id_seq OWNED BY sample_characteristics.id;
-
-
---
 -- Name: samples; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -723,7 +687,7 @@ CREATE TABLE users (
     uid character varying(255),
     contact_id integer,
     admin boolean DEFAULT false,
-    status character varying(255) DEFAULT 'pending'::character varying,
+    status character varying(255) DEFAULT 'active'::character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -891,13 +855,6 @@ ALTER TABLE ONLY protocols ALTER COLUMN id SET DEFAULT nextval('protocols_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY sample_characteristics ALTER COLUMN id SET DEFAULT nextval('sample_characteristics_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY samples ALTER COLUMN id SET DEFAULT nextval('samples_id_seq'::regclass);
 
 
@@ -1047,14 +1004,6 @@ ALTER TABLE ONLY protocol_parameters
 
 ALTER TABLE ONLY protocols
     ADD CONSTRAINT protocols_pkey PRIMARY KEY (id);
-
-
---
--- Name: sample_characteristics_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY sample_characteristics
-    ADD CONSTRAINT sample_characteristics_pkey PRIMARY KEY (id);
 
 
 --
@@ -1308,27 +1257,6 @@ CREATE INDEX index_protocols_on_protocol_type_id ON protocols USING btree (proto
 
 
 --
--- Name: index_sample_characteristics_on_ontology_term_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_sample_characteristics_on_ontology_term_id ON sample_characteristics USING btree (ontology_term_id);
-
-
---
--- Name: index_sample_characteristics_on_sample_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_sample_characteristics_on_sample_id ON sample_characteristics USING btree (sample_id);
-
-
---
--- Name: index_sample_characteristics_on_unit_type_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_sample_characteristics_on_unit_type_id ON sample_characteristics USING btree (unit_type_id);
-
-
---
 -- Name: index_samples_on_ancestry; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1460,8 +1388,6 @@ INSERT INTO schema_migrations (version) VALUES ('20130228151449');
 INSERT INTO schema_migrations (version) VALUES ('20130228151502');
 
 INSERT INTO schema_migrations (version) VALUES ('20130228151542');
-
-INSERT INTO schema_migrations (version) VALUES ('20130228151643');
 
 INSERT INTO schema_migrations (version) VALUES ('20130228152615');
 
