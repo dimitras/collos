@@ -6,33 +6,40 @@
 * Export/Import CSV documentation
 * Possible integration with Roo gem for import
     * likely this will be in `lib/import_worksheet.rb` or something similar
-* change user reg for default active. Have forms for deactivating users.
+* -- change user reg for default active. Have forms for deactivating users. --
 
 ## barcodes
 
+* better template export and API
+
 ## taxon
+
+* Done.
 
 ## container types
 
 * --remove autocomplete--
-* switch to selection of proper ontology terms
+* --switch to selection of proper ontology terms--
+* Done ( I think)
 
 ## containers
 
-* remove autocomplete conatiner_type in favor of selection
+* --remove autocomplete conatiner_type in favor of selection--
 * hierachy navigation
 * visualizations
+    * basically I need to make a table grid and show sample contents.
 
 
 ## Samples
 
-* remove autocomplete in favor of selection
+* --remove taxon autocomplete in favor of selection--
 * tags
 * container placement
-* hiearchy visualizations
+* hiearchy visualizations - same as Containers?
 
 
 #API
 
-* Integrate oauth provider
-* API using RABL
+* Integrate oauth provider - doorkeeper
+* API using RABL - half-ass implementation at the moment.
+
