@@ -8,6 +8,8 @@ Collos::Application.routes.draw do
       post 'receive'
       post 'ship'
     end
+  end
+
   resources :users do
     member do
       post 'activate'
@@ -46,9 +48,6 @@ Collos::Application.routes.draw do
       get 'autocomplete_taxon_scientific_name', format: 'json'
     end
   end
-
-  resources :sample_characteristics
-
   resources :containers
   resources :container_types
 

@@ -29,7 +29,6 @@ class Sample < ActiveRecord::Base
   belongs_to :container
   belongs_to :protocol_application
   belongs_to :taxon
-  has_many :sample_characteristics
 
   has_ancestry :orphan_strategy => :rootify, :cache_depth => true
 

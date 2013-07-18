@@ -1,1 +1,1 @@
-CONFIG = Configulations.new
+# CONFIG = Configulations.new

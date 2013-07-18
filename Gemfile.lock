@@ -116,7 +116,6 @@ GEM
     paper_trail (2.7.2)
       activerecord (~> 3.0)
       railties (~> 3.0)
-    parsley-rails (1.1.16.0)
     pg (0.15.1)
     pg_search (0.7.0)
       activerecord (>= 3.1)
@@ -233,7 +232,6 @@ DEPENDENCIES
   jquery-ui-sass-rails
   omniauth-37signals
   paper_trail (~> 2)
-  parsley-rails
   pg
   pg_search
   puma
