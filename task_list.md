@@ -11,6 +11,7 @@
 ## barcodes
 
 * better template export and API
+* add referenced object type to views
 
 ## taxon
 
@@ -28,12 +29,12 @@
 * hierachy navigation
 * visualizations
     * basically I need to make a table grid and show sample contents.
-
+* tags
 
 ## Samples
 
 * --remove taxon autocomplete in favor of selection--
-* tags
+* tags instead of robust characteristics
 * container placement
 * hiearchy visualizations - same as Containers?
 
