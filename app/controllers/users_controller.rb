@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-    skip_before_filter :require_login, :only => [:register]
-    skip_authorization_check :only => [:register]
+    # skip_before_filter :require_login, :only => [:register]
+    # skip_authorization_check :only => [:register]
 
     load_and_authorize_resource
 
@@ -29,14 +29,16 @@ class UsersController < ApplicationController
 
     def new; end
     def create
-        @user.status = :pending
+        @user.status = :active
         if @user.save
-            redirect_to @user, notice: 'Successfully registered. We will email a confirmation once your account is active'
+            UserRegistrationMailer.delay.welcome(@user.id)
+            redirect_to @user, notice: 'Successfully registered.'
+        end
+
         else
             render action: "new"
         end
     end
-
 
     def destroy
         redirect_to user_inactivate_path(@user)
@@ -44,24 +46,16 @@ class UsersController < ApplicationController
 
     def activate
         @user = User.find(params[:id])
-        send_mail = @user.pending?
         @user.active!
-        if send_mail
-            UserRegistrationMailer.delay.welcome(@user.id)
-        end
         flash[:success] = "User #{@user.name} now active"
         redirect_to user_path(@user)
     end
 
-    def inactivate
+    def deactivate
         @user.inactive!
         @user.save
-        flash[:success]= "User #{@user.name} now inactive"
+        flash[:success]= "User #{@user.name} now deactivated"
         redirect_to user_path(@user)
     end
 
-    # Review the list of pending registrations
-    def approve
-        @users = @users.pending
-    end
 end

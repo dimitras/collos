@@ -1,6 +1,6 @@
 class UserRegistrationMailer < ActionMailer::Base
   layout "mailer"
-  default from: ENV['GMAIL_USERNAME']
+  default from: CONFIG.application.gmail_username
 
   def welcome(user_id)
     @user = User.find(user_id)

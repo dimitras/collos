@@ -46,7 +46,7 @@ class User <  ActiveRecord::Base
   end
 
   # User status flag
-  enum :status, [:pending,:active,:inactive]
+  enum :status, [:active,:inactive]
 
   def self.valid_37signals_project(auth)
     valid = false

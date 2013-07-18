@@ -55,12 +55,12 @@ Collos::Application.configure do
     :address              => "smtp.gmail.com",
     :port                 => 587,
     :domain               => 'itmat.upenn.edu',
-    :user_name            => ENV['GMAIL_USERNAME'],
-    :password             => ENV['GMAIL_PASSWORD'],
+    :user_name            => CONFIG.application.gmail_username,
+    :password             => CONFIG.application.gmail_password,
     :authentication       => 'plain',
     :enable_starttls_auto => true  }
   config.action_mailer.default_url_options = {
-    :host => "collos.itmat.upenn.edu"
+    :host => CONFIG.application.mailer_host
   }
 
 

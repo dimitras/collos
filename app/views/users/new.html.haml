@@ -1,7 +1,5 @@
-= simple_form_for @user, :url => '/auth/identity/register' do |f|
-  %h3 Register an Account
-  = f.input :name, :input_html => {:name => 'name'}
-  = f.input :email, :input_html => {:name => 'email'}
-  = f.input :password, :as => 'password', :input_html => {:name => 'password'}
-  = f.input :password_confirmation, :label => "Confirm Password", :as => 'password', :input_html => {:name => 'password_confirmation'}
-  = f.submit "Sign Up"
+%h4 Note
+
+New users are automatically created by virtue of them signing into
+the application. Only users of valid Basecamp projects are allowed
+to create accounts.

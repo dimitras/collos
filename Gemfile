@@ -28,8 +28,10 @@ gem "haml-rails", "~> 0.4"
 gem "will_paginate"
 gem 'will_paginate_twitter_bootstrap'
 gem 'simple_form'
+
 # JS form validation
-gem "parsley-rails"
+# client side form validation not implemented yet.
+# gem "parsley-rails"
 
 # YAML application configuration
 gem 'configulations'

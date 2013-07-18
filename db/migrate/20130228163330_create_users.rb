@@ -7,7 +7,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :uid
       t.references :contact
       t.boolean :admin, default: false
-      t.string :status, default: 'pending'
+      t.string :status, default: 'active'
       t.timestamps
     end
     add_index :users, :email
