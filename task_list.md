@@ -38,8 +38,12 @@
 * container placement
 * hiearchy visualizations - same as Containers?
 
+## Shipments
 
-#API
+* Start it :)
+* mailers for sending and receiving
+
+# API
 
 * Integrate oauth provider - doorkeeper
 * API using RABL - half-ass implementation at the moment.
