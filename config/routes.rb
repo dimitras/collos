@@ -3,16 +3,15 @@ require 'api_constraints'
 
 Collos::Application.routes.draw do
 
-  resources :shipments
-
+  resources :shipments do
+    member do
+      post 'receive'
+      post 'ship'
+    end
   resources :users do
     member do
       post 'activate'
       post 'inactivate'
-    end
-    collection do
-      # get 'register'
-      get 'approve'
     end
   end
 
@@ -50,7 +49,6 @@ Collos::Application.routes.draw do
 
   resources :sample_characteristics
 
-
   resources :containers
   resources :container_types
 
@@ -73,6 +71,6 @@ Collos::Application.routes.draw do
   mount Sidekiq::Web, at: '/sidekiq', constraints: SidekiqAuth.new
 
   # Any path that is not found get re-directed to the root path
-  # match ':not_found' => redirect('/'), :constraints => { :not_found => /.*/ }
+  match ':not_found' => redirect('/'), :constraints => { :not_found => /.*/ }
 
 end

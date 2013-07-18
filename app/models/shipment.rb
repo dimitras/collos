@@ -7,13 +7,13 @@
 #  shipper_id      :integer
 #  receiver_id     :integer
 #  ship_date       :datetime
-#  recieve_date    :datetime
+#  receive_date    :datetime
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
 
 class Shipment < ActiveRecord::Base
-  attr_accessible :receiver_id, :recieve_date, :ship_date, :shipper_id, :tracking_number
+  attr_accessible :receiver_id, :reciever, :recieve_date, :ship_date, :shipper_id, :shipper, :tracking_number
   has_and_belongs_to_many :containers
   has_one :barcode, as: :barcodeable
   belongs_to :shipper, :class_name => "User", :foreign_key => "shipper_id"

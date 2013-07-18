@@ -12,6 +12,7 @@
 
 * better template export and API
 * add referenced object type to views
+* possibly get rid of fetch() route
 
 ## taxon
 
