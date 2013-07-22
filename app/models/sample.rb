@@ -24,7 +24,6 @@ class Sample < ActiveRecord::Base
     :protocol_application, :protocol_application_id
 
   # validates :name, presence: true
-
   has_one :barcode, as: :barcodeable
   belongs_to :container
   belongs_to :protocol_application
@@ -48,6 +47,7 @@ class Sample < ActiveRecord::Base
 
   before_create :assign_barcode
 
+  private
   def assign_barcode
       self.barcode ||= Barcode.generate()
   end

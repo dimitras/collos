@@ -17,7 +17,6 @@ Collos::Application.routes.draw do
     end
   end
 
-  resources :contacts
   resources :addresses
 
   resources :barcodes, except: :destroy do
