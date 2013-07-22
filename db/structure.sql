@@ -562,6 +562,38 @@ ALTER SEQUENCE protocols_id_seq OWNED BY protocols.id;
 
 
 --
+-- Name: sample_relationships; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE sample_relationships (
+    id integer NOT NULL,
+    ancestor_id integer,
+    descendant_id integer,
+    direct boolean,
+    count integer
+);
+
+
+--
+-- Name: sample_relationships_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE sample_relationships_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sample_relationships_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE sample_relationships_id_seq OWNED BY sample_relationships.id;
+
+
+--
 -- Name: samples; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -855,6 +887,13 @@ ALTER TABLE ONLY protocols ALTER COLUMN id SET DEFAULT nextval('protocols_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY sample_relationships ALTER COLUMN id SET DEFAULT nextval('sample_relationships_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY samples ALTER COLUMN id SET DEFAULT nextval('samples_id_seq'::regclass);
 
 
@@ -1004,6 +1043,14 @@ ALTER TABLE ONLY protocol_parameters
 
 ALTER TABLE ONLY protocols
     ADD CONSTRAINT protocols_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sample_relationships_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY sample_relationships
+    ADD CONSTRAINT sample_relationships_pkey PRIMARY KEY (id);
 
 
 --
@@ -1257,6 +1304,20 @@ CREATE INDEX index_protocols_on_protocol_type_id ON protocols USING btree (proto
 
 
 --
+-- Name: index_sample_relationships_on_ancestor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_sample_relationships_on_ancestor_id ON sample_relationships USING btree (ancestor_id);
+
+
+--
+-- Name: index_sample_relationships_on_descendant_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_sample_relationships_on_descendant_id ON sample_relationships USING btree (descendant_id);
+
+
+--
 -- Name: index_samples_on_ancestry; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1416,3 +1477,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130513144752');
 INSERT INTO schema_migrations (version) VALUES ('20130513144841');
 
 INSERT INTO schema_migrations (version) VALUES ('20130709202649');
+
+INSERT INTO schema_migrations (version) VALUES ('20130722131646');

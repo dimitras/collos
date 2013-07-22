@@ -1,7 +1,13 @@
 # Task list
 -----
 
+# General
+
+Update documentation on used gem plugins
+
+
 # Regular app
+
 
 * Export/Import CSV documentation
 * Possible integration with Roo gem for import
@@ -22,7 +28,8 @@
 
 * --remove autocomplete--
 * --switch to selection of proper ontology terms--
-* Done ( I think)
+* Make sure that we really can't delete these, only retire!
+
 
 ## containers
 
@@ -37,7 +44,9 @@
 * --remove taxon autocomplete in favor of selection--
 * tags instead of robust characteristics
 * container placement
-* hiearchy visualizations - same as Containers?
+* hiearchy visualizations - same as Containers? - needs multiple parents, ancestry gem seems to not have this.
+
+
 
 ## Shipments
 

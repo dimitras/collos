@@ -30,7 +30,7 @@ class Sample < ActiveRecord::Base
   belongs_to :protocol_application
   belongs_to :taxon
 
-  has_ancestry :orphan_strategy => :rootify, :cache_depth => true
+  has_dag_links link_class_name: 'SampleRelationship'
 
   # version information
   has_paper_trail

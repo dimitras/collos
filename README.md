@@ -15,6 +15,13 @@ The site depends on two core technologies:
 * [PostgreSQL](http://www.postgresql.org/)
 * [redis](http://redis.io/)
 
+For development, you will also need to install [GraphViz](http://www.graphviz.org/)
+
+```bash
+brew install graphviz
+````
+
+
 In particular we are taking advantage of PostgreSQL's native full-text-search capabilities. The Rails engines and plugins are itemized in the Gemfile. Both are discussed below.
 
 
@@ -56,3 +63,12 @@ bundle
 ```
 
 Then make sure Postgres and redis are running, etc.
+
+
+## Rails Plugins
+
+We use a few rails plugins in this app
+
+## Doorkeeper
+
+## Ancestry

@@ -1,0 +1,24 @@
+# == Schema Information
+#
+# Table name: sample_relationships
+#
+#  id            :integer          not null, primary key
+#  ancestor_id   :integer
+#  descendant_id :integer
+#  direct        :boolean
+#  count         :integer
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  ancestor_id: 1
+  descendant_id: 1
+  direct: false
+  count: 1
+
+two:
+  ancestor_id: 1
+  descendant_id: 1
+  direct: false
+  count: 1

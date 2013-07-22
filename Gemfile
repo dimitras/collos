@@ -36,8 +36,11 @@ gem 'simple_form'
 # YAML application configuration
 gem 'configulations'
 
-# for hierarchy relationships
+# For hierarchical relationships
+# Containers are strict trees
 gem 'ancestry'
+# Samples are Directed Acyclic Graphs
+gem 'acts-as-dag'
 
 # Full text search
 gem 'pg_search'
