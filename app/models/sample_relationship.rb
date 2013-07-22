@@ -11,6 +11,6 @@
 
 class SampleRelationship < ActiveRecord::Base
   attr_accessible :ancestry, :ancestor_id, :count, :descendant, :descendant_id, :direct
-  acts_as_dag_link node_class_name: "Sample"
+  acts_as_dag_links node_class_name: "Sample"
 
 end
