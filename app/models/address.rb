@@ -17,6 +17,6 @@
 
 class Address < ActiveRecord::Base
   attr_accessible :city, :country, :line_1, :line_2, :line_3, :province, :state, :zip
-  has_many :contacts
+  has_and_belongs_to_many :users
 
 end
