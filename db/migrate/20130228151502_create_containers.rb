@@ -3,7 +3,7 @@ class CreateContainers < ActiveRecord::Migration
     create_table :containers do |t|
       t.references :container_type
       t.string :name
-      t.string :ancestry, length: 500
+      t.string :ancestry, limit: 500
       t.integer :ancestry_depth, default: 0
       t.integer :container_x, default: 0
       t.integer :container_y, default: 0

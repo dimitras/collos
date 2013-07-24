@@ -152,7 +152,7 @@ CREATE TABLE containers (
     id integer NOT NULL,
     container_type_id integer,
     name character varying(255),
-    ancestry character varying(255),
+    ancestry character varying(500),
     ancestry_depth integer DEFAULT 0,
     container_x integer DEFAULT 0,
     container_y integer DEFAULT 0,
@@ -306,7 +306,7 @@ CREATE TABLE ontologies (
     id integer NOT NULL,
     name character varying(255) NOT NULL,
     release character varying(255),
-    description character varying(255),
+    description character varying(500),
     uri character varying(255) NOT NULL,
     prefix character varying(255) NOT NULL
 );
@@ -341,7 +341,7 @@ CREATE TABLE ontology_terms (
     accession character varying(255) NOT NULL,
     name character varying(255) NOT NULL,
     definition character varying(255),
-    ancestry character varying(255),
+    ancestry character varying(500),
     ancestry_depth integer DEFAULT 0,
     obsolete boolean DEFAULT false
 );
@@ -582,9 +582,11 @@ CREATE TABLE samples (
     container_x integer,
     container_y integer,
     protocol_application_id integer,
-    ancestry character varying(255),
+    ancestry character varying(500),
     ancestry_depth integer DEFAULT 0,
+    tags character varying(500),
     notes text,
+    retired boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1396,13 +1398,6 @@ CREATE INDEX index_users_on_status ON users USING btree (status);
 --
 
 CREATE INDEX index_versions_on_item_type_and_item_id ON versions USING btree (item_type, item_id);
-
-
---
--- Name: pg_search_documents_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX pg_search_documents_idx ON pg_search_documents USING gin (to_tsvector('english'::regconfig, content));
 
 
 --

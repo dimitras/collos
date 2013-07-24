@@ -7,7 +7,7 @@
 #  accession      :string(255)      not null
 #  name           :string(255)      not null
 #  definition     :string(255)
-#  ancestry       :string(255)
+#  ancestry       :string(500)
 #  ancestry_depth :integer          default(0)
 #  obsolete       :boolean          default(FALSE)
 #

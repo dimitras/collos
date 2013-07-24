@@ -7,9 +7,11 @@ class CreateSamples < ActiveRecord::Migration
       t.integer :container_x
       t.integer :container_y
       t.references :protocol_application
-      t.string :ancestry, length: 500
+      t.string :ancestry, limit: 500
       t.integer :ancestry_depth, default: 0
+      t.string :tags, limit: 500
       t.text :notes
+      t.boolean :retired, default: false
       t.timestamps
     end
     add_index :samples, :name

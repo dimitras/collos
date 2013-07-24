@@ -21,7 +21,7 @@
                         |
                         =link_to("Activate User", activate_user_path(@user), method: 'post')
                         |
--if @user.contact
-    = render :partial, "contact_information"
--else
-    %h3= link_to "Add Contact Information", new_contact_path( user_id: @user.id)
+/ -if @user.contact
+/     = render :partial, "contact_information"
+/ -else
+/     %h3= link_to "Add Contact Information", new_contact_path( user_id: @user.id)

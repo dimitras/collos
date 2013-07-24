@@ -1,0 +1,23 @@
+%h3 Users
+
+%table.table.table-striped.table-condensed.table-bordered
+    %thead
+        %tr
+            %th Name
+            %th E-mail
+            %th Status
+            %th &nbsp;
+    %tbody
+        -for user in @users
+            %tr
+                %td= link_to user.name, user
+                %td= user.email
+                %td= user.status
+                %td
+                    - if current_user && current_user.admin?
+                        - if user.active?
+                            =link_to("Make Inactive", inactivate_user_path(user), method: 'post')
+                        - else
+                            =link_to("Activate User", activate_user_path(user), method: 'post')
+                    - else
+                        &nbsp;

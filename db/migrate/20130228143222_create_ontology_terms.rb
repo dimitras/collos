@@ -5,7 +5,7 @@ class CreateOntologyTerms < ActiveRecord::Migration
       t.string :accession, null: false
       t.string :name, null: false
       t.string :definition
-      t.string :ancestry, length: 500
+      t.string :ancestry, limit: 500
       t.integer :ancestry_depth, default: 0
       t.boolean :obsolete, default: false
     end

@@ -5,3 +5,10 @@
         = f.input :status, as: :radio_buttons
         = f.input :admin
     =f.button :submit
+
+%h4 Addresses
+=link_to "Add an Address", new_address_path(params: {user_id: @user.id}), class: 'btn'
+
+- for addr in @user.addresses
+    .box
+        = render partial: "addresses/form", locals: {address: addr}

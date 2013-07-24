@@ -1,24 +1,22 @@
 class UsersController < ApplicationController
-    # skip_before_filter :require_login, :only => [:register]
-    # skip_authorization_check :only => [:register]
-
     load_and_authorize_resource
-
     @@per_page = 25
 
     def index
-        @users = @users.paginate(per_page: params[:per_page] || @@per_page,
-            page:  params[:page])
-        if params[:status]
-            @user.where(status: params[:status])
+        if params[:show_all]
+            @user = @user.unscoped
         end
+        @users = @users.page(params[:page] || 1).per_page(params[:per_page] || @@per_page)
     end
-
-    def show; end
+    def show
+        @addresses = @user.addresses
+    end
 
     # Regular edit functionality. If current_user.admin? then you can change
     # the active/inactive status of the supplied user
-    def edit; end
+    def edit
+        @addresses = @user.addresses
+    end
     def update
         if @user.update_attributes(params[:user])
             redirect_to @user, notice: "User was successfully updated"
@@ -29,12 +27,9 @@ class UsersController < ApplicationController
 
     def new; end
     def create
-        @user.status = :active
         if @user.save
             UserRegistrationMailer.delay.welcome(@user.id)
             redirect_to @user, notice: 'Successfully registered.'
-        end
-
         else
             render action: "new"
         end
@@ -55,7 +50,7 @@ class UsersController < ApplicationController
         @user.inactive!
         @user.save
         flash[:success]= "User #{@user.name} now deactivated"
-        redirect_to user_path(@user)
+        redirect_to @user
     end
 
 end

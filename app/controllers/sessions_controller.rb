@@ -10,13 +10,8 @@ class SessionsController < ApplicationController
     logger.debug(env["omniauth.auth"])
     begin
       user = User.from_omniauth(env["omniauth.auth"])
-      if user.pending?
-        flash[:success] = "User #{user.name} is now pending. We will send you an email once your account is active."
-        redirect_to root_path and return
-      else
-        session[:user_id] = user.id
-        redirect_to root_path, notice: "Signed in!"
-      end
+      session[:user_id] = user.id
+      redirect_to user_path(user), notice: "Signed in!"
     rescue OmniAuth::Error => e
       redirect_to login_url, alert:  "Authentication failed, please try again.", params: params
     end

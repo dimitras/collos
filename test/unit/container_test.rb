@@ -5,7 +5,7 @@
 #  id                :integer          not null, primary key
 #  container_type_id :integer
 #  name              :string(255)
-#  ancestry          :string(255)
+#  ancestry          :string(500)
 #  ancestry_depth    :integer          default(0)
 #  container_x       :integer          default(0)
 #  container_y       :integer          default(0)

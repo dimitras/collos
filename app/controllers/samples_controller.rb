@@ -1,7 +1,6 @@
 class SamplesController < ApplicationController
     load_and_authorize_resource
 
-    autocomplete :taxon, :scientific_name, full: true, extra_data: [:scientific_name]
 
     def index
         @samples = @samples.includes([:barcode, :container ]).page(params[:page] || 1)

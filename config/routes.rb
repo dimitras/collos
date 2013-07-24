@@ -39,13 +39,14 @@ Collos::Application.routes.draw do
   resources :protocol_applications
   # resources :protocol_parameter_values
 
-  resources :samples do
+  resources :samples, except: :destroy do
     collection do
       post 'annotate'
       post 'query'
       post 'upload'
     end
   end
+
   resources :containers
   resources :container_types
 

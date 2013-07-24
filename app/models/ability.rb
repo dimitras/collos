@@ -8,11 +8,10 @@ class Ability
     else
         can :read, :all
 
-        can :manage, [Sample, SampleCharacteristic,
+        can :manage, [Sample, Shipment,
                       Container, ContainerType,
                       Protocol, ProtocolApplication, ProtocolParameter,
-                      ProtocolParameterValue, Shipment,
-                      Contact, Address]
+                      ProtocolParameterValue, Address]
 
         can :create, Barcode
 
