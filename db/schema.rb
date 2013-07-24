@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130722131646) do
+ActiveRecord::Schema.define(:version => 20130724165231) do
 
   create_table "addresses", :force => true do |t|
     t.string   "line_1"
@@ -26,6 +26,14 @@ ActiveRecord::Schema.define(:version => 20130722131646) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "addresses_users", :id => false, :force => true do |t|
+    t.integer "address_id", :null => false
+    t.integer "user_id",    :null => false
+  end
+
+  add_index "addresses_users", ["address_id"], :name => "index_addresses_users_on_address_id"
+  add_index "addresses_users", ["user_id"], :name => "index_addresses_users_on_user_id"
+
   create_table "barcodes", :force => true do |t|
     t.string  "barcode"
     t.integer "barcode_set",      :default => 0
@@ -36,17 +44,6 @@ ActiveRecord::Schema.define(:version => 20130722131646) do
   add_index "barcodes", ["barcode"], :name => "index_barcodes_on_barcode", :unique => true
   add_index "barcodes", ["barcode_set"], :name => "index_barcodes_on_barcode_set"
   add_index "barcodes", ["barcodeable_type", "barcodeable_id"], :name => "index_barcodes_on_barcodeable_type_and_barcodeable_id"
-
-  create_table "contacts", :force => true do |t|
-    t.string   "fname"
-    t.string   "lname"
-    t.string   "email"
-    t.integer  "address_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "contacts", ["address_id"], :name => "index_contacts_on_address_id"
 
   create_table "container_types", :force => true do |t|
     t.integer  "type_id"
@@ -157,6 +154,7 @@ ActiveRecord::Schema.define(:version => 20130722131646) do
     t.string   "searchable_type"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.tsvector "tsv_content"
   end
 
   create_table "protocol_applications", :force => true do |t|
@@ -210,27 +208,15 @@ ActiveRecord::Schema.define(:version => 20130722131646) do
   add_index "protocols", ["name"], :name => "index_protocols_on_name"
   add_index "protocols", ["protocol_type_id"], :name => "index_protocols_on_protocol_type_id"
 
-  create_table "sample_characteristics", :force => true do |t|
-    t.integer  "sample_id"
-    t.integer  "ontology_term_id"
-    t.string   "name"
-    t.string   "value"
-    t.integer  "unit_type_id"
-    t.string   "unit"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
-  end
-
-  add_index "sample_characteristics", ["ontology_term_id"], :name => "index_sample_characteristics_on_ontology_term_id"
-  add_index "sample_characteristics", ["sample_id"], :name => "index_sample_characteristics_on_sample_id"
-  add_index "sample_characteristics", ["unit_type_id"], :name => "index_sample_characteristics_on_unit_type_id"
-
   create_table "sample_relationships", :force => true do |t|
     t.integer "ancestor_id"
     t.integer "descendant_id"
     t.boolean "direct"
     t.integer "count"
   end
+
+  add_index "sample_relationships", ["ancestor_id"], :name => "index_sample_relationships_on_ancestor_id"
+  add_index "sample_relationships", ["descendant_id"], :name => "index_sample_relationships_on_descendant_id"
 
   create_table "samples", :force => true do |t|
     t.string   "name"
@@ -277,15 +263,15 @@ ActiveRecord::Schema.define(:version => 20130722131646) do
   add_index "taxons", ["scientific_name"], :name => "index_taxons_on_scientific_name", :unique => true
 
   create_table "users", :force => true do |t|
-    t.string   "name",                              :null => false
-    t.string   "email",                             :null => false
+    t.string   "name",                             :null => false
+    t.string   "email",                            :null => false
     t.string   "provider"
     t.string   "uid"
     t.integer  "contact_id"
     t.boolean  "admin",      :default => false
-    t.string   "status",     :default => "pending"
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
+    t.string   "status",     :default => "active"
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
   end
 
   add_index "users", ["contact_id"], :name => "index_users_on_contact_id"

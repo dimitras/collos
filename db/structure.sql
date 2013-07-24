@@ -376,7 +376,8 @@ CREATE TABLE pg_search_documents (
     searchable_id integer,
     searchable_type character varying(255),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    tsv_content tsvector
 );
 
 
@@ -1398,10 +1399,24 @@ CREATE INDEX index_versions_on_item_type_and_item_id ON versions USING btree (it
 
 
 --
+-- Name: pg_search_documents_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX pg_search_documents_idx ON pg_search_documents USING gin (to_tsvector('english'::regconfig, content));
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
+
+
+--
+-- Name: pg_search_documents_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER pg_search_documents_tsvupdate BEFORE INSERT OR UPDATE ON pg_search_documents FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'content');
 
 
 --
@@ -1447,3 +1462,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130709202649');
 INSERT INTO schema_migrations (version) VALUES ('20130722131646');
 
 INSERT INTO schema_migrations (version) VALUES ('20130722142838');
+
+INSERT INTO schema_migrations (version) VALUES ('20130724165231');

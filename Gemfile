@@ -22,9 +22,10 @@ end
 
 # View helpers
 gem 'jquery-rails'
-gem 'rails3-jquery-autocomplete'
+# gem 'rails3-jquery-autocomplete'
 gem "haml", "~> 4.0"
 gem "haml-rails", "~> 0.4"
+gem "sass-twitter-bootstrap", "~> 2.3.0"
 gem "will_paginate"
 gem 'will_paginate_twitter_bootstrap'
 gem 'simple_form'
