@@ -52,5 +52,4 @@ class UsersController < ApplicationController
         flash[:success]= "User #{@user.name} now deactivated"
         redirect_to @user
     end
-
 end
