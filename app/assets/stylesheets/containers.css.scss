@@ -1,3 +1,15 @@
 // Place all the styles related to the containers controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+$cbox-padding: 2px;
+$cbox-margin: 2px;
+$cbox-border: 1px solid black;
+
+.cbox {
+    margin: $cbox-margin;
+    padding: $cbox-padding;
+    border: $cbox-border;
+    text-align: center;
+    vertical-align: top;
+}

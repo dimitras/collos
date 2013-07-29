@@ -7,8 +7,8 @@
 #  name              :string(255)
 #  ancestry          :string(500)
 #  ancestry_depth    :integer          default(0)
-#  container_x       :integer          default(0)
-#  container_y       :integer          default(0)
+#  parent_x          :integer          default(0)
+#  parent_y          :integer          default(0)
 #  retired           :boolean          default(FALSE)
 #  notes             :text
 #  created_at        :datetime         not null
@@ -48,4 +48,9 @@ class Container < ActiveRecord::Base
     def container_type_name=(cname)
         self.container_type = ContainerType.from_pretty_string(cname)
     end
+
+    def to_s
+        "[#{barcode}] #{name}"
+    end
+
 end

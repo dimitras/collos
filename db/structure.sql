@@ -116,10 +116,11 @@ CREATE TABLE container_types (
     id integer NOT NULL,
     type_id integer,
     name character varying(255),
-    x_dimension integer,
-    y_dimension integer,
-    x_coord_labels character varying(255),
-    y_coord_labels character varying(255),
+    x_dimension integer DEFAULT 1,
+    y_dimension integer DEFAULT 1,
+    x_coord_labels character varying(255) DEFAULT 'number'::character varying,
+    y_coord_labels character varying(255) DEFAULT 'number'::character varying,
+    can_have_children boolean DEFAULT true,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -154,8 +155,8 @@ CREATE TABLE containers (
     name character varying(255),
     ancestry character varying(500),
     ancestry_depth integer DEFAULT 0,
-    container_x integer DEFAULT 0,
-    container_y integer DEFAULT 0,
+    parent_x integer DEFAULT 0,
+    parent_y integer DEFAULT 0,
     retired boolean DEFAULT false,
     notes text,
     created_at timestamp without time zone NOT NULL,
@@ -582,8 +583,6 @@ CREATE TABLE samples (
     container_x integer,
     container_y integer,
     protocol_application_id integer,
-    ancestry character varying(500),
-    ancestry_depth integer DEFAULT 0,
     tags character varying(500),
     notes text,
     retired boolean DEFAULT false,
@@ -1286,13 +1285,6 @@ CREATE INDEX index_sample_relationships_on_ancestor_id ON sample_relationships U
 --
 
 CREATE INDEX index_sample_relationships_on_descendant_id ON sample_relationships USING btree (descendant_id);
-
-
---
--- Name: index_samples_on_ancestry; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_samples_on_ancestry ON samples USING btree (ancestry);
 
 
 --

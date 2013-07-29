@@ -9,8 +9,6 @@
 #  container_x             :integer
 #  container_y             :integer
 #  protocol_application_id :integer
-#  ancestry                :string(500)
-#  ancestry_depth          :integer          default(0)
 #  tags                    :string(500)
 #  notes                   :text
 #  retired                 :boolean          default(FALSE)

@@ -69,6 +69,7 @@ tube =  OntologyTerm.where(
         ).first_or_create()
 tube.parent = container
 tube.save
+
 freezer =  OntologyTerm.where(
             name: "freezer",
             accession: "C84327",
@@ -77,6 +78,7 @@ freezer =  OntologyTerm.where(
         ).first_or_create()
 freezer.parent = container
 freezer.save
+
 box = OntologyTerm.where(
             name: "box",
             accession: "C43178",
@@ -85,6 +87,7 @@ box = OntologyTerm.where(
         ).first_or_create()
 box.parent = container
 box.save
+
 bag = OntologyTerm.where(
             name: "bag",
             accession: "C43167",
@@ -131,29 +134,33 @@ s.save
         name: '96 well plate',
         x_dimension: 12,
         y_dimension: 8,
-        x_coord_labels: 'numbers',
-        y_coord_labels: 'letters',
-        type_id: plate.id
+        x_coord_labels: 'number',
+        y_coord_labels: 'letter',
+        type_id: plate.id,
+        can_have_children: false
     },
     {
         name: '384 well plate',
         x_dimension: 24,
         y_dimension: 16,
-        x_coord_labels: 'numbers',
-        y_coord_labels: 'letters',
-        type_id: plate.id
+        x_coord_labels: 'number',
+        y_coord_labels: 'letter',
+        type_id: plate.id,
+        can_have_children: false
     },
     {
         name: '1.5 mL tube',
         x_dimension: 1,
         y_dimension: 1,
-        type_id: tube.id
+        type_id: tube.id,
+        can_have_children: false
     },
     {
         name: '15 mL tube',
         x_dimension: 1,
         y_dimension: 1,
-        type_id: tube.id
+        type_id: tube.id,
+        can_have_children: false
     },
     {
         name: '-80 freezer',

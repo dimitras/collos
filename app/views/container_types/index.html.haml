@@ -22,4 +22,6 @@
                     -if can?(:destroy, container_type)
                         = link_to "Destroy", container_type_path(container_type), method: 'delete', class: 'btn btn-danger'
 =will_paginate(@container_types)
-= link_to "Create new Container Type", new_container_type_path, class: 'btn btn-primary btn-large'
+
+-if can? :create, ContainerType
+    = link_to "Create new Container Type", new_container_type_path, class: 'btn btn-primary btn-large'

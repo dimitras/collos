@@ -7,6 +7,7 @@ class CreateContainerTypes < ActiveRecord::Migration
       t.integer :y_dimension, default: 1
       t.string :x_coord_labels, default: 'number'
       t.string :y_coord_labels, default: 'number'
+      t.boolean :can_have_children, default: true
       t.timestamps
     end
     add_index :container_types, :type_id
