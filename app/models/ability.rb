@@ -9,11 +9,11 @@ class Ability
         can :read, :all
 
         can :manage, [Sample, Shipment,
-                      Container, ContainerType,
+                      Container, Address,
                       Protocol, ProtocolApplication, ProtocolParameter,
-                      ProtocolParameterValue, Address]
+                      ProtocolParameterValue]
 
-        can :create, Barcode
+        can [:create, :generate, :fetch], Barcode
 
         can :update, User, :id => user.id
     end
