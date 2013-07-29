@@ -18,6 +18,9 @@ class ContainerType < ActiveRecord::Base
 
     belongs_to :type, class_name: "OntologyTerm", foreign_key: "type_id"
     has_many :containers, inverse_of: :container_types
+
+    enum :x_coord_labels, [:letter,:number]
+    enum :y_coord_labels, [:letter,:number]
     def container_type_terms
         OntologyTerm.where(
             name: "container",
