@@ -50,6 +50,7 @@ gem 'pg_search'
 gem 'bcrypt-ruby'
 gem 'omniauth-37signals'
 
+# https://github.com/yonbergman/enumify
 gem 'enumify'
 
 # Authorization
