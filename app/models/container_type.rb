@@ -17,11 +17,12 @@
 class ContainerType < ActiveRecord::Base
     attr_accessible :name, :type, :type_id,
         :x_coord_labels, :x_dimension, :parent_x,
-        :y_coord_labels, :y_dimension, :parent_y
+        :y_coord_labels, :y_dimension, :parent_y,
+        :can_have_children
 
     belongs_to :type, class_name: "OntologyTerm", foreign_key: "type_id"
-    has_many :containers, inverse_of: :container_types
 
+    has_many :containers, inverse_of: :container_types
 
     def container_type_terms
         OntologyTerm.where(
