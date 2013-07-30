@@ -17,6 +17,10 @@
     %tr
         %th Retired
         %td=@container.retired? ? "Yes" : "No"
+
+    %tr
+        %th Tags
+        %th=format_tags(@container.tags)
     %tr
         %th Notes
         %th=@container.notes
@@ -25,6 +29,6 @@
 - if can? :edit , @container
     =button_to "Edit container", edit_container_path(@container), method: 'get', class: 'btn btn-success'
 - if can? :destroy , @container
-    =button_to "Delete container", container_path(@container), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
+    =button_to "Retire container", container_path(@container), method: 'delete', class: 'btn btn-danger'
 
 =button_to "See all containers", containers_path(), class: 'btn', method: 'get'

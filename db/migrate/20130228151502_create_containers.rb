@@ -8,6 +8,7 @@ class CreateContainers < ActiveRecord::Migration
       t.integer :parent_x, default: 0
       t.integer :parent_y, default: 0
       t.boolean :retired, default: false
+      t.string :tags, limit: 500
       t.text :notes
       t.timestamps
     end

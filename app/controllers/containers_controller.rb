@@ -33,12 +33,13 @@ class ContainersController < ApplicationController
     end
 
     def destroy
+        @container.retired = true
         begin
-            @container.destroy
-            flash[:success] = 'Container deleted'
+            @container.save
+            flash[:success] = 'Container retired'
             redirect_to containers_url
         rescue Exception => e
-            flash[:error] = "Container was not deleted because #{e.message}"
+            flash[:error] = "Container was not retired because #{e.message}"
             render @container
         end
     end
