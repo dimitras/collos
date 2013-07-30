@@ -1,10 +1,14 @@
 class SamplesController < ApplicationController
     load_and_authorize_resource
 
-
     def index
-        @samples = @samples.includes([:barcode, :container ]).page(params[:page] || 1)
+        @samples = @samples.includes([:barcode, :container ])
+        unless params[:show_all]
+            @samples = @samples.where(retired: false)
+        end
+        @samples = @samples.page(params[:page] || 1)
     end
+
     def show;end
 
     def new;end
@@ -27,11 +31,13 @@ class SamplesController < ApplicationController
             render action: 'edit'
         end
     end
+
     def destroy
-        if @sample.destroy
-            redirect_to samples_url, success: "Sample was deleted"
+        @sample.retired = true
+        if @sample.save
+            redirect_to samples_url, success: "Sample was retired"
         else
-            redirect_to @sample, error: "Sample was not deleted"
+            redirect_to samples_url, error: "Sample was not deleted"
         end
     end
 end

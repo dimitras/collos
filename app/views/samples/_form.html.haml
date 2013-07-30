@@ -1,5 +1,16 @@
 =simple_form_for @sample, html: {class: 'form-horizontal'} do |f|
     =f.association :taxon, label_method: :scientific_name
     =f.input :name
+    =f.input :tags, hint: 'Hit the "Tab" key to get a new tag'
+    =f.association :container
+    =f.input :container_x
+    =f.input :container_y
     =f.input :notes
+    =f.input :retired
     =f.button :submit
+
+= content_for :js do
+    :javascript
+        $("#sample_tags").tagsInput()
+
+

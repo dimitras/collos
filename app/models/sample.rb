@@ -20,12 +20,31 @@ class Sample < ActiveRecord::Base
   attr_accessible :name,
     :taxon, :taxon_id,
     :scientific_name, :common_name,
-    :ancestry, :container_x, :container_y,
+    :container, :container_id,
+    :container_x, :container_y,
     :protocol_application, :protocol_application_id,
-    :tags, :notes, :retired
+    :notes, :retired, :tags
 
-  serialize :tags
-  default_scope where(retired: false)
+
+  # Needed to parse out comma delimited tags from forms into a strict Array
+  # def tags=(tgs)
+  #   if tgs.kind_of? String
+  #     tgs = [tgs]
+  #   end
+  #   tgs = tgs.collect{ |t| t.split(',')}.flatten.collect {|t| t.strip }
+  #   write_attribute(:tags, tgs)
+  # end
+
+  # def tags
+  #   t = read_attribute(:tags)
+  #   if t.kind_of? Array
+  #     return t.join(", ")
+  #   else
+  #     return t
+  #   end
+  # end
+
+  # default_scope where(retired: false)
 
   # validates :name, presence: true
   has_one :barcode, as: :barcodeable
@@ -36,12 +55,15 @@ class Sample < ActiveRecord::Base
   def scientific_name
     taxon.try(:scientific_name)
   end
+
   def common_name
     taxon.try(:common_name)
   end
 
   def scientific_name=(sn)
-    self.taxon = Taxon.find_by_scientific_name(sn)
+    if tx = Taxon.find_by_scientific_name(sn)
+      self.taxon = tx
+    end
   end
 
   # Sample hierarchy is represented (loosely) as a directed acyclic graph.
@@ -54,6 +76,7 @@ class Sample < ActiveRecord::Base
   multisearchable against: [:name, :tags, :notes],
     using: {
       tsearch: {
+        dictionary: "english",
         any_word: true,
         prefix: true,
         tsvector_column: 'tsv_content'

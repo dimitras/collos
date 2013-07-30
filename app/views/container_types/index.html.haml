@@ -1,4 +1,5 @@
 %h3 Container Types
+
 %table.table.table-striped.table-condensed.table-bordered
     %thead
         %tr
@@ -21,7 +22,7 @@
                         =link_to "Edit", edit_container_type_path(container_type), class: 'btn btn-success'
                     -if can?(:destroy, container_type)
                         = link_to "Destroy", container_type_path(container_type), method: 'delete', class: 'btn btn-danger'
-=will_paginate(@container_types)
+=will_paginate(@container_types, params: params)
 
 -if can? :create, ContainerType
     = link_to "Create new Container Type", new_container_type_path, class: 'btn btn-primary btn-large'

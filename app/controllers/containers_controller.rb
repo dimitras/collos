@@ -2,11 +2,14 @@ class ContainersController < ApplicationController
     load_and_authorize_resource includes: [:barcode,:container_type]
 
     def index
-        @containers = @containers.includes([:barcode,:container_type]).page(params[:page])
+        @containers = @containers.includes([:barcode,:container_type])
+        unless params[:show_all]
+            @containers = @containers.where(retired: false)
+        end
+        @containers = @containers.page(params[:page])
     end
+
     def show; end
-    #     @container = Container.includes(:container_type => [ :type ] ).find(@container)
-    # end
     def new; end
     def create
         @container.parent = nil

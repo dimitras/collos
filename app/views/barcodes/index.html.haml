@@ -16,7 +16,7 @@
                         = link_to barcode.barcodeable.name, url_for(barcode.barcodeable)
                     -else
                         None
-=will_paginate(@barcodes)
+=will_paginate(@barcodes, params: params)
 
 %h3 Generate some barcodes:
 = render partial: 'generate_barcodes'

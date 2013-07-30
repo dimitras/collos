@@ -26,10 +26,6 @@ class Container < ActiveRecord::Base
     has_one :barcode, as: :barcodeable
     has_and_belongs_to_many :shipments
 
-    # Sets the default scope to only find containers that are active.
-    # To find all entries, use "Container.unscoped.find" or some derivative.
-    default_scope where(retired: false)
-
     # parent-child-sibling relationships
     has_ancestry :orphan_strategy => :rootify, :cache_depth => true
 

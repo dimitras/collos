@@ -39,7 +39,7 @@ Collos::Application.routes.draw do
   resources :protocol_applications
   # resources :protocol_parameter_values
 
-  resources :samples, except: :destroy do
+  resources :samples do
     collection do
       post 'annotate'
       post 'query'
@@ -69,6 +69,6 @@ Collos::Application.routes.draw do
   mount Sidekiq::Web, at: '/sidekiq', constraints: SidekiqAuth.new
 
   # Any path that is not found get re-directed to the root path
-  match ':not_found' => redirect('/'), :constraints => { :not_found => /.*/ }
+  # match ':not_found' => redirect(), :constraints => { :not_found => /.*/ }
 
 end

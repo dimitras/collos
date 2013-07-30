@@ -1,28 +1,36 @@
 %h3 Samples
+
+-if params[:show_all]
+    =link_to("Hide Retired Samples", samples_url())
+-else
+    =link_to('Show Retired Samples', samples_url(params: {show_all: true}))
 %table.table.table-striped.table-condensed.table-bordered
     %thead
         %tr
-            %th.span2 Barcode
+            %th.span1 Barcode
             %th.span2 Name
-            %th.span2 Taxon
-            %th.span2 Container
+            %th.span1 Taxon
+            %th.span1 Container
+            %th.span1 Retired?
             %th.span2 &nbsp;
     %tbody
         -for sample in @samples
             %tr
                 %td=link_to sample.barcode.barcode, barcode_url(sample.barcode)
                 %td=sample.name
-                %td=sample.taxon.scientific_name
+                %td=sample.taxon.try(:scientific_name)
                 %td
                     -if sample.container
                         =link_to sample.container.name, container_url(sample.container)
                     -else
                         %i None
+                %td= sample.retired? ? "yes" : "no"
                 %td
                     =link_to "Show", sample_path(sample), class: 'btn'
                     - if can?(:edit, sample)
                         =link_to "Edit", edit_sample_path(sample), class: 'btn btn-success'
                     -if can?(:destroy, sample)
-                        = link_to "Destroy", sample_path(sample), method: 'delete', class: 'btn btn-danger'
-=will_paginate(@samples)
+                        = link_to "Retire", sample_path(sample), method: 'delete', class: 'btn btn-danger'
+=will_paginate(@samples, params: params)
+
 = link_to "Create a new Sample", new_sample_path, class: 'btn btn-primary btn-large'

@@ -1,4 +1,8 @@
 %h3 Containers
+-if params[:show_all]
+    =link_to("Hide Retired Containers", containers_url())
+-else
+    =link_to('Show Retired Containers', containers_url(params: {show_all: true}))
 %table.table.table-striped.table-condensed.table-bordered
     %thead
         %tr
