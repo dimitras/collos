@@ -1,0 +1,29 @@
+- sample_matrix = @container.sample_matrix
+%table.table.cntr
+    / output the top X axis label
+    - x_label = @container.container_type.x_coord_labels == 'letter' ? "A" : 1
+    %tr
+        -for x in 0...(@container.container_type.x_dimension)
+            %td.cntr-cell-label=x_label
+            - x_label.next!
+    / output the rows
+    - y_label = @container.container_type.y_coord_labels == 'letter' ? "A" : 1
+    -for y in 0...(@container.container_type.y_dimension)
+        %tr
+            %td.cntr.cell.label= y_label
+            - for x in 0...(@container.container_type.x_dimension)
+                -if smp = sample_matrix[y][x]
+                    %td.cntr.cell.filled(id= "cntr-#{y}-#{x}")=link_to(smp.barcode, sample_url(smp))
+                -else
+                    %td.cntr.cell(id= "cntr-#{y}-#{x}") &nbsp;
+
+        - y_label.next!
+
+    / output the bottom X axis label
+    - x_label = @container.container_type.x_coord_labels == 'letter' ? "A" : 1
+    %tr
+        -for x in 0.upto(@container.container_type.x_dimension)
+            %td.cntr-cell-label=x_label
+            - x_label.next!
+
+

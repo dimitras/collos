@@ -93,7 +93,8 @@ class Sample < ActiveRecord::Base
   before_create :assign_barcode
   private
   def assign_barcode
-      self.barcode ||= Barcode.generate()
+      bc = Barcode.generate()
+      self.barcode_string = bc.barcode.barcode
+      self.barcode = bc
   end
-
 end

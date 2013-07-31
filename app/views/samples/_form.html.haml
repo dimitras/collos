@@ -6,16 +6,23 @@
         =f.input :barcode, disabled: true, hint: "Barcodes are automatically generated"
     =f.association :taxon, label_method: :scientific_name
     =f.association :container, collection: Container.where(retired: false).order('containers.container_type_id, name').all,  hint: link_to("Create a new container", new_container_url), label_method: :to_s
-    =f.input :container_x
-    =f.input :container_y
+    %fieldset
+        =f.input :container_x
+        =f.input :container_y, hint: 'You can choose this at a later time.'
+
     =f.input :tags, hint: 'Press "Tab" key to enter a tag. Delete by clicking each tags "x"'
     =f.input :notes
     =f.input :retired
     =f.button :submit
     =link_to 'Cancel', @sample, class: 'btn btn-warning'
 
+.cntr.text-center.span1
+    .cell.selected(data-x=0 data-y=0) Cell 1
+    .cell(data-x=0 data-y=1) Cell 2
+
 = content_for :js do
     :javascript
         $("#sample_tags").tagsInput()
+
 
 

@@ -47,7 +47,12 @@ Collos::Application.routes.draw do
     end
   end
 
-  resources :containers
+  resources :containers do
+    collection do
+      get 'place_object'
+    end
+  end
+
   resources :container_types
 
   # static content pages
