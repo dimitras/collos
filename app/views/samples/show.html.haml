@@ -5,6 +5,13 @@
         %th Name
         %td=@sample.name
     %tr
+        %th Sample Barcode
+        %td
+            =@sample.barcode.barcode
+            [
+            =link_to("Barcode set #{@sample.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @sample.barcode.barcode_set))
+            ]
+    %tr
         %th.span3 Species
         %td=@sample.taxon.try(:scientific_name)
     %tr
@@ -14,12 +21,16 @@
         %th Container
         %td
             -if @sample.container
-                == #{@sample.container} (#{@sample.container_x},#{@sample.container_y})
+                - if @sample.container.show_location?
+                    = link_to("#{@sample.container} (#{@sample.container_x}, #{@sample.container_y})", @sample.container)
+                -else
+                    =link_to( @sample.container, @sample.container)
     %tr
         %th Notes
         %td=@sample.notes
 
-- if can? :edit , @sample
-    =button_to "Edit sample", edit_sample_path(@sample), method: 'get', class: 'btn btn-success'
-=button_to "See all samples", samples_path, method: 'get', class: 'btn'
+.buttons
+    =link_to "Edit sample", edit_sample_path(@sample), method: 'get', class: 'btn btn-success'
+    =link_to "Retire sample", edit_sample_path(@sample), method: 'get', class: 'btn btn-danger'
+    =link_to "See all samples", samples_path, method: 'get', class: 'btn'
 

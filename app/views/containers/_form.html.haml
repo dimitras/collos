@@ -1,7 +1,7 @@
 = simple_form_for @container, :html => {:class => 'form-horizontal' } do |f|
     = f.input :name
     - if @container.barcode
-        =f.input :barcode, disabled: true, hint: "Barcodes are permanent. If you really want to change it, then contact the site admin."
+        =f.input :barcode, disabled: true, hint: "Barcodes are permanent. If you really want to change it, then contact the site admin.", label_method: 'barcode.barcode'
     - else
         =f.input :barcode, disabled: true, hint: "Barcodes are automatically generated"
     = f.association :container_type
@@ -12,6 +12,6 @@
 
 = content_for :js do
     :javascript
-        $("#sample_tags").tagsInput()
+        $("#container_tags").tagsInput()
 
 
