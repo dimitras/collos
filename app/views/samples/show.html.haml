@@ -29,7 +29,8 @@
         %th Notes
         %td=@sample.notes
 
-- if can? :edit , @sample
-    =button_to "Edit sample", edit_sample_path(@sample), method: 'get', class: 'btn btn-success'
-=button_to "See all samples", samples_path, method: 'get', class: 'btn'
+.buttons
+    =link_to "Edit sample", edit_sample_path(@sample), method: 'get', class: 'btn btn-success'
+    =link_to "Retire sample", edit_sample_path(@sample), method: 'get', class: 'btn btn-danger'
+    =link_to "See all samples", samples_path, method: 'get', class: 'btn'
 
