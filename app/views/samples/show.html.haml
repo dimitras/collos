@@ -5,6 +5,13 @@
         %th Name
         %td=@sample.name
     %tr
+        %th Sample Barcode
+        %td
+            =@sample.barcode.barcode
+            [
+            =link_to("Barcode set #{@sample.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @sample.barcode.barcode_set))
+            ]
+    %tr
         %th.span3 Species
         %td=@sample.taxon.try(:scientific_name)
     %tr
@@ -14,7 +21,10 @@
         %th Container
         %td
             -if @sample.container
-                == #{@sample.container} (#{@sample.container_x},#{@sample.container_y})
+                - if @sample.container.show_location?
+                    = link_to("#{@sample.container} (#{@sample.container_x}, #{@sample.container_y})", @sample.container)
+                -else
+                    =link_to( @sample.container, @sample.container)
     %tr
         %th Notes
         %td=@sample.notes

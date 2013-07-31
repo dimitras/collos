@@ -66,6 +66,10 @@ class Sample < ActiveRecord::Base
     end
   end
 
+  def barcode_string
+    barcode.barcode
+  end
+
   # Sample hierarchy is represented (loosely) as a directed acyclic graph.
   # This is not strictly correct, but serves better for our purposes than a
   # strict tree hiearchy.

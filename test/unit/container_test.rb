@@ -10,6 +10,7 @@
 #  parent_x          :integer          default(0)
 #  parent_y          :integer          default(0)
 #  retired           :boolean          default(FALSE)
+#  tags              :string(500)
 #  notes             :text
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null

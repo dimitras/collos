@@ -56,4 +56,8 @@ class Barcode < ActiveRecord::Base
     end
     return [barcode_set_id, barcodes]
   end
+
+  def to_s
+    barcode
+  end
 end

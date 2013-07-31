@@ -158,6 +158,7 @@ CREATE TABLE containers (
     parent_x integer DEFAULT 0,
     parent_y integer DEFAULT 0,
     retired boolean DEFAULT false,
+    tags character varying(500),
     notes text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL

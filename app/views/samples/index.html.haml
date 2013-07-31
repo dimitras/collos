@@ -8,17 +8,19 @@
     %thead
         %tr
             %th.span1 Barcode
-            %th.span2 Name
+            %th.span1 Name
             %th.span1 Taxon
+            %th.span2 Tags
             %th.span1 Container
             %th.span1 Retired?
             %th.span2 &nbsp;
     %tbody
         -for sample in @samples
             %tr
-                %td=link_to sample.barcode.barcode, barcode_url(sample.barcode)
-                %td=sample.name
+                %td=sample.barcode.barcode
+                %td=link_to(sample.name, sample)
                 %td=sample.taxon.try(:scientific_name)
+                %td=format_tags(sample.tags)
                 %td
                     -if sample.container
                         =link_to sample.container.name, container_url(sample.container)
