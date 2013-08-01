@@ -66,11 +66,32 @@ class Container < ActiveRecord::Base
     end
 
     before_create :assign_barcode
-    private
     def assign_barcode
         bc = Barcode.generate()
         self.barcode_string = bc.barcode
         self.barcode = bc
     end
+
+    # Full text search of samples
+    include PgSearch
+    multisearchable against: [:name, :barcode_string, :tags, :notes],
+        using: {
+            tsearch: {
+                dictionary: "english",
+                any_word: true,
+                prefix: true,
+                tsvector_column: 'tsv_content'
+            }
+        }
+      pg_search_scope :search, against:  [:name, :barcode_string, :tags, :notes],
+        using: {
+          tsearch: {
+            dictionary: "english",
+            any_word: true,
+            prefix: true,
+            tsvector_column: 'tsv_content'
+          }
+        }
+
 
 end

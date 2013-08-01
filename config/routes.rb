@@ -42,8 +42,6 @@ Collos::Application.routes.draw do
   resources :samples do
     collection do
       get 'search'
-      # post 'annotate'
-      # post 'upload'
     end
     member do
       post 'place' # place this object into a container
@@ -53,7 +51,7 @@ Collos::Application.routes.draw do
 
   resources :containers do
     collection do
-      get 'search', format: 'json'
+      get 'search'
       get 'collect_objects'
       post 'place_objects'
     end
@@ -76,7 +74,8 @@ Collos::Application.routes.draw do
   # match "/register", to: "identities#new", as: :register
   match "/auth/failure", to: "sessions#failure", as: :login_failure
 
-  root :to => "pages#index"
+  # search page
+  match "/search", to: "search#index", as: :search
 
   # Sidekiq background work processor
   require "sidekiq_auth"
@@ -84,5 +83,7 @@ Collos::Application.routes.draw do
 
   # Any path that is not found get re-directed to the root path
   # match ':not_found' => redirect(), :constraints => { :not_found => /.*/ }
+  root :to => "pages#index"
+
 
 end
