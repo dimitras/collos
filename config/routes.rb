@@ -41,15 +41,24 @@ Collos::Application.routes.draw do
 
   resources :samples do
     collection do
-      post 'annotate'
-      post 'query'
-      post 'upload'
+      get 'search'
+      # post 'annotate'
+      # post 'upload'
     end
+    member do
+      post 'place' # place this object into a container
+    end
+
   end
 
   resources :containers do
     collection do
-      get 'place_object'
+      get 'search', format: 'json'
+      get 'collect_objects'
+      post 'place_objects'
+    end
+    member do
+      post 'place' # place this object into a container
     end
   end
 

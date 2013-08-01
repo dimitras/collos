@@ -5,6 +5,7 @@ $ ->
     updateSampleContainerLocations = (x,y) ->
         $("#container_x").attr('value', x)
         $("#container_y").attr('value', y)
+
     currentSelectedCell = $(".selected")
     $("[data-x]").click ->
         if (currentSelectedCell)
@@ -12,5 +13,4 @@ $ ->
         currentSelectedCell = this
         $(this).addClass("selected")
         updateSampleContainerLocations($(this).data("x"),$(this).data("y"))
-    updateContainerWidget = (id) ->
-        $.ajax(#{link_to(container_url(id))})
+
