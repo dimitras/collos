@@ -1,36 +1,58 @@
 %h3= @sample.name
 
-%table.table.table-bordered
-    %tr
-        %th Name
-        %td=@sample.name
-    %tr
-        %th Sample Barcode
-        %td
-            =@sample.barcode.barcode
-            [
-            =link_to("Barcode set #{@sample.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @sample.barcode.barcode_set))
-            ]
-    %tr
-        %th.span3 Species
-        %td=@sample.taxon.try(:scientific_name)
-    %tr
-        %th Tags
-        %td=format_tags(@sample.tags)
-    %tr
-        %th Container
-        %td
-            -if @sample.container
-                - if @sample.container.show_location?
-                    = link_to("#{@sample.container} (#{@sample.container_x}, #{@sample.container_y})", @sample.container)
-                -else
-                    =link_to( @sample.container, @sample.container)
-    %tr
-        %th Notes
-        %td=@sample.notes
-
-.buttons
+#buttons
     =link_to "Edit sample", edit_sample_path(@sample), method: 'get', class: 'btn btn-success'
     =link_to "Retire sample", edit_sample_path(@sample), method: 'get', class: 'btn btn-danger'
     =link_to "See all samples", samples_path, method: 'get', class: 'btn'
+%br
+#annotation
+    %table.table.table-bordered
+        %tr
+            %th Name
+            %td=@sample.name
+        %tr
+            %th Sample Barcode
+            %td
+                =@sample.barcode.barcode
+                [
+                =link_to("Barcode set #{@sample.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @sample.barcode.barcode_set))
+                ]
+        %tr
+            %th.span3 Species
+            %td=@sample.taxon.try(:scientific_name)
+        %tr
+            %th Tags
+            %td=format_tags(@sample.tags)
+        %tr
+            %th Container
+            %td
+                -if @sample.container
+                    - if @sample.container.show_location?
+                        = link_to("#{@sample.container} (#{@sample.container_x}, #{@sample.container_y})", @sample.container)
+                    -else
+                        =link_to( @sample.container, @sample.container)
+        %tr
+            %th Notes
+            %td=@sample.notes
+#ancestry
+    %h4 Related Samples
+    %table.table.table-bordered
+        %tr
+            %th Parents
+        - if @sample.parents.count > 0
+            -for p in @sample.parents
+                %tr
+                    %td=link_to "#{p.barcode}] #{p.name}", sample_url(p)
+        -else
+            %tr
+                %td
+                    %i None
+
+        %tr
+            %th Children
+        -for c in @sample.children
+            %tr
+                %td=link_to "#{c.barcode}] #{c.name}", sample_url(c)
+
+
 
