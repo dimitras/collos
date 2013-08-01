@@ -42,6 +42,7 @@ Collos::Application.routes.draw do
   resources :samples do
     collection do
       get 'search'
+      post 'upload'
     end
     member do
       post 'place' # place this object into a container

@@ -14,8 +14,8 @@
     %h4 Fetch a barcode set
     = render partial: "barcodes/fetch_barcodes"
 
-    %h4 Upload CSV of Annotations
-    = form_tag(upload_samples_path,method: 'post', class: 'form-horizontal') do
-        .fieldset
-            =file_field_tag :annotation_file,  class: 'file-field span4'
-            =submit_tag "Upload Annotations", class:'btn btn-primary'
+    / %h4 Upload CSV of Annotations
+    / = form_tag(upload_samples_path,method: 'post', class: 'form-horizontal') do
+    /     .fieldset
+    /         =file_field_tag :annotation_file,  class: 'file-field span4'
+    /         =submit_tag "Upload Annotations", class:'btn btn-primary'

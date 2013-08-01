@@ -10,8 +10,8 @@
 
     =field_set_tag "Container for sample" do
         =f.association :container, collection: Container.where(retired: false).order('containers.container_type_id, name').all,  hint: link_to("Create a new container", new_container_url), label_method: :to_s
-        =f.input :container_x
-        =f.input :container_y, hint: 'You can choose this at a later time.'
+        =f.input :container_y, hint: "The origin is at the top left corner, starts with zero. Tubes only have one position (0,0)."
+        =f.input :container_x, hint: 'You can choose this at a later time using the container\'s view.'
 
     =field_set_tag "Other Annotations" do
 
