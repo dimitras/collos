@@ -3,7 +3,7 @@
 
 # General
 
-Update documentation on used gem plugins
+-- Update documentation on used gem plugins--
 
 
 # Regular app
@@ -18,17 +18,16 @@ Update documentation on used gem plugins
 
 * better template export and API
 * add referenced object type to views
-* possibly get rid of fetch() route
 
 ## taxon
 
-* Done.
+* Nothing
 
 ## container types
 
 * --remove autocomplete--
 * --switch to selection of proper ontology terms--
-* Make sure that we really can't delete these, only retire!
+* --Make sure that we really can't delete these, only retire!--
 
 
 ## containers
@@ -42,9 +41,9 @@ Update documentation on used gem plugins
 ## Samples
 
 * --remove taxon autocomplete in favor of selection--
-* tags instead of robust characteristics
-* container placement
-* hiearchy visualizations - same as Containers? - needs multiple parents, ancestry gem seems to not have this.
+* --tags instead of robust characteristics--
+* --container placement-- Needs a bit more from container view
+* -- hiearchy visualizations - same as Containers? - needs multiple parents, ancestry gem seems to not have this. -- Changed to using acts-as-dag gem --
 
 
 
