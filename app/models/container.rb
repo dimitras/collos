@@ -5,15 +5,17 @@
 #  id                :integer          not null, primary key
 #  container_type_id :integer
 #  name              :string(255)
+#  barcode_string    :string(255)
 #  ancestry          :string(500)
 #  ancestry_depth    :integer          default(0)
-#  parent_x          :integer          default(0)
-#  parent_y          :integer          default(0)
+#  container_x       :integer          default(0)
+#  container_y       :integer          default(0)
 #  retired           :boolean          default(FALSE)
 #  tags              :string(500)
 #  notes             :text
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  tsv_content       :tsvector
 #
 
 class Container < ActiveRecord::Base
@@ -35,17 +37,11 @@ class Container < ActiveRecord::Base
 
     validates_presence_of :container_type
 
-    before_create :assign_barcode
-    def assign_barcode
-        self.barcode ||= Barcode.generate()
-    end
 
+    # some handy methods
+    alias_method :container, :parent
     def container_type_name
         container_type.name
-    end
-
-    def container_type_name=(cname)
-        self.container_type = ContainerType.from_pretty_string(cname)
     end
 
     def to_s
@@ -55,4 +51,47 @@ class Container < ActiveRecord::Base
     def show_location?
         container_type.x_dimension * container_type.y_dimension > 1
     end
+
+    # Collects the associated samples or child containers into a
+    # 2D Array sparse matrix
+    def container_matrix
+        cm = Array.new(container_type.y_dimension, Array.new(container_type.x_dimension, nil))
+        children.each  do |c|
+            cm[c.container_y][c.container_x] = container_x
+        end
+        samples.each do |s|
+            cm[s.container_y][container_x] = s
+        end
+        return cm
+    end
+
+    before_create :assign_barcode
+    def assign_barcode
+        bc = Barcode.generate()
+        self.barcode_string = bc.barcode
+        self.barcode = bc
+    end
+
+    # Full text search of samples
+    include PgSearch
+    multisearchable against: [:name, :barcode_string, :tags, :notes],
+        using: {
+            tsearch: {
+                dictionary: "english",
+                any_word: true,
+                prefix: true,
+                tsvector_column: 'tsv_content'
+            }
+        }
+      pg_search_scope :search, against:  [:name, :barcode_string, :tags, :notes],
+        using: {
+          tsearch: {
+            dictionary: "english",
+            any_word: true,
+            prefix: true,
+            tsvector_column: 'tsv_content'
+          }
+        }
+
+
 end

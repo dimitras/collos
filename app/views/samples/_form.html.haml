@@ -1,21 +1,29 @@
 =simple_form_for @sample, html: {class: 'form-horizontal'} do |f|
-    =f.input :name
-    - if @sample.barcode
-        =f.input :barcode, disabled: true, hint: "Barcodes are permanent. If you really want to change it, then contact the site admin."
-    - else
-        =f.input :barcode, disabled: true, hint: "Barcodes are automatically generated"
-    =f.association :taxon, label_method: :scientific_name
-    =f.association :container, collection: Container.where(retired: false).order('containers.container_type_id, name').all,  hint: link_to("Create a new container", new_container_url), label_method: :to_s
-    =f.input :container_x
-    =f.input :container_y
-    =f.input :tags, hint: 'Press "Tab" key to enter a tag. Delete by clicking each tags "x"'
-    =f.input :notes
-    =f.input :retired
-    =f.button :submit
-    =link_to 'Cancel', @sample, class: 'btn btn-warning'
+    =field_set_tag "Basic Information" do
+        =f.input :name
+        - if @sample.barcode
+            =f.input :barcode, disabled: true, hint: "Barcodes are permanent. If you really want to change it, then contact the site admin."
+        - else
+            =f.input :barcode, disabled: true, hint: "Barcodes are automatically generated"
+        =f.association :taxon, label_method: :scientific_name
+        =f.input :retired
+
+    =field_set_tag "Container for sample" do
+        =f.association :container, collection: Container.where(retired: false).order('containers.container_type_id, name').all,  hint: link_to("Create a new container", new_container_url), label_method: :to_s
+        =f.input :container_y, hint: "The origin is at the top left corner, starts with zero. Tubes only have one position (0,0)."
+        =f.input :container_x, hint: 'You can choose this at a later time using the container\'s view.'
+
+    =field_set_tag "Other Annotations" do
+
+        =f.input :tags, hint: 'Press "Tab" key to enter a tag. Delete by clicking each tags "x"'
+        =f.input :notes
+    %fieldset
+        =f.button :submit
+        =link_to 'Cancel', @sample, class: 'btn btn-warning'
 
 = content_for :js do
     :javascript
         $("#sample_tags").tagsInput()
+
 
 

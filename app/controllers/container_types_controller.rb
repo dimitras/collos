@@ -10,7 +10,7 @@ class ContainerTypesController < ApplicationController
 
     def new
         # grab container type ontology terms
-        @container_type_terms = @container.container_type_terms()
+        @container_type_terms = @container_type.container_type_terms()
     end
     def create
         if @container_type.save
@@ -23,7 +23,7 @@ class ContainerTypesController < ApplicationController
 
     def edit
         # grab container type ontology terms
-        @container_type_terms = @container.container_type_terms()
+        @container_type_terms = @container_type.container_type_terms()
     end
     def update
         if @container_type.update_attributes(params[:container_type])

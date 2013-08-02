@@ -4,11 +4,11 @@
         %span.text-error(style='font-size: smaller;') * obsolete term *
 %table.table.table-bordered
     %tr
-        %th.span3 Source Ontology
-        %td=link_to @ontology_term.ontology.name, @ontology_term.ontology
-    %tr
         %th.span3 Term Name
         %td=@ontology_term.name
+    %tr
+        %th.span3 Source Ontology
+        %td=link_to @ontology_term.ontology.prefix, @ontology_term.ontology
     %tr
         %th.span3 Accession
         %td=@ontology_term.accession

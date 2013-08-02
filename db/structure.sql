@@ -153,15 +153,17 @@ CREATE TABLE containers (
     id integer NOT NULL,
     container_type_id integer,
     name character varying(255),
+    barcode_string character varying(255),
     ancestry character varying(500),
     ancestry_depth integer DEFAULT 0,
-    parent_x integer DEFAULT 0,
-    parent_y integer DEFAULT 0,
+    container_x integer DEFAULT 0,
+    container_y integer DEFAULT 0,
     retired boolean DEFAULT false,
     tags character varying(500),
     notes text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    tsv_content tsvector
 );
 
 
@@ -579,16 +581,18 @@ ALTER SEQUENCE sample_relationships_id_seq OWNED BY sample_relationships.id;
 CREATE TABLE samples (
     id integer NOT NULL,
     name character varying(255),
+    barcode_string character varying(255),
     taxon_id integer,
     container_id integer,
-    container_x integer,
-    container_y integer,
+    container_x integer DEFAULT 0,
+    container_y integer DEFAULT 0,
     protocol_application_id integer,
     tags character varying(500),
     notes text,
     retired boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    tsv_content tsvector
 );
 
 
@@ -1114,6 +1118,13 @@ CREATE INDEX index_containers_on_container_type_id ON containers USING btree (co
 
 
 --
+-- Name: index_containers_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_containers_on_name ON containers USING btree (name);
+
+
+--
 -- Name: index_containers_shipments_on_container_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1401,10 +1412,24 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
+-- Name: containers_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER containers_tsvupdate BEFORE INSERT OR UPDATE ON containers FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'name', 'barcode_string', 'tags', 'notes');
+
+
+--
 -- Name: pg_search_documents_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER pg_search_documents_tsvupdate BEFORE INSERT OR UPDATE ON pg_search_documents FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'content');
+
+
+--
+-- Name: samples_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER samples_tsvupdate BEFORE INSERT OR UPDATE ON samples FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'name', 'barcode_string', 'tags', 'notes');
 
 
 --
@@ -1452,3 +1477,7 @@ INSERT INTO schema_migrations (version) VALUES ('20130722131646');
 INSERT INTO schema_migrations (version) VALUES ('20130722142838');
 
 INSERT INTO schema_migrations (version) VALUES ('20130724165231');
+
+INSERT INTO schema_migrations (version) VALUES ('20130731195626');
+
+INSERT INTO schema_migrations (version) VALUES ('20130731195637');

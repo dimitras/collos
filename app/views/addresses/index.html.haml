@@ -1,0 +1,26 @@
+%h3 Addresses
+
+%table.table.table-striped.table-bordered
+    %thead
+        %tr
+            %th Line 1
+            %th Line 2
+            %th Line 3
+            %th City
+            %th State
+            %th Zip Code
+            %th Province
+            %th Country
+    %tbody
+        -for address in @addresses
+            %tr
+                %td= link_to address.line_1, address
+                %td= address.line_2
+                %td= address.line_3
+                %td= address.city
+                %td= address.state
+                %td= address.zip
+                %td= address.province
+                %td= address.country
+
+=link_to "Create New Address", new_address_url, class: 'btn btn-primary btn-large'

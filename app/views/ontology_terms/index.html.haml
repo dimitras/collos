@@ -3,15 +3,15 @@
 %table.table.table-striped.table-condensed.table-bordered
     %thead
         %tr
-            %th Ontology
             %th Name
+            %th Ontology
             %th Accession
             %th &nbsp;
     %tbody
         -for ontology_term in @ontology_terms
             %tr
-                %td=link_to ontology_term.ontology.name, ontology_path(ontology_term.ontology)
-                %td=ontology_term.name
+                %td=link_to ontology_term.name, ontology_term
+                %td=link_to ontology_term.ontology.prefix, ontology_path(ontology_term.ontology)
                 %td=ontology_term.accession
                 %td
                     =link_to "Show", ontology_term_path(ontology_term), class: 'btn'

@@ -31,7 +31,7 @@
                     =link_to "Show", sample_path(sample), class: 'btn'
                     - if can?(:edit, sample)
                         =link_to "Edit", edit_sample_path(sample), class: 'btn btn-success'
-                    -if can?(:destroy, sample)
+                    -if can?(:destroy, sample) and ! sample.retired
                         = link_to "Retire", sample_path(sample), method: 'delete', class: 'btn btn-danger'
 =will_paginate(@samples, params: params)
 

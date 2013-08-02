@@ -2,7 +2,7 @@ class ContainersController < ApplicationController
     load_and_authorize_resource includes: [:barcode,:container_type]
 
     def index
-        @containers = @containers.includes([:barcode,:container_type])
+        @containers = @containers.includes([:barcode,:container_type]).order(:created_at)
         unless params[:show_all]
             @containers = @containers.where(retired: false)
         end

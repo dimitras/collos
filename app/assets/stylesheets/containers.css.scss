@@ -13,3 +13,22 @@ $cbox-border: 1px solid black;
     text-align: center;
     vertical-align: top;
 }
+
+.cntr {
+    border: 2px solid #3d3;
+    padding: 2px;
+    .cell {
+        border: 1px solid #333;
+        background: #E6E6E6;
+        margin: 1px
+    }
+    .filled {
+        @extend .cell;
+        background: #F8E0E0;
+    }
+    .selected {
+        @extend .cell;
+        border: 2px solid #333;
+        background: #A9F5A9;
+    }
+}
