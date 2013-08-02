@@ -27,6 +27,6 @@
                     - if can?(:edit, container)
                         =link_to "Edit", edit_container_path(container), class: 'btn btn-success'
                     -if can?(:destroy, container)
-                        = link_to "Destroy", container_path(container), method: 'delete', class: 'btn btn-danger'
+                        = link_to "Retire", container_path(container), method: 'delete', class: 'btn btn-danger'
 =will_paginate(@containers)
 = link_to "Create a new Container", new_container_path, class: 'btn btn-primary btn-large'

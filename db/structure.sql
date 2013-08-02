@@ -630,13 +630,17 @@ CREATE TABLE schema_migrations (
 
 CREATE TABLE shipments (
     id integer NOT NULL,
+    barcode_string character varying(255),
     tracking_number character varying(255),
     shipper_id integer,
     receiver_id integer,
     ship_date timestamp without time zone,
     recieve_date timestamp without time zone,
+    tags character varying(500),
+    notes character varying(500),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    tsv_content tsvector
 );
 
 
@@ -1433,6 +1437,13 @@ CREATE TRIGGER samples_tsvupdate BEFORE INSERT OR UPDATE ON samples FOR EACH ROW
 
 
 --
+-- Name: shipments_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER shipments_tsvupdate BEFORE INSERT OR UPDATE ON shipments FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'name', 'barcode_string', 'tags', 'notes');
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -1481,3 +1492,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130724165231');
 INSERT INTO schema_migrations (version) VALUES ('20130731195626');
 
 INSERT INTO schema_migrations (version) VALUES ('20130731195637');
+
+INSERT INTO schema_migrations (version) VALUES ('20130802175506');

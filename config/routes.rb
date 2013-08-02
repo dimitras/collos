@@ -7,6 +7,8 @@ Collos::Application.routes.draw do
     member do
       post 'receive'
       post 'ship'
+      post 'add_member'
+      post 'remove_member'
     end
   end
 
@@ -17,8 +19,8 @@ Collos::Application.routes.draw do
     end
   end
 
-  resources :addresses do 
-    member do 
+  resources :addresses do
+    member do
       post 'assign'
       post 'remove'
     end
