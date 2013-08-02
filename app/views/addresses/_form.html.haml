@@ -6,5 +6,8 @@
     = f.input :state
     = f.input :zip
     = f.input :province
-    = f.input :country
+    = f.input :country, priority: "USA", collection: %w[ Canada England Ireland USA]
+    - if params[:user_id]
+        =hidden_field_tag :user_id, params[:user_id]
     = f.button :submit
+    = link_to "Cancel",:back, class: 'btn btn-warning'

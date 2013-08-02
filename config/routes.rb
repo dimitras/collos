@@ -17,7 +17,12 @@ Collos::Application.routes.draw do
     end
   end
 
-  resources :addresses
+  resources :addresses do 
+    member do 
+      post 'assign'
+      post 'remove'
+    end
+  end
 
   resources :barcodes, except: :destroy do
     collection do

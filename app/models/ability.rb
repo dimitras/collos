@@ -14,8 +14,8 @@ class Ability
                       ProtocolParameterValue]
 
         can [:create, :generate, :fetch], Barcode
-
         can :update, User, :id => user.id
+        can [:create, :update], ContainerType
     end
   end
 end

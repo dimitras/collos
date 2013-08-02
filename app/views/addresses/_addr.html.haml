@@ -1,0 +1,12 @@
+.address
+    %b=address.line_1
+    - if address.line_2
+        %br=address.line_2
+    - if address.line_3
+        %br=address.line_3
+    -if address.city
+        %br==#{address.city}, #{address.state} #{address.zip}
+    - if address.province
+        %br=address.province
+    - if address.country
+        %br=address.country

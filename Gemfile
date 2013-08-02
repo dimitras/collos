@@ -30,6 +30,9 @@ gem "will_paginate"
 gem 'will_paginate_twitter_bootstrap'
 gem 'simple_form'
 
+# May need this gem if the set of countries can grow big
+# gem 'country_select'
+
 # JS form validation
 # client side form validation not implemented yet.
 # gem "parsley-rails"

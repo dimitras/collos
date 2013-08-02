@@ -1,27 +1,35 @@
 %h3 User Information
 
-%table.table.table-striped.table-condensed.table-bordered
-    %thead
-        %tr
-            %th Name
-            %th E-mail
-            %th Status
-    %tbody
-        %tr
-            %td=@user.name
-            %td=@user.email
-            %td
-                = @user.status
-                -if current_user and current_user.admin?
-                    -if @user.active?
-                        |
-                        =link_to("Make Inactive", inactivate_user_path(@user), method: 'post')
-                        |
-                    -else
-                        |
-                        =link_to("Activate User", activate_user_path(@user), method: 'post')
-                        |
-/ -if @user.contact
-/     = render :partial, "contact_information"
-/ -else
-/     %h3= link_to "Add Contact Information", new_contact_path( user_id: @user.id)
+%table.table.table-bordered
+%thead
+  %tr
+    %th Name
+    %td=@user.name
+  %tr
+    %th E-mail
+    %td=@user.email
+  %tr
+    %th Status
+    %td
+      = @user.status
+      -if current_user and current_user.admin?
+        -if @user.active?
+          |
+          =link_to("Make Inactive", inactivate_user_path(@user), method: 'post')
+          |
+        -else
+          |
+          =link_to("Activate User", activate_user_path(@user), method: 'post')
+          |
+
+%h4 Addresses
+
+- for address in @user.addresses
+  .row
+    .span4.address
+      = render partial: 'addresses/addr', locals: { address: address}
+      = link_to "Remove this Address", remove_address_url(address, user_id: @user.id), method: 'post' , class: 'btn'
+
+.row
+  .span12
+    =link_to "Create a new Address", new_address_url(user_id: @user.id), class: 'btn btn-primary'

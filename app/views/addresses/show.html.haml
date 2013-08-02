@@ -1,0 +1,25 @@
+%h4 Address
+.row
+    .span4= render partial: 'addresses/addr', locals: { address: @address}
+
+.buttons
+    =link_to "Edit", edit_address_url(@address), class: 'btn btn-success'
+    =link_to "Delete", address_url(@address), class: 'btn btn-danger', confirm: "Are you sure? This can't be undone!", method: 'delete'
+    =link_to "Show All", addresses_url, class: 'btn'
+
+%h3 Associated Users
+- if @address.users
+    %table.table.table-bordered
+        - for user in @address.users
+            %tr
+                %td=link_to user.name, user
+                %td= link_to "Remove this user from this address", remove_address_url(@address, user_id: user.id), method:'post', class: 'btn'
+-else 
+    %i None.
+
+%h4 Add another user to this Address:
+=form_tag assign_address_url(@address) do
+    
+    =select_tag :user_id, options_for_select( User.all.collect {|u| [u.name, u.id]})
+    =submit_tag "Add", class: "btn btn-primary"
+    
