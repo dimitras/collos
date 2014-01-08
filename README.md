@@ -14,11 +14,15 @@ The site depends on two core technologies:
 * [Rails 3](http://rubyonrails.org/)
 * [PostgreSQL](http://www.postgresql.org/)
 * [redis](http://redis.io/)
+* [GraphViz](http://www.graphviz.org/)
+* zint
 
-For development, you will also need to install [GraphViz](http://www.graphviz.org/)
 
 ```bash
+brew install postgresql 
+# Follow the postgresql setup instructions
 brew install graphviz
+brew install zint
 ````
 
 
@@ -72,3 +76,4 @@ We use a few rails plugins in this app
 ## Doorkeeper
 
 ## Ancestry
+

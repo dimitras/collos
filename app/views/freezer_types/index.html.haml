@@ -1,0 +1,19 @@
+%h1 Listing freezer_types
+
+%table
+  %tr
+    %th Label
+    %th
+    %th
+    %th
+
+  - @freezer_types.each do |freezer_type|
+    %tr
+      %td= freezer_type.label
+      %td= link_to 'Show', freezer_type
+      %td= link_to 'Edit', edit_freezer_type_path(freezer_type)
+      %td= link_to 'Destroy', freezer_type, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Freezer type', new_freezer_type_path

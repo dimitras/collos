@@ -1,0 +1,17 @@
+%h3= @taxon.scientific_name
+
+%table.table.table-bordered
+    %tr
+        %th.span3 NCBI id
+        %td=@taxon.ncbi_id
+    %tr
+        %th Scientific name
+        %td=@taxon.scientific_name
+    %tr
+        %th Common name
+        %td=@taxon.common_name
+
+- if can? :edit , @taxon
+    =button_to "Edit Taxon", edit_taxon_path(@taxon), method: 'get', class: 'btn btn-success'
+- if can? :destroy , @taxon
+    =button_to "Delete Taxon", taxon_path(@taxon), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."

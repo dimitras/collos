@@ -7,14 +7,14 @@ group :assets do
   gem 'sass-rails'
   gem 'coffee-rails'
   gem 'uglifier'
-  gem 'bootstrap-sass-rails'
+  gem 'bootstrap-sass-rails', '~> 2.3.2.1'
   gem 'jquery-ui-sass-rails'
 end
 
 group :development do
   gem 'wirble'
   gem 'awesome_print'
-  gem 'annotate'
+  gem 'annotate', ">=2.5.0"
   gem 'railroady'
   gem 'puma'
   gem 'sequel'

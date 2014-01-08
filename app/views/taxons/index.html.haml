@@ -1,0 +1,22 @@
+%h3 Taxons
+%table.table.table-striped.table-condensed.table-bordered
+    %thead
+        %tr
+            %th NCBI id
+            %th Scientific name
+            %th Common name
+            %th &nbsp;
+    %tbody
+        -for taxon in @taxons
+            %tr
+                %td=taxon.ncbi_id
+                %td=taxon.scientific_name
+                %td=taxon.common_name
+                %td
+                    =link_to "Show", taxon_path(taxon), class: 'btn'
+                    - if can?(:edit, taxon)
+                        =link_to "Edit", edit_taxon_path(taxon), class: 'btn btn-success'
+                    -if can?(:destroy, taxon)
+                        = link_to "Destroy", taxon_path(taxon), method: 'delete', class: 'btn btn-danger'
+=will_paginate(@taxons)
+= link_to "Create new taxon", new_taxon_path, class: 'btn btn-primary btn-large'

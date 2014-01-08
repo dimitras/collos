@@ -1,0 +1,9 @@
+%p#notice= notice
+
+%p
+  %b Label:
+  = @freezer_type.label
+
+= link_to 'Edit', edit_freezer_type_path(@freezer_type)
+\|
+= link_to 'Back', freezer_types_path

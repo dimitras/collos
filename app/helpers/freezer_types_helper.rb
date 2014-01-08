@@ -1,0 +1,2 @@
+module FreezerTypesHelper
+end

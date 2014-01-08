@@ -1,0 +1,21 @@
+# == Schema Information
+#
+# Table name: experiments
+#
+#  id         :integer          not null, primary key
+#  name       :text
+#  person_id  :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  study_id   :integer
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyText
+  person_id: 1
+
+two:
+  name: MyText
+  person_id: 1
