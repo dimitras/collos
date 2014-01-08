@@ -53,6 +53,7 @@ container = OntologyTerm.where(
             definition: "A device that can be used to restrict the location of material entities over time",
             ontology_id: obi.id
     ).first_or_create()
+
 plate = OntologyTerm.where(
             name: "microtiter plate",
             accession: "obo:OBI_0000192",
@@ -61,6 +62,7 @@ plate = OntologyTerm.where(
         ).first_or_create()
 plate.parent = container
 plate.save
+
 tube =  OntologyTerm.where(
             name: "test tube",
             accession: "obo:OBI_0000836",
@@ -105,6 +107,7 @@ gender = OntologyTerm.where(name: "biological sex",
         definition: 'An organismal quality inhering in a bearer by virtue of the bearer\'s ability to undergo sexual reproduction in order to differentiate the individuals or types involved.',
         ontology_id: obi.id
     ).first_or_create()
+
 s = OntologyTerm.where(name: "male",
         accession: 'obo:PATO_0000384',
         definition: 'A biological sex quality inhering in an individual or a population whose sex organs contain only male gametes.',
@@ -112,6 +115,7 @@ s = OntologyTerm.where(name: "male",
     ).first_or_create()
 s.parent = gender
 s.save
+
 s = OntologyTerm.where(name: "female",
         accession: 'obo:PATO_0000383',
         definition: 'A biological sex quality inhering in an individual or a population that only produces gametes that can be fertilised by male gametes.',

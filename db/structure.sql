@@ -109,6 +109,40 @@ ALTER SEQUENCE barcodes_id_seq OWNED BY barcodes.id;
 
 
 --
+-- Name: box_types; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE box_types (
+    id integer NOT NULL,
+    label character varying(255),
+    dimension_x integer,
+    dimension_y integer,
+    freezer_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: box_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE box_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: box_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE box_types_id_seq OWNED BY box_types.id;
+
+
+--
 -- Name: container_types; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -122,7 +156,10 @@ CREATE TABLE container_types (
     y_coord_labels character varying(255) DEFAULT 'number'::character varying,
     can_have_children boolean DEFAULT true,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    retired boolean DEFAULT false,
+    label character varying(255),
+    box_id integer
 );
 
 
@@ -194,6 +231,70 @@ CREATE TABLE containers_shipments (
     container_id integer,
     shipment_id integer
 );
+
+
+--
+-- Name: freezer_types; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE freezer_types (
+    id integer NOT NULL,
+    label character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: freezer_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE freezer_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: freezer_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE freezer_types_id_seq OWNED BY freezer_types.id;
+
+
+--
+-- Name: investigations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE investigations (
+    id integer NOT NULL,
+    name text,
+    person_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    study_id integer
+);
+
+
+--
+-- Name: investigations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE investigations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: investigations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE investigations_id_seq OWNED BY investigations.id;
 
 
 --
@@ -368,6 +469,41 @@ CREATE SEQUENCE ontology_terms_id_seq
 --
 
 ALTER SEQUENCE ontology_terms_id_seq OWNED BY ontology_terms.id;
+
+
+--
+-- Name: people; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE people (
+    id integer NOT NULL,
+    name character varying(255),
+    type character varying(255),
+    institution character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    email character varying(255),
+    phone integer
+);
+
+
+--
+-- Name: people_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE people_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: people_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE people_id_seq OWNED BY people.id;
 
 
 --
@@ -592,7 +728,8 @@ CREATE TABLE samples (
     retired boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    tsv_content tsvector
+    tsv_content tsvector,
+    material_type character varying(255)
 );
 
 
@@ -657,6 +794,39 @@ CREATE SEQUENCE shipments_id_seq
 --
 
 ALTER SEQUENCE shipments_id_seq OWNED BY shipments.id;
+
+
+--
+-- Name: studies; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE studies (
+    id integer NOT NULL,
+    title text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    identifier character varying(255),
+    description text
+);
+
+
+--
+-- Name: studies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE studies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: studies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE studies_id_seq OWNED BY studies.id;
 
 
 --
@@ -779,6 +949,13 @@ ALTER TABLE ONLY barcodes ALTER COLUMN id SET DEFAULT nextval('barcodes_id_seq':
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY box_types ALTER COLUMN id SET DEFAULT nextval('box_types_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY container_types ALTER COLUMN id SET DEFAULT nextval('container_types_id_seq'::regclass);
 
 
@@ -787,6 +964,20 @@ ALTER TABLE ONLY container_types ALTER COLUMN id SET DEFAULT nextval('container_
 --
 
 ALTER TABLE ONLY containers ALTER COLUMN id SET DEFAULT nextval('containers_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY freezer_types ALTER COLUMN id SET DEFAULT nextval('freezer_types_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY investigations ALTER COLUMN id SET DEFAULT nextval('investigations_id_seq'::regclass);
 
 
 --
@@ -822,6 +1013,13 @@ ALTER TABLE ONLY ontologies ALTER COLUMN id SET DEFAULT nextval('ontologies_id_s
 --
 
 ALTER TABLE ONLY ontology_terms ALTER COLUMN id SET DEFAULT nextval('ontology_terms_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY people ALTER COLUMN id SET DEFAULT nextval('people_id_seq'::regclass);
 
 
 --
@@ -884,6 +1082,13 @@ ALTER TABLE ONLY shipments ALTER COLUMN id SET DEFAULT nextval('shipments_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY studies ALTER COLUMN id SET DEFAULT nextval('studies_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY taxons ALTER COLUMN id SET DEFAULT nextval('taxons_id_seq'::regclass);
 
 
@@ -918,6 +1123,14 @@ ALTER TABLE ONLY barcodes
 
 
 --
+-- Name: box_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY box_types
+    ADD CONSTRAINT box_types_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: container_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -931,6 +1144,22 @@ ALTER TABLE ONLY container_types
 
 ALTER TABLE ONLY containers
     ADD CONSTRAINT containers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: experiments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY investigations
+    ADD CONSTRAINT experiments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: freezer_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY freezer_types
+    ADD CONSTRAINT freezer_types_pkey PRIMARY KEY (id);
 
 
 --
@@ -971,6 +1200,14 @@ ALTER TABLE ONLY ontologies
 
 ALTER TABLE ONLY ontology_terms
     ADD CONSTRAINT ontology_terms_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: people_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY people
+    ADD CONSTRAINT people_pkey PRIMARY KEY (id);
 
 
 --
@@ -1035,6 +1272,14 @@ ALTER TABLE ONLY samples
 
 ALTER TABLE ONLY shipments
     ADD CONSTRAINT shipments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: studies_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY studies
+    ADD CONSTRAINT studies_pkey PRIMARY KEY (id);
 
 
 --
@@ -1481,3 +1726,31 @@ INSERT INTO schema_migrations (version) VALUES ('20130724165231');
 INSERT INTO schema_migrations (version) VALUES ('20130731195626');
 
 INSERT INTO schema_migrations (version) VALUES ('20130731195637');
+
+INSERT INTO schema_migrations (version) VALUES ('20130925152643');
+
+INSERT INTO schema_migrations (version) VALUES ('20131127171624');
+
+INSERT INTO schema_migrations (version) VALUES ('20131127172415');
+
+INSERT INTO schema_migrations (version) VALUES ('20131127172524');
+
+INSERT INTO schema_migrations (version) VALUES ('20131127185917');
+
+INSERT INTO schema_migrations (version) VALUES ('20131127205247');
+
+INSERT INTO schema_migrations (version) VALUES ('20131127210411');
+
+INSERT INTO schema_migrations (version) VALUES ('20131127211158');
+
+INSERT INTO schema_migrations (version) VALUES ('20131127211928');
+
+INSERT INTO schema_migrations (version) VALUES ('20131127212343');
+
+INSERT INTO schema_migrations (version) VALUES ('20131127212509');
+
+INSERT INTO schema_migrations (version) VALUES ('20131127213130');
+
+INSERT INTO schema_migrations (version) VALUES ('20131127213817');
+
+INSERT INTO schema_migrations (version) VALUES ('20131217151108');

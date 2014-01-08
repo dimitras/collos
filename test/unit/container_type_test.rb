@@ -12,6 +12,9 @@
 #  can_have_children :boolean          default(TRUE)
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  retired           :boolean          default(FALSE)
+#  label             :string(255)
+#  box_id            :integer
 #
 
 require 'test_helper'
