@@ -3,6 +3,21 @@ require 'api_constraints'
 
 Collos::Application.routes.draw do
 
+  resources :box_types
+
+
+  resources :freezer_types
+
+
+  resources :people
+
+
+  resources :investigations
+
+
+  resources :studies
+
+
   resources :shipments do
     member do
       post 'receive'
@@ -13,7 +28,7 @@ Collos::Application.routes.draw do
   resources :users do
     member do
       post 'activate'
-      post 'inactivate'
+      post 'deactivate'
     end
   end
 
