@@ -71,3 +71,6 @@ config/database.ymlscratch.txt
 
 # Ignore application configuration
 /config/application.yml
+
+# Personal files
+/workspace/
