@@ -25,7 +25,7 @@ class ContainersController < ApplicationController
     end
     def update
         if @container.update_attributes(params[:container])
-            flash[:success] = "ContainerType successfully updated."
+            flash[:success] = "Container successfully updated."
             redirect_to @container
         else
             render action: 'edit'

@@ -2,11 +2,16 @@
     %h3 Welcome!
     =render "sessions/form"
 -else
+    %br
+    %em (non-functional yet)
     %h4 Search CollOS for Samples and Containers
     = form_tag("/search",method: 'get', class: 'form-inline form-search') do
         .fieldset
             =text_field_tag :query, nil,class: 'span4', placeholder: '"PBF78E5" or "zfish123"'
             =submit_tag "Search", class:'btn btn-primary'
+    
+    %br
+    %br
 
     %h4 Generate barcodes
     = render partial: "barcodes/generate_barcodes"

@@ -24,6 +24,14 @@
     %tr
         %th Notes
         %th=@container.notes
+    %tr
+        %th Contained Samples
+        %th
+            -for sample in @container.samples
+                = link_to sample.name, url_for(sample) 
+                = "[" + sample.barcode_string + "]"
+                = "[" + sample.scientific_name + "] "
+                %br
 
 
 - if can? :edit , @container

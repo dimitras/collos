@@ -37,7 +37,6 @@ class Container < ActiveRecord::Base
 
     validates_presence_of :container_type
 
-
     # some handy methods
     alias_method :container, :parent
     def container_type_name
@@ -92,6 +91,5 @@ class Container < ActiveRecord::Base
             tsvector_column: 'tsv_content'
           }
         }
-
 
 end

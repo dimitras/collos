@@ -2,7 +2,11 @@ class ContainerTypesController < ApplicationController
     load_and_authorize_resource
 
     def index
-        @container_types = @container_types.includes(:type => [:ontology]).page(params[:page])
+        @container_types = @container_types.includes(:type => [:ontology])
+        unless params[:show_all]
+            @container_types = @container_types.where(retired: false)
+        end
+        @container_types = @container_types.page(params[:page])
     end
     def show
         @type = @container_type.type
@@ -35,8 +39,17 @@ class ContainerTypesController < ApplicationController
     end
 
     def destroy
-        @container_type.destroy
-        redirect_to container_types_url, notice: "ContainerType was deleted."
+        # @container_type.destroy
+        # redirect_to container_types_url, notice: "ContainerType was deleted."
+        @container_type.retired = true
+        begin
+            @container_type.save
+            flash[:success] = 'Container type retired'
+            redirect_to container_types_url
+        rescue Exception => e
+            flash[:error] = "Container type was not retired because #{e.message}"
+            render @container_type
+        end
     end
 
 end

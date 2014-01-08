@@ -3,19 +3,51 @@
 %table.table.table-striped.table-condensed.table-bordered
     %thead
         %tr
-            %th.span2 Barcode Set ID
-            %th.span2 Barcode
+            %th.span2 Barcode (Set ID)
             %th.span2 Related Entity
+            %th.span2 Entity Details
     %tbody
         -for barcode in @barcodes
             %tr
-                %td=link_to barcode.barcode_set, fetch_barcodes_path(barcode_set: barcode.barcode_set)
-                %td=link_to barcode.barcode, barcode_path(barcode)
+                %td
+                    =link_to barcode.barcode, barcode_path(barcode)
+                    ==(#{ link_to barcode.barcode_set, fetch_barcodes_path(barcode_set: barcode.barcode_set)})
                 %td
                     -if barcode.barcodeable
                         = link_to barcode.barcodeable.name, url_for(barcode.barcodeable)
-                    -else
-                        None
+                %td
+                    -if !barcode.barcodeable_type.nil?
+                        %strong Entity Type:
+                        = barcode.barcodeable_type
+                    -if barcode.barcodeable_type == 'Container'
+                        %br
+                        %strong Container Type:
+                        = barcode.barcodeable.container_type
+                        -if !barcode.barcodeable.samples.empty?
+                            %br
+                            %strong Samples:
+                            -for sample in barcode.barcodeable.samples
+                                = link_to sample.name, url_for(sample) 
+                                = "[" + sample.barcode_string + "]"
+                                = "[" + sample.scientific_name + "] "
+                        -if barcode.barcodeable.tags != ''
+                            %br
+                            %strong Tags:
+                            = barcode.barcodeable.tags
+                    -elsif barcode.barcodeable_type == 'Sample'
+                        %br
+                        %strong Taxon:
+                        = barcode.barcodeable.scientific_name
+                        %br
+                        %strong Container:
+                        = link_to barcode.barcodeable.container.name, url_for(barcode.barcodeable.container)
+                        = "[" + barcode.barcodeable.container.barcode_string + "]"
+                        = "[" + barcode.barcodeable.container.container_type.to_s + "]"
+                        -if barcode.barcodeable.tags != ''
+                            %br
+                            %strong Tags:
+                            = barcode.barcodeable.tags
+
 =will_paginate(@barcodes, params: params)
 
 %h3 Generate some barcodes:

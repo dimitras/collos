@@ -1,3 +1,4 @@
+%br 
 %table.table.table-bordered
     %tr
         %th.span3 Barcode
@@ -12,6 +13,36 @@
                 = link_to @barcode.barcodeable.name, url_for(@barcode.barcodeable)
             -else
                 None
+    %tr
+        %th Entity Details
+        %td
+            -if @barcode.barcodeable_type == 'Container'
+                %strong Container Type:
+                = @barcode.barcodeable.container_type
+                -if !@barcode.barcodeable.samples.empty?
+                    %br
+                    %strong Samples included:
+                    -for sample in @barcode.barcodeable.samples
+                        %br
+                        = link_to sample.name, url_for(sample) 
+                        = "[" + sample.barcode_string + "]"
+                        = "[" + sample.scientific_name + "] "
+                -if @barcode.barcodeable.tags != ''
+                    %br
+                    %strong Tags:
+                    = @barcode.barcodeable.tags
+            -elsif @barcode.barcodeable_type == 'Sample'
+                %strong Taxon:
+                = @barcode.barcodeable.scientific_name
+                %br
+                %strong Container:
+                = link_to @barcode.barcodeable.container.name, url_for(@barcode.barcodeable.container)
+                = "[" + @barcode.barcodeable.container.barcode_string + "]"
+                = "[" + @barcode.barcodeable.container.container_type.to_s + "]"
+                -if @barcode.barcodeable.tags != ''
+                    %br
+                    %strong Tags:
+                    = @barcode.barcodeable.tags
 
 
 =button_to "See all barcodes", barcodes_path(), class: 'btn', method: 'get'

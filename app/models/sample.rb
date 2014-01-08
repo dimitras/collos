@@ -16,6 +16,7 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  tsv_content             :tsvector
+#  material_type           :string(255)
 #
 
 class Sample < ActiveRecord::Base
@@ -25,7 +26,7 @@ class Sample < ActiveRecord::Base
     :container, :container_id,
     :container_x, :container_y,
     :protocol_application, :protocol_application_id,
-    :notes, :retired, :tags
+    :notes, :retired, :tags, :can_have_children, :material_type
 
 
   # Needed to parse out comma delimited tags from forms into a strict Array
@@ -53,6 +54,7 @@ class Sample < ActiveRecord::Base
   belongs_to :container
   belongs_to :protocol_application
   belongs_to :taxon
+  belongs_to :type, class_name: "OntologyTerm", foreign_key: "type_id"
 
   def scientific_name
     taxon.try(:scientific_name)
@@ -82,6 +84,13 @@ class Sample < ActiveRecord::Base
       bc = Barcode.generate()
       self.barcode_string = bc.barcode
       self.barcode = bc
+  end
+
+  def gender_type_terms
+    OntologyTerm.where(
+      name: "gender",
+      accession: "obo:PATO_0000047"
+    ).first.children()
   end
 
   # Full text search of samples

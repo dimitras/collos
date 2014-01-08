@@ -1,6 +1,6 @@
 %br
 %p=link_to(image_tag("basecamp.png"), url_for("auth/37signals"), class: 'btn btn-large')
 
-- unless Rails.env.production?
-  %h4 Or use a development account
-  =button_to("Developer Login", "/auth/developer")
+/ - unless Rails.env.production?
+/   %h4 Or use a development account
+/   =button_to("Developer Login", "auth/developer")

@@ -12,14 +12,18 @@
 #  can_have_children :boolean          default(TRUE)
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  retired           :boolean          default(FALSE)
+#  label             :string(255)
+#  box_id            :integer
 #
 
 class ContainerType < ActiveRecord::Base
     attr_accessible :name, :type, :type_id,
         :x_coord_labels, :x_dimension, :parent_x,
         :y_coord_labels, :y_dimension, :parent_y,
-        :can_have_children
+        :can_have_children, :retired, :label, :box_id
 
+    belongs_to :box_type
     belongs_to :type, class_name: "OntologyTerm", foreign_key: "type_id"
 
     has_many :containers, inverse_of: :container_types

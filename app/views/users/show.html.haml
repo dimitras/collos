@@ -15,12 +15,14 @@
       -if current_user and current_user.admin?
         -if @user.active?
           |
-          =link_to("Make Inactive", inactivate_user_path(@user), method: 'post')
+          =link_to("Deactivate", inactivate_user_path(@user), method: 'post')
           |
         -else
           |
-          =link_to("Activate User", activate_user_path(@user), method: 'post')
+          =link_to("Activate", activate_user_path(@user), method: 'post')
           |
+%p
+=button_to "See all users", users_path(), class: 'btn', method: 'get'
 
 %h4 Addresses
 

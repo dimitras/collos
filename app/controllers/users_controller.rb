@@ -29,6 +29,8 @@ class UsersController < ApplicationController
     def create
         if @user.save
             UserRegistrationMailer.delay.welcome(@user.id)
+            # don't use sidekiq
+            # UserRegistrationMailer.welcome(@user.id)
             redirect_to @user, notice: 'Successfully registered.'
         else
             render action: "new"
@@ -36,7 +38,7 @@ class UsersController < ApplicationController
     end
 
     def destroy
-        redirect_to user_inactivate_path(@user)
+        redirect_to user_deactivate_path(@user)
     end
 
     def activate

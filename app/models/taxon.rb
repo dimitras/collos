@@ -9,7 +9,6 @@
 #
 
 class Taxon < ActiveRecord::Base
-  attr_accessible :ncbi_id,
-    :scientific_name, :common_name
+  attr_accessible :ncbi_id, :scientific_name, :common_name
   has_many :samples
 end
