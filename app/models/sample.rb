@@ -16,7 +16,9 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  tsv_content             :tsvector
-#  material_type           :string(255)
+#  shipped                 :string(255)
+#  sex                     :string(255)
+#  source_name             :string(255)
 #
 
 class Sample < ActiveRecord::Base
@@ -26,7 +28,7 @@ class Sample < ActiveRecord::Base
     :container, :container_id,
     :container_x, :container_y,
     :protocol_application, :protocol_application_id,
-    :notes, :retired, :tags, :can_have_children, :material_type
+    :notes, :retired, :tags, :shipped, :sex, :source_name
 
 
   # Needed to parse out comma delimited tags from forms into a strict Array
@@ -52,7 +54,8 @@ class Sample < ActiveRecord::Base
   # validates :name, presence: true
   has_one :barcode, as: :barcodeable
   belongs_to :container
-  belongs_to :protocol_application
+  belongs_to_many :protocol_applications
+  belongs_to_many :material_types
   belongs_to :taxon
   belongs_to :type, class_name: "OntologyTerm", foreign_key: "type_id"
 

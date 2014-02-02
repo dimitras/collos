@@ -3,17 +3,16 @@
 # Table name: investigations
 #
 #  id         :integer          not null, primary key
-#  name       :text
-#  person_id  :integer
+#  title      :text
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  study_id   :integer
+#  identifier :text
 #
 
 class Investigation < ActiveRecord::Base
-	attr_accessible :name, :person_id, :study_id
+	attr_accessible :title, :identifier
 
-  	belongs_to :study
+  	has_many :studies
 	has_many :samples
 	has_and_belongs_to_many :people
 

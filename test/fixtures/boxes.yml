@@ -1,11 +1,11 @@
 # == Schema Information
 #
-# Table name: box_types
+# Table name: boxes
 #
 #  id          :integer          not null, primary key
-#  name        :string(255)
-#  dimension_x :integer
-#  dimension_y :integer
+#  label       :string(255)
+#  box_type_id :integer
+#  freezer_id  :integer
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
@@ -14,12 +14,14 @@
 
 one:
   label: MyString
+  box_type_id: 1
   dimension_x: 1
   dimension_y: 1
   freezer_id: 1
 
 two:
   label: MyString
+  box_type_id: 1
   dimension_x: 1
   dimension_y: 1
   freezer_id: 1

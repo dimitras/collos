@@ -4,7 +4,7 @@
 #
 #  id                :integer          not null, primary key
 #  container_type_id :integer
-#  name              :string(255)
+#  label             :string(255)
 #  barcode_string    :string(255)
 #  ancestry          :string(500)
 #  ancestry_depth    :integer          default(0)
@@ -16,14 +16,16 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  tsv_content       :tsvector
+#  box_id            :integer
 #
 
 class Container < ActiveRecord::Base
-    attr_accessible :name,  :barcode,
+    attr_accessible :label,  :barcode,
         :ancestry, :container_x, :container_y,
         :container_type_name, :container_type, :container_type_id,
-        :retired, :tags, :notes
+        :retired, :tags, :notes, :box_id
 
+    belongs_to :box
     belongs_to :container_type, inverse_of: :containers
     has_many :samples
     has_one :barcode, as: :barcodeable

@@ -1,0 +1,2 @@
+class FreezersController < ApplicationController
+end

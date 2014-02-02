@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: freezer_types
+# Table name: material_types
 #
 #  id         :integer          not null, primary key
 #  name       :string(255)
@@ -8,8 +8,10 @@
 #  updated_at :datetime         not null
 #
 
-class FreezerType < ActiveRecord::Base
-	attr_accessible :name
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-	has_many :freezers
-end
+one:
+  name: MyString
+
+two:
+  name: MyString

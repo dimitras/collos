@@ -1,18 +1,18 @@
 # == Schema Information
 #
-# Table name: box_types
+# Table name: boxes
 #
 #  id          :integer          not null, primary key
-#  name        :string(255)
-#  dimension_x :integer
-#  dimension_y :integer
+#  label       :string(255)
+#  box_type_id :integer
+#  freezer_id  :integer
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
 
 require 'test_helper'
 
-class BoxTypeTest < ActiveSupport::TestCase
+class BoxTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

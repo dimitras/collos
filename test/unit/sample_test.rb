@@ -16,7 +16,9 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  tsv_content             :tsvector
-#  material_type           :string(255)
+#  shipped                 :string(255)
+#  sex                     :string(255)
+#  source_name             :string(255)
 #
 
 require 'test_helper'
