@@ -1,12 +1,17 @@
-%p#notice= notice
+%h3= @investigation.title
 
-%p
-  %b Name:
-  = @investigation.name
-%p
-  %b Person:
-  = @investigation.person_id
+=link_to "Edit Investigation", edit_investigation_path(@investigation), method: 'get', class: 'btn btn-success'
+=link_to "See all Investigations", investigations_path, method: 'get', class: 'btn'
 
-= link_to 'Edit', edit_investigation_path(@investigation)
-\|
-= link_to 'Back', investigations_path
+%br
+
+%table.table.table-bordered
+    %tr
+        %th Title
+        %td=@investigation.title
+    %tr
+        %th Identifier
+        %td=@investigation.identifier
+    %tr
+        %th Studies
+        %td 

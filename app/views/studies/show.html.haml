@@ -1,9 +1,23 @@
-%p#notice= notice
+%h3= @study.title
 
-%p
-  %b Name:
-  = @study.name
+=link_to "Edit study", edit_study_path(@study), method: 'get', class: 'btn btn-success'
+=link_to "See all studies", studies_path, method: 'get', class: 'btn'
 
-= link_to 'Edit', edit_study_path(@study)
-\|
-= link_to 'Back', studies_path
+%br
+
+%table.table.table-bordered
+    %tr
+        %th Title
+        %td=@study.title
+    %tr
+        %th Identifier
+        %td=@study.identifier
+    %tr
+        %th Description
+        %td=@study.description
+    %tr
+        %th Investigation
+        %td       
+    %tr
+        %th Samples
+        %td

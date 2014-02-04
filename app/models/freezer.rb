@@ -10,7 +10,10 @@
 #
 
 class Freezer < ActiveRecord::Base
-  attr_accessible :freezer_type_id, :label
+	attr_accessible :freezer_type_id, :label
 
-   belongs_to :freezer_type
+	belongs_to :freezer_type
+	has_many :boxes
+	has_one :barcode, as: :barcodeable
+	has_and_belongs_to_many :shipments
 end

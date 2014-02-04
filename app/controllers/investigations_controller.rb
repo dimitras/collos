@@ -1,4 +1,5 @@
 class InvestigationsController < ApplicationController
+  load_and_authorize_resource
   # GET /investigations
   # GET /investigations.json
   def index

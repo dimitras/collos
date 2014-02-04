@@ -15,7 +15,7 @@
       -if current_user and current_user.admin?
         -if @user.active?
           |
-          =link_to("Deactivate", inactivate_user_path(@user), method: 'post')
+          =link_to("Deactivate", deactivate_user_path(@user), method: 'post')
           |
         -else
           |

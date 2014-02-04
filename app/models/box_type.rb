@@ -13,5 +13,5 @@
 class BoxType < ActiveRecord::Base
 	attr_accessible :dimension_x, :dimension_y, :name
 
-	has_many :boxes
+	has_many :boxes, inverse_of: :box_types
 end

@@ -52,6 +52,10 @@ class Container < ActiveRecord::Base
     def show_location?
         container_type.x_dimension * container_type.y_dimension > 1
     end
+	
+	def name
+		label
+	end
 
     # Collects the associated samples or child containers into a
     # 2D Array sparse matrix

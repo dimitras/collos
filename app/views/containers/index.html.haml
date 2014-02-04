@@ -14,7 +14,7 @@
     %tbody
         -for container in @containers
             %tr
-                %td=link_to container.name, container
+                %td=link_to container.label, container
                 %td
                     =container.barcode.barcode
                     [

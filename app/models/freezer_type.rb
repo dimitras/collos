@@ -11,5 +11,5 @@
 class FreezerType < ActiveRecord::Base
 	attr_accessible :name
 
-	has_many :freezers
+	has_many :freezers, inverse_of: :freezer_types
 end

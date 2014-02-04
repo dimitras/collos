@@ -54,8 +54,8 @@ class Sample < ActiveRecord::Base
   # validates :name, presence: true
   has_one :barcode, as: :barcodeable
   belongs_to :container
-  belongs_to_many :protocol_applications
-  belongs_to_many :material_types
+  # belongs_to_many :protocol_applications
+  # belongs_to_many :material_types
   belongs_to :taxon
   belongs_to :type, class_name: "OntologyTerm", foreign_key: "type_id"
 

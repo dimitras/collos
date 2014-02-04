@@ -15,4 +15,7 @@ class Box < ActiveRecord::Base
 
 	belongs_to :box_type
 	belongs_to :freezer
+	has_many :containers
+	has_one :barcode, as: :barcodeable
+	has_and_belongs_to_many :shipments
 end

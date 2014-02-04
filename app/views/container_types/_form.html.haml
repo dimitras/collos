@@ -2,9 +2,9 @@
     = f.input :name
     = f.association :type, collection: @container_type.container_type_terms, hint: "What sort of container is it?"
     = f.input :x_dimension, hint: "How many columns?" 
-    = f.input :x_coord_labels, as: :radio_buttons, collection: ['letter', 'number'], hint: "Are the labels letters or numbers? When in doubt, choose 'number'"
+    //= f.input :x_coord_labels, as: :radio_buttons, collection: ['letter', 'number'], hint: "Are the labels letters or numbers? When in doubt, choose 'number'"
     = f.input :y_dimension
-    = f.input :y_coord_labels, as: :radio_buttons, collection: ['letter', 'number'], hint: "Are the labels letters or numbers?"
+    //= f.input :y_coord_labels, as: :radio_buttons, collection: ['letter', 'number'], hint: "Are the labels letters or numbers?"
     = f.input :retired, as: :radio_buttons
     = f.button :submit
     = link_to "Cancel", :back, class: 'btn btn-warning'
