@@ -3,11 +3,12 @@
     =render "sessions/form"
 -else
     %br
-    %h4 Search
-    = form_tag("/search",method: 'get', class: 'form-inline form-search') do
+    %h4 Search for Samples
+    = form_tag(search_path, method: 'get', class: 'form-inline form-search') do
         .fieldset
             =text_field_tag :query, nil,class: 'span4', placeholder: '"PBF78E5" or "zfish123"'
             =submit_tag "Search", class:'btn btn-primary'
+
     
     %br
     %br
