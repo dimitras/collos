@@ -1,14 +1,21 @@
 = simple_form_for @container, :html => {:class => 'form-horizontal' } do |f|
-    = f.input :name
+    = f.input :label
     - if @container.barcode
         =f.input :barcode, disabled: true, hint: "Barcodes are permanent. If you really want to change it, then contact the site admin.", label_method: 'barcode.barcode'
     - else
         =f.input :barcode, disabled: true, hint: "Barcodes are automatically generated"
     = f.association :container_type
+    /TOFIX
+    -if @container.container_type#.can_have_children
+        = f.input :ancestry # FIX as association?
+    -else
+        = f.input :ancestry, readonly:true
+    /
     = f.input :tags, hint: 'Press "Tab" key to enter a tag. Delete by clicking each tags "x"'
     = f.input :notes
     = f.input :retired, as: :radio_buttons
     = f.button :submit
+    = link_to 'Cancel', @container, class: 'btn btn-warning'
 
 = content_for :js do
     :javascript

@@ -11,5 +11,5 @@
 class MaterialType < ActiveRecord::Base
   attr_accessible :name
 
-  has_many :samples
+  has_and_belongs_to_many :samples
 end

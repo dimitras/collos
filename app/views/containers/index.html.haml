@@ -6,6 +6,7 @@
 %table.table.table-striped.table-condensed.table-bordered
     %thead
         %tr
+            %th.span2 Ancestry
             %th.span2 Name
             %th.span2 Barcode
             %th.span2 Container Type
@@ -14,6 +15,7 @@
     %tbody
         -for container in @containers
             %tr
+                %td=container.subtree.inspect
                 %td=link_to container.label, container
                 %td
                     =container.barcode.barcode
@@ -26,7 +28,7 @@
                     =link_to "Show", container_path(container), class: 'btn'
                     - if can?(:edit, container)
                         =link_to "Edit", edit_container_path(container), class: 'btn btn-success'
-                    -if can?(:destroy, container)
+                    -if can?(:destroy, container) and !container.retired
                         = link_to "Retire", container_path(container), method: 'delete', class: 'btn btn-danger'
 =will_paginate(@containers)
 =link_to "Create a new Container", new_container_path, class: 'btn btn-primary btn-large'

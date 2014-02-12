@@ -1,5 +1,6 @@
 class ShipmentsController < ApplicationController
     load_and_authorize_resource
+
     def index
         @shipments = @shipments.includes({:containers => :samples})
         if params.has_key? :open
@@ -7,14 +8,34 @@ class ShipmentsController < ApplicationController
         end
     end
     def show
-        @shipment.containers
+        # @shipment.containers
     end
     def new; end
     def create
+        if @shipment.save
+            redirect_to @shipment, success: "Shipment created successfully"
+        else
+            render action: 'new'
+        end
     end
     def edit; end
     def update
+        if @shipment.update_attributes(params[:shipment])
+            redirect_to @shipment, success: "Shipment updated"
+        else
+            render action: 'edit'
+        end
     end
+    def destroy
+        @shipment = Shipment.find(params[:id])
+        @shipment.destroy
+
+        respond_to do |format|
+          format.html { redirect_to shipments_url }
+          format.json { head :no_content }
+        end
+    end
+
     def receive
         if @shipment.received!
             ShipmentMailer.delay.received(@shipment.id)

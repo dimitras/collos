@@ -16,7 +16,7 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  tsv_content       :tsvector
-#  box_id            :integer
+#  ancestry_id       :integer
 #
 
 require 'test_helper'

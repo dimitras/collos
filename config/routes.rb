@@ -3,10 +3,10 @@ require 'api_constraints'
 
 Collos::Application.routes.draw do
 
-  resources :box_types
+  resources :shipments
 
 
-  resources :freezer_types
+  resources :material_types
 
 
   resources :people

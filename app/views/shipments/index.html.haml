@@ -1,0 +1,34 @@
+%h3 Shipments
+
+%table.table.table-striped.table-condensed.table-bordered
+    %thead
+        %tr
+            %th.span2 Tracking No
+            %th.span1 Shipper
+            %th.span1 Receiver
+            %th.span2 Ship date
+            %th.span2 Receive date
+            %th.span3 Shipper container
+            %th.span3 Receiver container
+            %th.span1 Complete
+            %th.span2 &nbsp;
+    %tbody
+        -for shipment in @shipments
+            %tr
+                %td=link_to(shipment.tracking_number, shipment)
+                %td=shipment.shipper.name
+                %td=shipment.receiver.name
+                %td=shipment.ship_date
+                %td=shipment.recieve_date
+                %td=shipment.past_container
+                %td=shipment.new_container
+                %td=shipment.complete
+                %td
+                    =link_to "Show", shipment_path(shipment), class: 'btn'
+                    - if can?(:edit, shipment)
+                        =link_to "Edit", edit_shipment_path(shipment), class: 'btn btn-success'
+                    =link_to 'Delete', shipment, :method => :delete, :data => {:confirm => 'Are you sure?'}, class: 'btn btn-danger'
+
+%br
+
+= link_to 'Create a Shipment', new_shipment_path, class: 'btn btn-primary btn-large'

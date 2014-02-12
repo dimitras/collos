@@ -36,7 +36,7 @@
 
 - if can? :edit , @container
     =button_to "Edit container", edit_container_path(@container), method: 'get', class: 'btn btn-success'
-- if can? :destroy , @container
+- if can? :destroy , @container and !@container.retired
     =button_to "Retire container", container_path(@container), method: 'delete', class: 'btn btn-danger'
 
 =button_to "See all containers", containers_path(), class: 'btn', method: 'get'

@@ -6,6 +6,7 @@
         - else
             =f.input :barcode, disabled: true, hint: "Barcodes are automatically generated"
         =f.association :taxon, label_method: :scientific_name
+        =f.input :source_name
         / =f.association :type, collection: @sample.gender_type_terms # add the migration first
         =f.input :retired
 

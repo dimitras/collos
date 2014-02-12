@@ -1,0 +1,32 @@
+%h3= @shipment.tracking_number
+
+=link_to "Edit shipment", edit_shipment_path(@shipment), method: 'get', class: 'btn btn-success'
+=link_to "See all shipments", shipments_path, method: 'get', class: 'btn'
+
+%br
+
+%table.table.table-bordered
+	%tr
+		%th.span2 Tracking No
+		%td=@shipment.tracking_number
+	%tr
+		%th.span1 Shipper
+		%td=@shipment.shipper.name
+	%tr
+		%th.span1 Receiver
+		%td=@shipment.receiver.name
+	%tr
+		%th.span2 Ship date
+		%td=@shipment.ship_date
+	%tr
+		%th.span2 Receive date
+		%td=@shipment.recieve_date
+	%tr
+		%th.span3 Shipper container
+		%td=@shipment.past_container
+	%tr
+		%th.span3 Receiver container
+		%td=@shipment.new_container
+	%tr
+		%th.span1 Complete
+		%td=@shipment.complete

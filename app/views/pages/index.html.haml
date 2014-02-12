@@ -3,13 +3,17 @@
     =render "sessions/form"
 -else
     %br
-    %h4 Search for Samples
+    %h4 Search samples
     = form_tag(search_path, method: 'get', class: 'form-inline form-search') do
         .fieldset
             =text_field_tag :query, nil,class: 'span4', placeholder: '"PBF78E5" or "zfish123"'
             =submit_tag "Search", class:'btn btn-primary'
+    
+    =submit_tag "Advanced Search", class:'btn btn-primary'
 
     
+    %br
+    %br
     %br
     %br
 
@@ -24,3 +28,27 @@
     /     .fieldset
     /         =file_field_tag :annotation_file,  class: 'file-field span4'
     /         =submit_tag "Upload Annotations", class:'btn btn-primary'
+
+
+    %br
+    %br
+    
+    %h4 Bulk upload
+    %em Massively enter the samples in the database, by files of defined format (check out 
+    =link_to "help section",help_path()
+    ).
+    %br
+    %br
+    %li.btn.btn-primary ISA-Tab files 
+    (tip: load the investigation and study files)
+    %br
+    %br
+    %li.btn.btn-primary CSV files 
+    (tip: load the investigation, contacts, studies, samples files)
+
+    %br
+    %br
+
+    / = form_for :file_upload, :html => {:multipart => true} do |f| %
+    /     = f.file_field :my_file
+    /     = f.submit "Upload"

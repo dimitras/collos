@@ -109,24 +109,24 @@ ALTER SEQUENCE barcodes_id_seq OWNED BY barcodes.id;
 
 
 --
--- Name: box_types; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: container_changes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE TABLE box_types (
+CREATE TABLE container_changes (
     id integer NOT NULL,
-    name character varying(255),
-    dimension_x integer,
-    dimension_y integer,
+    container_id integer,
+    past_ancestry_container_id integer,
+    new_ancestry_container_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
 
 
 --
--- Name: box_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: container_changes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE box_types_id_seq
+CREATE SEQUENCE container_changes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -135,43 +135,10 @@ CREATE SEQUENCE box_types_id_seq
 
 
 --
--- Name: box_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: container_changes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE box_types_id_seq OWNED BY box_types.id;
-
-
---
--- Name: boxes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE boxes (
-    id integer NOT NULL,
-    label character varying(255),
-    box_type_id integer,
-    freezer_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: boxes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE boxes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: boxes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE boxes_id_seq OWNED BY boxes.id;
+ALTER SEQUENCE container_changes_id_seq OWNED BY container_changes.id;
 
 
 --
@@ -230,7 +197,7 @@ CREATE TABLE containers (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     tsv_content tsvector,
-    box_id integer
+    ancestry_id integer
 );
 
 
@@ -261,69 +228,6 @@ CREATE TABLE containers_shipments (
     container_id integer,
     shipment_id integer
 );
-
-
---
--- Name: freezer_types; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE freezer_types (
-    id integer NOT NULL,
-    name character varying(255),
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: freezer_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE freezer_types_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: freezer_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE freezer_types_id_seq OWNED BY freezer_types.id;
-
-
---
--- Name: freezers; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE freezers (
-    id integer NOT NULL,
-    label character varying(255),
-    freezer_type_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: freezers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE freezers_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: freezers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE freezers_id_seq OWNED BY freezers.id;
 
 
 --
@@ -869,7 +773,12 @@ CREATE TABLE shipments (
     ship_date timestamp without time zone,
     recieve_date timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    past_container character varying(255),
+    new_container character varying(255),
+    complete boolean,
+    past_container_id integer,
+    new_container_id integer
 );
 
 
@@ -1046,14 +955,7 @@ ALTER TABLE ONLY barcodes ALTER COLUMN id SET DEFAULT nextval('barcodes_id_seq':
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY box_types ALTER COLUMN id SET DEFAULT nextval('box_types_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY boxes ALTER COLUMN id SET DEFAULT nextval('boxes_id_seq'::regclass);
+ALTER TABLE ONLY container_changes ALTER COLUMN id SET DEFAULT nextval('container_changes_id_seq'::regclass);
 
 
 --
@@ -1068,20 +970,6 @@ ALTER TABLE ONLY container_types ALTER COLUMN id SET DEFAULT nextval('container_
 --
 
 ALTER TABLE ONLY containers ALTER COLUMN id SET DEFAULT nextval('containers_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY freezer_types ALTER COLUMN id SET DEFAULT nextval('freezer_types_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY freezers ALTER COLUMN id SET DEFAULT nextval('freezers_id_seq'::regclass);
 
 
 --
@@ -1241,19 +1129,11 @@ ALTER TABLE ONLY barcodes
 
 
 --
--- Name: box_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: container_changes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY box_types
-    ADD CONSTRAINT box_types_pkey PRIMARY KEY (id);
-
-
---
--- Name: boxes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY boxes
-    ADD CONSTRAINT boxes_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY container_changes
+    ADD CONSTRAINT container_changes_pkey PRIMARY KEY (id);
 
 
 --
@@ -1278,22 +1158,6 @@ ALTER TABLE ONLY containers
 
 ALTER TABLE ONLY investigations
     ADD CONSTRAINT experiments_pkey PRIMARY KEY (id);
-
-
---
--- Name: freezer_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY freezer_types
-    ADD CONSTRAINT freezer_types_pkey PRIMARY KEY (id);
-
-
---
--- Name: freezers_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY freezers
-    ADD CONSTRAINT freezers_pkey PRIMARY KEY (id);
 
 
 --
@@ -1481,6 +1345,13 @@ CREATE INDEX index_barcodes_on_barcode_set ON barcodes USING btree (barcode_set)
 --
 
 CREATE INDEX index_barcodes_on_barcodeable_type_and_barcodeable_id ON barcodes USING btree (barcodeable_type, barcodeable_id);
+
+
+--
+-- Name: index_container_changes_on_container_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_container_changes_on_container_id ON container_changes USING btree (container_id);
 
 
 --
@@ -1922,3 +1793,13 @@ INSERT INTO schema_migrations (version) VALUES ('20140114214033');
 INSERT INTO schema_migrations (version) VALUES ('20140114214125');
 
 INSERT INTO schema_migrations (version) VALUES ('20140114215841');
+
+INSERT INTO schema_migrations (version) VALUES ('20140211154102');
+
+INSERT INTO schema_migrations (version) VALUES ('20140211154515');
+
+INSERT INTO schema_migrations (version) VALUES ('20140211155311');
+
+INSERT INTO schema_migrations (version) VALUES ('20140211192652');
+
+INSERT INTO schema_migrations (version) VALUES ('20140212164913');

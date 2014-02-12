@@ -11,7 +11,7 @@
             %th.span1 Name
             %th.span1 Taxon
             %th.span1 Container
-            %th.span2 Tags
+            %th.span2 Source
             %th.span1 Retired?
             %th.span2 &nbsp;
     %tbody
@@ -25,7 +25,7 @@
                         =link_to sample.container.label, container_url(sample.container)
                     -else
                         %i None
-                %td=format_tags(sample.tags)
+                %td=format_tags(sample.source_name)
                 %td= sample.retired? ? "yes" : "no"
                 %td
                     =link_to "Show", sample_path(sample), class: 'btn'
@@ -35,4 +35,4 @@
                         = link_to "Retire", sample_path(sample), method: 'delete', class: 'btn btn-danger'
 =will_paginate(@samples, params: params)
 
-= link_to "Create a new Sample", new_sample_path, class: 'btn btn-primary btn-large'
+= link_to "Create a Sample", new_sample_path, class: 'btn btn-primary btn-large'

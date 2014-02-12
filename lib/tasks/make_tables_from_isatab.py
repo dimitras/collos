@@ -5,7 +5,7 @@ rails.
 
 """
 
-# USAGE: python lib/tasks/make_tables_from_isatab.py data/isatab_sample/ data/temp_studies.csv data/temp_contacts.csv data/temp_investigation.csv data/temp_samples.csv 
+# USAGE: python lib/tasks/make_tables_from_isatab.py workspace/data/isatab_sample/ workspace/data/isatab_sample_tmp/studies.csv workspace/data/isatab_sample_tmp/contacts.csv workspace/data/isatab_sample_tmp/investigation.csv workspace/data/isatab_sample_tmp/samples.csv
 
 from bcbio import isatab
 import sys
@@ -26,7 +26,7 @@ class Sample:
 	def attribute(self, atr_name):
 		return self.attributes[atr_name]
 	
-	def attribute_string(self, atr_name, delimiter="-"):
+	def attribute_string(self, atr_name, delimiter="|"):
 		return delimiter.join(self.attribute(atr_name))
 
 def is_empty(any_structure):
@@ -87,7 +87,7 @@ def main():
 	if not investigation_info:
 		if len(studies_table) != 1:
 			raise Exception('Investigation info empty and more than 1 studies provided. Check the files')
-		investigation_table = ["", studies_table[0][0]]
+		investigation_table = [studies_table[0][2], studies_table[0][0], studies_table[0][3]]
 	else:
 		investigation_table = investigation_info.values()
 

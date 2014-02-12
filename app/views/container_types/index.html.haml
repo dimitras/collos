@@ -9,22 +9,25 @@
             %th.span2 Container Type
             %th.span2 Container Type Term
             %th.span2 Dimensions
-            //%th.span2 Labels
+            %th.span2 Can contain
             %th.span2 Retired
             %th.span2 &nbsp;
     %tbody
         -for container_type in @container_types
             %tr
                 %td=link_to(container_type.name, container_type)
-                %td=link_to container_type.type.name, ontology_term_url(container_type.type)
+                -if container_type.type
+                    %td=link_to container_type.type.name, ontology_term_url(container_type.type)
+                -else
+                    %td -
                 %td==#{ container_type.x_dimension} x #{container_type.y_dimension}
-                //%td==X:(#{ container_type.x_coord_labels}) Y:(#{container_type.y_coord_labels})
+                %td=container_type.can_have_children? ? "Yes" : "No"
                 %td=container_type.retired? ? "Yes" : "No"
                 %td
                     =link_to "Show", container_type_path(container_type), class: 'btn'
                     - if can?(:edit, container_type)
                         =link_to "Edit", edit_container_type_path(container_type), class: 'btn btn-success'
-                    -if can?(:destroy, container_type)
+                    -if can?(:destroy, container_type) and ! container_type.retired
                         = link_to "Retire", container_type_path(container_type), method: 'delete', class: 'btn btn-danger'
                 
 =will_paginate(@container_types, params: params)

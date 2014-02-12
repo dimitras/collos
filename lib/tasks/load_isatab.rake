@@ -1,12 +1,12 @@
 namespace :db do
 
 	# USAGE: rake db:update_taxon_in_samples --trace
-	desc "update taxon in emanuelas samples"
+	desc "bulk update taxon in emanuelas samples"
 	task :update_taxon_in_samples  => :environment do
-		samples = Sample.all
+		samples = Sample.all # the database was empty before, so this is applied to all
 		samples.each do |sample|
-			puts sample.id.to_s + " " + sample.taxon_id.to_s
-# 			sample_update = Sample.update(sample.id, { :taxon_id => 1 }) # from mouse to human
+			# puts sample.id.to_s + " " + sample.taxon_id.to_s
+			# sample_update = Sample.update(sample.id, { :taxon_id => 1 }) # from mouse to human
 		end
 	end
 				
@@ -17,115 +17,91 @@ namespace :db do
 	# USAGE: rake db:load_isatab --trace
 	desc "import isatab file data"
 	task :load_isatab  => :environment do
-		isatab_tmp_file = "data/temp_isatab.csv"
-		in_section = 0
-		CSV.foreach(isatab_tmp_file) do |row|
-			if row[0].include? "investigation"
-				in_section = 1
-				next
-			end
-			if row[0].include? "metadata"
-				in_section = 2
-				next
-			end
-			if row[0].include? "contacts"
-				in_section = 3
-				next
-			end
-			if row[0].include? "nodes"
-				in_section = 4
-				next
-			end
 
-			case in_section
-			when 1
-				# :name, :person_id, :study_id
-				if row[0] == "Investigation Title"
-					investigation_name = row[1]
-				end
-			when 2
-				# :title, :identifier, :description
-				if row[0] == "Study Title"
-					title = row[1]
-				elsif row[0] == "Study Identifier"
-					identifier = row[1]
-				elsif row[0] == "Study Description"
-					description = row[1]
-				end
-			when 3
-				# :institution, :name, :type, :email, :phone
-				if row[0] == "Study Person First Name"
-					firstname = row[1]
-				elsif row[0] == "Study Person Last Name"
+		Dir["workspace/data/isatab_sample_tmp/*.csv"].each do |file|
+			file_pathname = Pathname.new(file)
+			filename = file_pathname.basename
+			CSV.foreach(file, {:headers=>:first_row}) do |row|
+				case filename
+
+				when filename == "investigation.csv"
+					investigation_identifier = row[0]
+					investigation_title = row[1]
+					investigation_description = row[2]
+					puts "#{investigation_identifier} | #{investigation_title} | #{investigation_description}"
+					
+
+				when filename == "studies.csv"
+					study_title = row[0]
+					study_identifier = row[2]
+					study_description = row[3]
+					puts "#{study_title} | #{study_identifier} | #{study_description}"
+					
+
+				when filename == "contacts.csv"
+					firstname = row[7]
 					lastname = row[1]
-				elsif row[0] == "Study Person Roles"
-					role = row[1]
-				elsif row[0] == "Study Person Phone"
-					phone = row[1]
-				elsif row[0] == "Study Person Email"
-					email = row[1]
-				elsif row[0] == "Study Person Affiliation"
-					institution = row[1]
+					role = row[3]
+					phone = row[4]
+					email = row[10]
+					institution = row[5]
+					puts "#{firstname} | #{lastname} | #{role} | {phone} | #{email} | #{institution}"
+
+
+				when filename == "samples.csv" 
+					sample_name = row[0]
+					parent = row[1]
+					source_name = row[2]
+					material_types = row[3].split(',')
+					organism = row[4]
+					protocol_refs = row[5].split(',')
+					freezer_type = row[6]
+					freezer_label = row[7]
+					(box_type, box_type_dimensions) = row[8].split('|')
+					box_label = row[9]
+					(container_type, container_type_dimensions) = row[10].split('|')
+					shipped = row[11]
+					receiver = row[12]
+					collOS = row[13]
+					puts "#{sample_name} | #{parent} | #{source_name} | {material_types} | #{organism} | #{protocol_refs} | #{freezer_type} | #{freezer_label} | #{box_type} | #{box_type_dimensions} | #{box_label} | #{container_type} | #{container_type_dimensions} | #{shipped} | #{receiver} | #{collOS}"
+
 				end
-			when 4
-				# :name, :taxon, :taxon_id, :scientific_name, :common_name, :container, :container_id, :container_x, :container_y, :protocol_application, :protocol_application_id, :notes, :tags, :material_type
 
-				for row.length-1 do |column|
-					# ['Material Type', [Attrs(Material_Type='urine', Term_Source_REF='BTO', Term_Accession_Number='BTO:0001419'), Attrs(Material_Type='whole organism', Term_Source_REF='EFO', Term_Accession_Number='efo:EFO_0002906')]]
-					# column.split('Attrs(')[1].
-					# column.match(/Attrs/)
-					# hashed_row = Hash[*row]
-					row.scan(/.+Attrs\((.+)='(.+)'.+/)
-				end
-				# if row[0] == "Source Name"
+				# feed the database
+				# study = Study.create(:title => study_title, :identifier => study_identifier, :description => study_description)
+				# person = Person.create(:firstname => firstname, :lastname => lastname, :type => role, :email => email, :phone => phone, :institution => institution)
+				# investigation = Investigation.create(:name => investigation_title, :investigation_identifier => investigation_identifier, :investigation_description => investigation_description, :person_id => person.id, :study_id => study.id) # has many people, has many studies
+				
+				# # TODO: check if taxon exists, otherwise enter, and pick the id
+				# taxon = Taxon.create()
+				# # 
+				# freezer_type = FreezerType.create()
+				# freezer = Freezer.create()
+				# box_type = BoxType.create()
+				# box = Box.create()
+				# container_type = ContainerType.create()
+				# container = Container.create()
+				# # 
+				# protocol = Protocol.create()
+				# protocol_app = ProtocolApplication.create()
+				# # add it
+				# material_type = Material_Type.create()
+				# # TODO: add barcode generation here
+				# sample = Sample.create(:name => sample_name, :barcode_string => ? , :taxon_id => taxon.id,  :container_id, :container_x, :container_y, :protocol_application_id, :notes, :tags, :material_type_id)
+				
+				# # add associations
+				# sample_protocolapp = Sample_protocolapp.create(:sample_id => sample.id, :protocolapp_id => protocol_app.id)
+				# sample_materialtype = Sample_materialtype.create(:sample_id => sample.id, :material_type_id => material_type.id)
+				# # 
+				# Ontology.create()
+				# OntologyTerm.create()
+				# Shipment.create()
+				# User.create()
+				# Address.create()
 
-				# elsif row[0] == "Sample Name"
-
-				# elsif row[0] == "Material Type"
-
-				# elsif row[0] == "organism"
-
-				# elsif row[0] == "Protocol REF"
-
-				# elsif row[0] == "freezer type"
-
-				# elsif row[0] == "freezer label"
-
-				# elsif row[0] == "box type"
-
-				# elsif row[0] == "box label"
-
-				# elsif row[0] == "container type"
-
-				# elsif row[0] == "shipped"
-
-				# elsif row[0] == "receiver"
-
-				# elsif row[0] == "collOS"
-
-				# end
 			end
-
-
-			# Study.create(:title => title, :identifier => identifier, :description => description)
-			# Person.create(:institution => institution, :name => firstname+" "+lastname, :type => role, :email => email, :phone => phone)
-			# Investigation.create(:name => investigation_name, :person_id => Person.id, :study_id => Study.id)
-
-			# Sample.create()
-			# Taxon.create()
-			# ContainerType.create()
-			# BoxType.create()
-			# FreezerType.create()
-			# Protocol.create()
-			# ProtocolApplication.create()
-			# ProtocolParameter.create()
-			# Ontology.create()
-			# OntologyTerm.create()
-			# Shipment.create()
-			# User.create()
-			# Address.create()
-
 		end
-	end
 
-end
+	end
+end		
+

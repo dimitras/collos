@@ -2,25 +2,59 @@
     
 %ol
 	%li
-		%b How do I add my sample?
+		%b How do I add one sample to the database?
 		%br
-		I first have to create or make sure there is the 
-		=link_to "container",containers_path()
-		, 
-		=link_to "container type",container_types_path()
-		, 
-		=link_to "taxonomy",taxons_path()
-		and
-		=link_to "ontology term",ontology_terms_path()
-		I need, then I create a new 
+		First I have to create or make sure the following exist:
+		%ul
+			%li
+				=link_to "container type",container_types_path()
+			%li  
+				=link_to "container",containers_path()
+			%li
+				=link_to "taxonomy",taxons_path()
+			%li
+				=link_to "ontology term",ontology_terms_path()
+		Then I create a new 
 		=link_to "sample",samples_path()
+	%br
+	%li
+		%b How do I add more than one samples to the database?
+		%br
+		I can use either ISA-Tab formatted files or plain tab-delimited ones.
+	%br
 	%li
 		%b How do I ship my sample?
-		%br	
-		yadayada...
+		%br
+		Each sample is automatically barcoded with a unique identifier. 
+		Each sample can be shipped one or more times.
+		If there is one or a couple of samples to be shipped, I can search for the sepicific samples in the system, edit them, and enter the shipping information.
+		If there is a collection of samples to be shipped, I can use the bulk upload functionality.
+	%br
 	%li
 		%b How do I get the barcode sticker for my shipment?
 		%br	
 		Click on show in the sample you wish to ship, and get the Sample Barcode from the	
 		=link_to "samples",samples_path()
-    
+		I can print the barcode stickers of the collection of samples I want to ship.
+	%br
+	%li
+		%b How do I find a sample or a collection of samples?
+		%br	
+		I can search the database by sample name, barcode, container, investigator, study, organism, tissue.
+		For more advanced search, I can define multiple filters to narrow my findings.
+	%br
+	%li
+		%b Which is the recommended ISA-Tab format for the bulk upload?
+		%br	
+		You may download the 
+		=link_to "sample ISA-Tab package"
+	%br
+	%li
+		%b Which is the recommended tab-delimited format for the bulk upload?
+		%br	
+		You may download the 
+		=link_to "sample tab-delimited package"
+
+
+
+

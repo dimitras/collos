@@ -16,20 +16,23 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  tsv_content       :tsvector
-#  box_id            :integer
+#  ancestry_id       :integer
 #
 
 class Container < ActiveRecord::Base
-    attr_accessible :label,  :barcode,
+    attr_accessible :label, :barcode,
         :ancestry, :container_x, :container_y,
         :container_type_name, :container_type, :container_type_id,
-        :retired, :tags, :notes, :box_id
+        :retired, :tags, :notes, :ancestry_id
 
-    belongs_to :box
     belongs_to :container_type, inverse_of: :containers
     has_many :samples
     has_one :barcode, as: :barcodeable
     has_and_belongs_to_many :shipments
+
+    # TOFIX
+    # has_many :ancestry_containers, :class_name => "Container", foreign_key => "ancestry_id"
+    # belongs_to :ancestry, :class_name => "Container", foreign_key => "ancestry_id"
 
     # parent-child-sibling relationships
     has_ancestry :orphan_strategy => :rootify, :cache_depth => true
@@ -53,9 +56,10 @@ class Container < ActiveRecord::Base
         container_type.x_dimension * container_type.y_dimension > 1
     end
 	
-	def name
-		label
-	end
+    alias_attribute :name, :label
+	# def name
+	# 	label
+	# end
 
     # Collects the associated samples or child containers into a
     # 2D Array sparse matrix

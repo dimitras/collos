@@ -4,17 +4,21 @@
     %tr
         %th.span3 Name
         %td=@container_type.name
-    %tr
-        %th Container Type Term
+    -if @type
+        %tr
+            %th Container Type Term
 
-        %td
-            =link_to "#{@type.name} [#{@type.ontology.prefix}: #{@type.accession}]", ontology_term_url(@type)
+            %td
+                =link_to "#{@type.name} [#{@type.ontology.prefix}: #{@type.accession}]", ontology_term_url(@type)
     %tr
         %th X Dimension
         %td=@container_type.x_dimension
     %tr
         %th Y Dimension
         %td=@container_type.y_dimension
+    %tr
+        %th Can contain other container type
+        %td=@container_type.can_have_children? ? "Yes" : "No"
     %tr
         %th Retired
         %td=@container_type.retired? ? "Yes" : "No"

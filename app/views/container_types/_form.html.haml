@@ -5,6 +5,7 @@
     //= f.input :x_coord_labels, as: :radio_buttons, collection: ['letter', 'number'], hint: "Are the labels letters or numbers? When in doubt, choose 'number'"
     = f.input :y_dimension
     //= f.input :y_coord_labels, as: :radio_buttons, collection: ['letter', 'number'], hint: "Are the labels letters or numbers?"
+    = f.input :can_have_children, as: :radio_buttons
     = f.input :retired, as: :radio_buttons
     = f.button :submit
     = link_to "Cancel", :back, class: 'btn btn-warning'

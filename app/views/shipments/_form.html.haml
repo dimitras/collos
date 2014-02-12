@@ -1,0 +1,22 @@
+=simple_form_for @shipment, html: {class: 'form-horizontal'} do |f|
+	=field_set_tag "Shipment Information" do
+		=f.input :tracking_number
+		=f.association :shipper
+		=f.association :receiver
+		=f.input :ship_date, :as => :string, :input_html => {:class => 'datepicker col-span-3'}
+		=f.input :recieve_date, :as => :string, :input_html => {:class => 'datepicker col-span-3'}
+		=f.input :complete
+	=field_set_tag "Package Information" do
+		=f.association :past_container
+		=f.association :new_container
+	%fieldset
+		=f.button :submit
+		=link_to 'Cancel', @shipment, class: 'btn btn-warning'
+		
+:javascript
+	$('.datepicker').datepicker({
+		format: "yyyy-mm-dd",
+		todayHighlight: true,
+		todayBtn: 'linked',
+		autoclose: true
+	}); ;

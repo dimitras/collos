@@ -55,7 +55,7 @@ class Sample < ActiveRecord::Base
   has_one :barcode, as: :barcodeable
   belongs_to :container
   # belongs_to_many :protocol_applications
-  # belongs_to_many :material_types
+  has_and_belongs_to_many :material_types
   belongs_to :taxon
   belongs_to :type, class_name: "OntologyTerm", foreign_key: "type_id"
 
@@ -98,7 +98,7 @@ class Sample < ActiveRecord::Base
 
   # Full text search of samples
   include PgSearch
-  multisearchable against: [:name, :barcode_string, :tags, :notes],
+  multisearchable against: [:name, :barcode_string, :tags, :notes, :source_name],
     using: {
       tsearch: {
         dictionary: "english",
@@ -108,7 +108,7 @@ class Sample < ActiveRecord::Base
       }
     }
 
-  pg_search_scope :search, against:  [:name, :barcode_string, :tags, :notes],
+  pg_search_scope :search, against: [:name, :barcode_string, :tags, :notes, :source_name],
     using: {
       tsearch: {
         dictionary: "english",
