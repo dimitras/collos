@@ -1,6 +1,7 @@
 %br
-%h4 Search Results for Samples
+
 -if @results.count > 0
+    %h4==#{@results.count} samples found
     %table.table.table-striped.table-condensed.table-bordered
         %thead
             %tr
@@ -21,9 +22,11 @@
                     %td= o.notes
                     %td= o.retired? ? "yes" : "no"
     =will_paginate(@results, params: params, method: 'post')
+    =link_to "Download CSV", search_path(results: @results, format: "csv"), class:'btn'
 -else
-    %i No results found
+    %i==#{@results.count} samples found
 
+%br
 %br
 
 %h4 Refine your search

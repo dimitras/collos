@@ -22,7 +22,7 @@
                 %td=sample.taxon.try(:scientific_name)
                 %td
                     -if sample.container
-                        =link_to sample.container.label, container_url(sample.container)
+                        =link_to sample.container.name, container_url(sample.container)
                     -else
                         %i None
                 %td=format_tags(sample.source_name)

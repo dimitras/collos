@@ -15,6 +15,12 @@
             =link_to("Barcode set #{@container.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @container.barcode.barcode_set))
             ]
     %tr
+        %th Parent Container
+        -if @container.parent
+            %td=@container.parent.name
+        -else
+            %td None
+    %tr
         %th Retired
         %td=@container.retired? ? "Yes" : "No"
 

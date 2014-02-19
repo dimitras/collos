@@ -185,7 +185,7 @@ ALTER SEQUENCE container_types_id_seq OWNED BY container_types.id;
 CREATE TABLE containers (
     id integer NOT NULL,
     container_type_id integer,
-    label character varying(255),
+    name character varying(255),
     barcode_string character varying(255),
     ancestry character varying(500),
     ancestry_depth integer DEFAULT 0,
@@ -196,8 +196,7 @@ CREATE TABLE containers (
     notes text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    tsv_content tsvector,
-    ancestry_id integer
+    tsv_content tsvector
 );
 
 
@@ -1379,7 +1378,7 @@ CREATE INDEX index_containers_on_container_type_id ON containers USING btree (co
 -- Name: index_containers_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_containers_on_name ON containers USING btree (label);
+CREATE INDEX index_containers_on_name ON containers USING btree (name);
 
 
 --
@@ -1803,3 +1802,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140211155311');
 INSERT INTO schema_migrations (version) VALUES ('20140211192652');
 
 INSERT INTO schema_migrations (version) VALUES ('20140212164913');
+
+INSERT INTO schema_migrations (version) VALUES ('20140219034759');

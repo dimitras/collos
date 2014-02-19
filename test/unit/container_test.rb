@@ -4,7 +4,7 @@
 #
 #  id                :integer          not null, primary key
 #  container_type_id :integer
-#  label             :string(255)
+#  name              :string(255)
 #  barcode_string    :string(255)
 #  ancestry          :string(500)
 #  ancestry_depth    :integer          default(0)
@@ -16,7 +16,6 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  tsv_content       :tsvector
-#  ancestry_id       :integer
 #
 
 require 'test_helper'

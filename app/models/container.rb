@@ -4,7 +4,7 @@
 #
 #  id                :integer          not null, primary key
 #  container_type_id :integer
-#  label             :string(255)
+#  name              :string(255)
 #  barcode_string    :string(255)
 #  ancestry          :string(500)
 #  ancestry_depth    :integer          default(0)
@@ -16,23 +16,18 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  tsv_content       :tsvector
-#  ancestry_id       :integer
 #
 
 class Container < ActiveRecord::Base
-    attr_accessible :label, :barcode,
+    attr_accessible :name, :barcode,
         :ancestry, :container_x, :container_y,
         :container_type_name, :container_type, :container_type_id,
-        :retired, :tags, :notes, :ancestry_id
+        :retired, :tags, :notes, :parent_id
 
     belongs_to :container_type, inverse_of: :containers
     has_many :samples
     has_one :barcode, as: :barcodeable
     has_and_belongs_to_many :shipments
-
-    # TOFIX
-    # has_many :ancestry_containers, :class_name => "Container", foreign_key => "ancestry_id"
-    # belongs_to :ancestry, :class_name => "Container", foreign_key => "ancestry_id"
 
     # parent-child-sibling relationships
     has_ancestry :orphan_strategy => :rootify, :cache_depth => true
@@ -44,23 +39,39 @@ class Container < ActiveRecord::Base
 
     # some handy methods
     alias_method :container, :parent
-    def container_type_name
+    
+	def container_type_name
         container_type.name
     end
 
     def to_s
-        "[#{barcode.barcode}] #{name} (#{container_type.name})"
+        "[#{barcode.barcode}] #{name} (#{container_type_name})"
     end
 
     def show_location?
         container_type.x_dimension * container_type.y_dimension > 1
     end
-	
-    alias_attribute :name, :label
-	# def name
-	# 	label
-	# end
 
+	def self.arrange_as_array(options={}, hash=nil)                                                                                                                                                            
+		hash ||= arrange(options)
+
+		arr = []
+		hash.each do |node, children|
+			arr << node
+			arr += arrange_as_array(options, children) unless children.nil?
+		end
+		arr
+	end
+
+	def name_for_selects
+		"#{'-' * depth} #{name}"
+	end
+
+	def possible_parents
+		parents = Container.arrange_as_array(:order => 'name')
+		return new_record? ? parents : parents - subtree
+	end
+	
     # Collects the associated samples or child containers into a
     # 2D Array sparse matrix
     def container_matrix
@@ -81,7 +92,7 @@ class Container < ActiveRecord::Base
         self.barcode = bc
     end
 
-    # Full text search of samples
+    # Full text search of containers
     include PgSearch
     multisearchable against: [:name, :barcode_string, :tags, :notes],
         using: {

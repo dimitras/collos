@@ -1,6 +1,6 @@
 class ContainersController < ApplicationController
     load_and_authorize_resource includes: [:barcode,:container_type]
-
+	
     def index
         @containers = @containers.includes([:barcode,:container_type]).order(:created_at)
         unless params[:show_all]
@@ -22,6 +22,7 @@ class ContainersController < ApplicationController
     end
     def edit
         @container = Container.includes(:barcode, :container_type).find(@container)
+		@containers = Container.arrange_as_array({:order => 'name'}, @container.possible_parents)
     end
     def update
         if @container.update_attributes(params[:container])

@@ -18,7 +18,7 @@ class ContainerType < ActiveRecord::Base
     attr_accessible :name, :type, :type_id,
         :x_dimension, :parent_x,
         :y_dimension, :parent_y,
-        :can_have_children, :retired, :name
+        :can_have_children, :retired
 
     belongs_to :type, class_name: "OntologyTerm", foreign_key: "type_id"
     has_many :containers, inverse_of: :container_types

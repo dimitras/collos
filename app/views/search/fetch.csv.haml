@@ -1,0 +1,4 @@
+=="Type","Name","Barcode","Tags","Notes"
+-for result in @results
+	-o = result.searchable
+	=="#{o}","#{o.name}","#{o.barcode}","#{format_tags(o.tags)}","#{o.notes}"
