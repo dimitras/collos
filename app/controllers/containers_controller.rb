@@ -10,9 +10,12 @@ class ContainersController < ApplicationController
     end
 
     def show; end
-    def new; end
+    def new
+        @container = Container.new
+        @containers = Container.all  
+    end
     def create
-        @container.parent = nil
+        # @container.parent = nil
         if @container.save
             redirect_to container_path(@container), :success => "Container successfully created"
         else
