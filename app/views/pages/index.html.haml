@@ -3,17 +3,13 @@
     =render "sessions/form"
 -else
     %br
-    %h4 Search samples
+    %h4 Search for samples/containers
     = form_tag(search_path, method: 'get', class: 'form-inline form-search') do
         .fieldset
-            =text_field_tag :query, nil,class: 'span4', placeholder: '"PBF78E5" or "zfish123"'
+            =text_field_tag :query, nil,class: 'span4', placeholder: '"PBF78E5" or "sample123" or "container123"'
             =submit_tag "Search", class:'btn btn-primary'
-    
-    =submit_tag "Advanced Search", class:'btn btn-primary'
-
-    
-    %br
-    %br
+            =submit_tag "Advanced Search", class:'btn'
+ 
     %br
     %br
 
@@ -34,20 +30,15 @@
     %br
     
     %h4 Bulk upload
-    %em Massively enter the samples in the database, by files of defined format (check out 
-    =link_to "help section",help_path()
-    ).
+    %em==Upload your files to massively enter the samples in the system (check out the files format #{link_to "here",help_path()}).
     %br
     %br
-    %li.btn.btn-primary ISA-Tab files 
-    (tip: load the investigation and study files)
-    %br
-    %br
-    %li.btn.btn-primary CSV files 
-    (tip: load the investigation, contacts, studies, samples files)
+    / = form_tag(uploader_path, method: 'get') do
+    /     .fieldset
+    =submit_tag "ISA-Tab files", class:'btn'
+    =submit_tag "CSV files", class:'btn'
 
-    %br
-    %br
+
 
     / = form_for :file_upload, :html => {:multipart => true} do |f| %
     /     = f.file_field :my_file

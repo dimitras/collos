@@ -12,6 +12,7 @@
             %th.span1 Taxon
             %th.span1 Container
             %th.span2 Source
+            %th.span2 Study
             %th.span1 Retired?
             %th.span2 &nbsp;
     %tbody
@@ -25,7 +26,8 @@
                         =link_to sample.container.name, container_url(sample.container)
                     -else
                         %i None
-                %td=format_tags(sample.source_name)
+                %td=sample.source_name
+                %td=sample.study.try(:title)
                 %td= sample.retired? ? "yes" : "no"
                 %td
                     =link_to "Show", sample_path(sample), class: 'btn'

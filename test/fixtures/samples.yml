@@ -16,9 +16,9 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  tsv_content             :tsvector
-#  shipped                 :string(255)
 #  sex                     :string(255)
 #  source_name             :string(255)
+#  study_id                :integer
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

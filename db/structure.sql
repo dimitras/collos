@@ -155,7 +155,8 @@ CREATE TABLE container_types (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     retired boolean DEFAULT false,
-    label character varying(255)
+    label character varying(255),
+    shipable boolean
 );
 
 
@@ -196,7 +197,8 @@ CREATE TABLE containers (
     notes text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    tsv_content tsvector
+    tsv_content tsvector,
+    shipped boolean
 );
 
 
@@ -726,9 +728,9 @@ CREATE TABLE samples (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     tsv_content tsvector,
-    shipped character varying(255),
     sex character varying(255),
-    source_name character varying(255)
+    source_name character varying(255),
+    study_id integer
 );
 
 
@@ -1804,3 +1806,13 @@ INSERT INTO schema_migrations (version) VALUES ('20140211192652');
 INSERT INTO schema_migrations (version) VALUES ('20140212164913');
 
 INSERT INTO schema_migrations (version) VALUES ('20140219034759');
+
+INSERT INTO schema_migrations (version) VALUES ('20140220155728');
+
+INSERT INTO schema_migrations (version) VALUES ('20140220160531');
+
+INSERT INTO schema_migrations (version) VALUES ('20140220170001');
+
+INSERT INTO schema_migrations (version) VALUES ('20140220170255');
+
+INSERT INTO schema_migrations (version) VALUES ('20140220170559');

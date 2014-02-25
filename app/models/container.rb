@@ -16,13 +16,14 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  tsv_content       :tsvector
+#  shipped           :boolean
 #
 
 class Container < ActiveRecord::Base
     attr_accessible :name, :barcode,
         :ancestry, :container_x, :container_y,
         :container_type_name, :container_type, :container_type_id,
-        :retired, :tags, :notes, :parent_id
+        :retired, :tags, :notes, :parent_id, :shipped
 
     belongs_to :container_type, inverse_of: :containers
     has_many :samples

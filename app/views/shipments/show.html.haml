@@ -21,6 +21,9 @@
 	%tr
 		%th.span2 Receive date
 		%td=@shipment.recieve_date
+	/ %tr
+	/ 	%th.span2 Shipping address
+	/ 	%td=@shipment.receiver.addresses[0]
 	%tr
 		%th.span3 Shipper container
 		%td=@shipment.past_container

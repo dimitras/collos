@@ -12,7 +12,7 @@
 class Investigation < ActiveRecord::Base
 	attr_accessible :title, :identifier
 
-  	has_many :studies
+  	has_many :studies, foreign_key: "id"
 	has_many :samples
 	has_and_belongs_to_many :people
 

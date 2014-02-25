@@ -16,9 +16,9 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  tsv_content             :tsvector
-#  shipped                 :string(255)
 #  sex                     :string(255)
 #  source_name             :string(255)
+#  study_id                :integer
 #
 
 class Sample < ActiveRecord::Base
@@ -28,7 +28,7 @@ class Sample < ActiveRecord::Base
     :container, :container_id,
     :container_x, :container_y,
     :protocol_application, :protocol_application_id,
-    :notes, :retired, :tags, :shipped, :sex, :source_name
+    :notes, :retired, :tags, :study_id, :study_title, :sex, :source_name
 
 
   # Needed to parse out comma delimited tags from forms into a strict Array
@@ -58,6 +58,7 @@ class Sample < ActiveRecord::Base
   has_and_belongs_to_many :material_types
   belongs_to :taxon
   belongs_to :type, class_name: "OntologyTerm", foreign_key: "type_id"
+  belongs_to :study
 
   def scientific_name
     taxon.try(:scientific_name)
@@ -71,6 +72,10 @@ class Sample < ActiveRecord::Base
     if tx = Taxon.find_by_scientific_name(sn)
       self.taxon = tx
     end
+  end
+
+  def title
+    study.try(:title)
   end
 
   def barcode_string

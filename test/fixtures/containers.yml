@@ -16,6 +16,7 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  tsv_content       :tsvector
+#  shipped           :boolean
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

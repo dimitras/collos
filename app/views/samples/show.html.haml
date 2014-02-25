@@ -15,15 +15,19 @@
             %th Sample Barcode
             %td
                 =@sample.barcode.barcode
-                [
-                =link_to("Barcode set #{@sample.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @sample.barcode.barcode_set))
-                ]
+                / =link_to("Barcode set #{@sample.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @sample.barcode.barcode_set))
         %tr
             %th.span3 Species
             %td=@sample.taxon.try(:scientific_name)
         %tr
             %th Source
             %td=@sample.source_name
+        / %tr
+        /     %th Sex
+        /     %td=@sample.sex
+        %tr
+            %th.span3 Study
+            %td=@sample.study.try(:title)
         %tr
             %th Tags
             %td=format_tags(@sample.tags)

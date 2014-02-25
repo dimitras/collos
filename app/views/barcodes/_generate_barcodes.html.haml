@@ -1,5 +1,5 @@
 = form_tag(generate_barcodes_path, method: 'post',class: 'form-horizontal') do
     .fieldset
-        =label :num, "Number of Barcodes:"
+        /=label :num, "Number of Barcodes:"
         = text_field_tag :num, nil, required: true, placeholder: '>= 1 and <= 1000', class: 'span4'
         =submit_tag "Generate Barcodes", class:'btn btn-primary'

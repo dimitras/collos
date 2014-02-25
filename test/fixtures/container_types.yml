@@ -12,6 +12,7 @@
 #  updated_at        :datetime         not null
 #  retired           :boolean          default(FALSE)
 #  label             :string(255)
+#  shipable          :boolean
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

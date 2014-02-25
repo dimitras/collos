@@ -3,7 +3,7 @@
 %table.table.table-striped.table-condensed.table-bordered
     %thead
         %tr
-            %th.span2 Barcode (Set ID)
+            %th.span2 Barcode
             %th.span2 Related Entity
             %th.span2 Entity Details
     %tbody
@@ -11,7 +11,7 @@
             %tr
                 %td
                     =link_to barcode.barcode, barcode_path(barcode)
-                    ==(#{ link_to barcode.barcode_set, fetch_barcodes_path(barcode_set: barcode.barcode_set)})
+                    /==(#{ link_to barcode.barcode_set, fetch_barcodes_path(barcode_set: barcode.barcode_set)})
                 %td
                     -if barcode.barcodeable
                         = link_to barcode.barcodeable.name, url_for(barcode.barcodeable)
@@ -53,5 +53,5 @@
 %h3 Generate some barcodes:
 = render partial: 'generate_barcodes'
 
-%h3 Fetch a barcode set:
-= render partial: 'fetch_barcodes'
+/ %h3 Fetch a barcode set:
+/ = render partial: 'fetch_barcodes'

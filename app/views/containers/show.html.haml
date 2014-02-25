@@ -11,9 +11,7 @@
         %th Barcode
         %td
             =@container.barcode.barcode
-            [
-            =link_to("Barcode set #{@container.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @container.barcode.barcode_set))
-            ]
+            /=link_to("Barcode set #{@container.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @container.barcode.barcode_set))
     %tr
         %th Parent Container
         -if @container.parent
