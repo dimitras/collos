@@ -23,7 +23,7 @@ class Container < ActiveRecord::Base
     attr_accessible :name, :barcode,
         :ancestry, :container_x, :container_y,
         :container_type_name, :container_type, :container_type_id,
-        :retired, :tags, :notes, :parent_id, :shipped
+        :retired, :tags, :notes, :parent_id, :shipped, :parent
 
     belongs_to :container_type, inverse_of: :containers
     has_many :samples

@@ -15,7 +15,7 @@
 #
 
 class Person < ActiveRecord::Base
-	attr_accessible :firstname, :lastname, :type, :email, :phone, :institution, :user_id
+	attr_accessible :firstname, :lastname, :type, :email, :phone, :institution, :user_id, :study_id
 
 	has_and_belongs_to_many :studies
 	has_and_belongs_to_many :investigations

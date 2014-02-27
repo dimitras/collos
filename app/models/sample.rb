@@ -28,7 +28,7 @@ class Sample < ActiveRecord::Base
     :container, :container_id,
     :container_x, :container_y,
     :protocol_application, :protocol_application_id,
-    :notes, :retired, :tags, :study_id, :study_title, :sex, :source_name
+    :notes, :retired, :tags, :study_id, :study_title, :sex, :source_name, :barcode
 
 
   # Needed to parse out comma delimited tags from forms into a strict Array

@@ -67,6 +67,16 @@ ALTER SEQUENCE addresses_id_seq OWNED BY addresses.id;
 
 
 --
+-- Name: addresses_shipments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE addresses_shipments (
+    address_id integer NOT NULL,
+    shipment_id integer NOT NULL
+);
+
+
+--
 -- Name: addresses_users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -482,7 +492,8 @@ CREATE TABLE people (
     email character varying(255),
     phone integer,
     lastname character varying(255),
-    user_id integer
+    user_id integer,
+    study_id integer
 );
 
 
@@ -1314,6 +1325,20 @@ ALTER TABLE ONLY versions
 
 
 --
+-- Name: index_addresses_shipments_on_address_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_addresses_shipments_on_address_id ON addresses_shipments USING btree (address_id);
+
+
+--
+-- Name: index_addresses_shipments_on_shipment_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_addresses_shipments_on_shipment_id ON addresses_shipments USING btree (shipment_id);
+
+
+--
 -- Name: index_addresses_users_on_address_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1816,3 +1841,7 @@ INSERT INTO schema_migrations (version) VALUES ('20140220170001');
 INSERT INTO schema_migrations (version) VALUES ('20140220170255');
 
 INSERT INTO schema_migrations (version) VALUES ('20140220170559');
+
+INSERT INTO schema_migrations (version) VALUES ('20140226191509');
+
+INSERT INTO schema_migrations (version) VALUES ('20140227070130');
