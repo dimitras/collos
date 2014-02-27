@@ -4,12 +4,11 @@ Convert an ISAtab directory to csv tables that can easily be imported in rails d
 
 """
 
-# USAGE: python lib/tasks/make_tables_from_isatab2.py workspace/data/isatab_sample/ workspace/data/isatab_sample_tmp/studies2.csv workspace/data/isatab_sample_tmp/contacts2.csv workspace/data/isatab_sample_tmp/investigation2.csv workspace/data/isatab_sample_tmp/samples2.csv 
+# USAGE: python lib/tasks/make_tables_from_isatab.py isatab_directory output_for_studies.csv output_for_contacts.csv output_for_investigation.csv output_for_samples.csv 
 
 from bcbio import isatab
 import sys
 import csv
-import pprint
 
 class Record:
 	'''
