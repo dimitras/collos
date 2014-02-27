@@ -194,7 +194,7 @@ def write_investigation_studies_to_csv(investigation, filename):
 	'''
 	Write studies list to a csv file.
 	'''
-	fields = ['Study Title', 'Study Public Release Date', 'Study Identifier', 'Study Description', 'Study Submission Date', 'Study File Name']
+	fields = ['Study Identifier', 'Study Title', 'Study Public Release Date', 'Study Description', 'Study Submission Date', 'Study File Name']
 	
 	with open(filename, 'w') as fp:
 		a = csv.writer(fp, delimiter=',')
