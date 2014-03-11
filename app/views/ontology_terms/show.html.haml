@@ -15,8 +15,21 @@
     %tr
         %th.span3 Term Definition
         %td=@ontology_term.definition
+    - if @ontology_term.parent
+        %tr
+            %th.span3 Parent
+            %td=@ontology_term.parent.name
+    - if @ontology_term.children.count > 0
+        %tr
+            %th.span3 Children
+            %td
+                - @ontology_term.children.each do |child|
+                    =child.name
+                    %br
+
 
 - if can? :edit , @ontology_term
     =button_to "Edit", edit_ontology_term_path(@ontology_term), method: 'get', class: 'btn btn-success'
 - if can? :destroy , @ontology_term
     =button_to "Delete", ontology_term_path(@ontology_term), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
+=link_to "See all ontology terms", ontology_terms_path, method: 'get', class: 'btn'

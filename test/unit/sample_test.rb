@@ -16,9 +16,11 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  tsv_content             :tsvector
-#  sex                     :string(255)
 #  source_name             :string(255)
 #  study_id                :integer
+#  ancestry                :string(500)
+#  ancestry_depth          :integer          default(0)
+#  sex_id                  :integer
 #
 
 require 'test_helper'

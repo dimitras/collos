@@ -16,9 +16,11 @@
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  tsv_content             :tsvector
-#  sex                     :string(255)
 #  source_name             :string(255)
 #  study_id                :integer
+#  ancestry                :string(500)
+#  ancestry_depth          :integer          default(0)
+#  sex_id                  :integer
 #
 
 class Sample < ActiveRecord::Base
@@ -28,7 +30,8 @@ class Sample < ActiveRecord::Base
     :container, :container_id,
     :container_x, :container_y,
     :protocol_application, :protocol_application_id,
-    :notes, :retired, :tags, :study_id, :study_title, :sex, :source_name, :barcode
+    :notes, :retired, :tags, :study_id, :study_title, 
+    :sex, :sex_id, :source_name, :barcode, :ancestry, :parent_id, :parent
 
 
   # Needed to parse out comma delimited tags from forms into a strict Array
@@ -57,8 +60,13 @@ class Sample < ActiveRecord::Base
   # belongs_to_many :protocol_applications
   has_and_belongs_to_many :material_types
   belongs_to :taxon
-  belongs_to :type, class_name: "OntologyTerm", foreign_key: "type_id"
+  belongs_to :sex, class_name: "OntologyTerm", foreign_key: "sex_id"
   belongs_to :study
+
+  # parent-child-sibling relationships
+  has_ancestry :orphan_strategy => :rootify, :cache_depth => true
+
+  alias_method :sample, :parent
 
   def scientific_name
     taxon.try(:scientific_name)
@@ -94,9 +102,9 @@ class Sample < ActiveRecord::Base
       self.barcode = bc
   end
 
-  def gender_type_terms
+  def self.gender_type_terms
     OntologyTerm.where(
-      name: "gender",
+      name: "biological sex",
       accession: "obo:PATO_0000047"
     ).first.children()
   end

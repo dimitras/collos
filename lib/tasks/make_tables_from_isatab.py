@@ -219,7 +219,7 @@ def write_investigation_studies_samples_to_csv(investigation, filename):
 	'''
 	Write samples table to csv file
 	'''
-	fields = ['Sample_Name', 'parent', 'Source_Name', 'Material_Type', 'organism', 'Protocol_REF', 'freezer_type', 'freezer_label', 'box_type', 'box_label', 'container_type', 'shipped', 'receiver', 'collOS']
+	fields = ['Sample_Name', 'parent', 'Source_Name', 'Material_Type', 'organism', 'Protocol_REF', 'freezer_type', 'freezer_label', 'box_type', 'box_label', 'container_type', 'shipped', 'receiver', 'collOS', 'sex']
 	
 	with open(filename, 'w') as fp:
 		a = csv.writer(fp, delimiter=',')

@@ -1,20 +1,25 @@
 =simple_form_for @sample, html: {class: 'form-horizontal'} do |f|
     =field_set_tag "Basic Information" do
-        =f.input :name
+        =f.input :name, hint: "Should be descriptive, eg. sample_tissue_condition_replicate"
         - if @sample.barcode
             =f.input :barcode, disabled: true, hint: "Barcodes are permanent. If you really want to change it, then contact the site admin."
         - else
             =f.input :barcode, disabled: true, hint: "Barcodes are automatically generated"
         =f.association :taxon, label_method: :scientific_name
-        =f.input :source_name
+        =f.input :source_name, :label => "Tissue", hint: "eg. whole organism, blood"
         =f.association :study
-        / =f.association :type, collection: @sample.gender_type_terms # add the migration first
-        =f.input :retired
+        =f.association :sex, collection: Sample.where(retired: false).gender_type_terms.order('name')
+        =f.input :retired, hint: "Enable if the sample is to be retired, eg. the sample is used or split"
 
     =field_set_tag "Container for sample" do
-        =f.association :container, collection: Container.where(retired: false).order('containers.container_type_id, name').all,  hint: link_to("Create a new container", new_container_url), label_method: :to_s
-        =f.input :container_y, hint: "The origin is at the top left corner, starts with zero. Tubes only have one position (0,0)."
-        =f.input :container_x, hint: 'You can choose this at a later time using the container\'s view.'
+        =f.association :container, collection: Container.where(retired: false).order('containers.container_type_id, name').all, hint: link_to("Create a new container", new_container_url), label_method: :to_s
+        ==Choose the position of the sample in the plate. The origin is at the top left corner, starts with zero. 
+        %br
+        Tubes only have one position (0,0).
+        %br
+        %br
+        =f.input :container_x, :label => "x-coordinate", hint: "eg. for 96 well plate choose between 1-12 on the x-axis"
+        =f.input :container_y, :label => "y-coordinate", hint: 'eg. for 96 well plate choose between A-H on the y-axis'
 
     =field_set_tag "Other Annotations" do
 

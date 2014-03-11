@@ -12,6 +12,7 @@
 #  phone       :integer
 #  lastname    :string(255)
 #  user_id     :integer
+#  study_id    :integer
 #
 
 require 'test_helper'

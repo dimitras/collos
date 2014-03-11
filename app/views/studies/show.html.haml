@@ -17,7 +17,11 @@
         %td=@study.description
     %tr
         %th Investigation
-        %td=@study.investigation_title      
+        %td=link_to(@study.investigation_title, @study.investigation)
     %tr
         %th Samples
         %td
+            -if @study.samples
+                -@study.samples.each do |sample|
+                    =link_to sample.name, url_for(sample)
+                    %br

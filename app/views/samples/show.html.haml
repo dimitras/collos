@@ -9,7 +9,7 @@
 #annotation
     %table.table.table-bordered
         %tr
-            %th Name
+            %th.span3 Name
             %td=@sample.name
         %tr
             %th Sample Barcode
@@ -17,17 +17,21 @@
                 =@sample.barcode.barcode
                 / =link_to("Barcode set #{@sample.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @sample.barcode.barcode_set))
         %tr
-            %th.span3 Species
-            %td=@sample.taxon.try(:scientific_name)
+            %th Species
+            %td=link_to @sample.taxon.try(:scientific_name), url_for(@sample.taxon)
         %tr
-            %th Source
-            %td=@sample.source_name
-        / %tr
-        /     %th Sex
-        /     %td=@sample.sex
+            %th Tissue
+            %td=@sample.try(:source_name)
         %tr
-            %th.span3 Study
-            %td=@sample.study.try(:title)
+            %th Sex
+            %td=@sample.sex.try(:name)
+        %tr
+            %th Material types
+            %td
+                /TODO
+        %tr
+            %th Study
+            %td=link_to @sample.study.try(:title), url_for(@sample.study) if @sample.study
         %tr
             %th Tags
             %td=format_tags(@sample.tags)
@@ -36,9 +40,15 @@
             %td
                 -if @sample.container
                     - if @sample.container.show_location?
-                        = link_to("#{@sample.container} (#{@sample.container_x}, #{@sample.container_y})", @sample.container)
+                        =link_to("#{@sample.container} (#{@sample.container_x}, #{@sample.container_y})", @sample.container)
                     -else
-                        =link_to( @sample.container, @sample.container)
+                        =link_to(@sample.container, @sample.container)
+        %tr
+            %th Parent Containers
+            %td
+                -@sample.container.ancestors.each do |container|
+                    =link_to container.name_for_selects, url_for(container)
+                    %br
         %tr
             %th Notes
             %td=@sample.notes
@@ -47,10 +57,12 @@
     %table.table.table-bordered
         %tr
             %th Parents
-        - if @sample.parents.count > 0
-            -for p in @sample.parents
-                %tr
-                    %td=link_to "#{p.barcode}] #{p.name}", sample_url(p)
+        / - if @sample.parent.count > 0
+        - if @sample.parent
+            / -for p in @sample.parents
+            %tr
+                / %td=link_to "#{p.barcode}] #{p.name}", sample_url(p)
+                %td=link_to "#{@sample.parent.barcode}] #{@sample.parent.name}", sample_url(@sample.parent)
         -else
             %tr
                 %td

@@ -5,7 +5,6 @@
     %tr
       %th.span1 Title
       %th.span1 Identifier
-      %th.span1 Description
       %th.span1 Investigation
       %th.span2 &nbsp;
   %tbody
@@ -13,7 +12,6 @@
       %tr
         %td= study.title
         %td= study.identifier
-        %td= study.description
         %td= study.investigation_title
         %td
           =link_to "Show", study_path(study), class: 'btn'

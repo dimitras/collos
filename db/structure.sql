@@ -739,9 +739,11 @@ CREATE TABLE samples (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     tsv_content tsvector,
-    sex character varying(255),
     source_name character varying(255),
-    study_id integer
+    study_id integer,
+    ancestry character varying(500),
+    ancestry_depth integer DEFAULT 0,
+    sex_id integer
 );
 
 
@@ -762,6 +764,18 @@ CREATE SEQUENCE samples_id_seq
 --
 
 ALTER SEQUENCE samples_id_seq OWNED BY samples.id;
+
+
+--
+-- Name: samples_material_types; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE samples_material_types (
+    sample_id integer NOT NULL,
+    material_type_id integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
 
 
 --
@@ -1584,6 +1598,27 @@ CREATE INDEX index_sample_relationships_on_descendant_id ON sample_relationships
 
 
 --
+-- Name: index_samples_material_types_on_material_type_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_material_types_on_material_type_id ON samples_material_types USING btree (material_type_id);
+
+
+--
+-- Name: index_samples_material_types_on_sample_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_material_types_on_sample_id ON samples_material_types USING btree (sample_id);
+
+
+--
+-- Name: index_samples_on_ancestry; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_ancestry ON samples USING btree (ancestry);
+
+
+--
 -- Name: index_samples_on_container_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1845,3 +1880,9 @@ INSERT INTO schema_migrations (version) VALUES ('20140220170559');
 INSERT INTO schema_migrations (version) VALUES ('20140226191509');
 
 INSERT INTO schema_migrations (version) VALUES ('20140227070130');
+
+INSERT INTO schema_migrations (version) VALUES ('20140227165540');
+
+INSERT INTO schema_migrations (version) VALUES ('20140227195323');
+
+INSERT INTO schema_migrations (version) VALUES ('20140228023732');

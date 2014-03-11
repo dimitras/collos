@@ -3,5 +3,9 @@
     = f.input :name, :label => "Term Name"
     = f.input :accession
     = f.input :definition, :label => "Term Definition"
+    ==Parent      #{f.collection_select :parent_id, @ontology_terms, :id, :name, :include_blank => true}
+    %br
+    %br
     = f.input :obsolete
     = f.button :submit
+    =link_to 'Cancel', @ontology_term, class: 'btn btn-warning'

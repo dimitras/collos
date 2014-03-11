@@ -53,8 +53,8 @@ class Container < ActiveRecord::Base
         container_type.x_dimension * container_type.y_dimension > 1
     end
 
-	def self.arrange_as_array(options={}, hash=nil)                                                                                                                                                            
-		hash ||= arrange(options)
+	def self.arrange_as_array(options={}, hash=nil)
+        hash ||= arrange(options)
 
 		arr = []
 		hash.each do |node, children|

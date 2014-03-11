@@ -13,9 +13,12 @@
             =@container.barcode.barcode
             /=link_to("Barcode set #{@container.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @container.barcode.barcode_set))
     %tr
-        %th Parent Container
-        -if @container.parent
-            %td=@container.parent.name
+        %th Parent Containers
+        -if @container.ancestors
+            %td
+                -@container.ancestors.each do |container|
+                    =link_to container.name_for_selects, url_for(container)
+                    %br
         -else
             %td None
     %tr

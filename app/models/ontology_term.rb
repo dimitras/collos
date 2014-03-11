@@ -13,15 +13,17 @@
 #
 
 class OntologyTerm < ActiveRecord::Base
-    belongs_to :ontology, inverse_of: :ontology_terms
+    attr_accessible :accession, :definition, :name, :obsolete, :ontology_id, :ontology, :parent, :parent_id
 
-    attr_accessible :accession, :definition, :name, :obsolete, :ontology_id, :ontology
+    belongs_to :ontology, inverse_of: :ontology_terms
 
     validates :ontology_id, :presence => true
     validates :accession, :presence => true
     validates :name, :presence => true
 
     has_ancestry :orphan_strategy => :rootify, :cache_depth => true
+
+    alias_method :ontology_term, :parent
 
     def pretty_string
         "[#{self.accession}] #{self.name}"

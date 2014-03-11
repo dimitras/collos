@@ -58,6 +58,7 @@ namespace :db do
 			person = Person.create(:firstname => firstname, :lastname => lastname, :type => role, :email => email, :phone => phone, :institution => institution, :study_id => studies[study_identifier].id)
 		end
 		
+		# TODO: fix parent for sample, if the samples.csv is not sorted, the parents are not assigned
 		samples_file = "workspace/data/isatab_sample_tmp/samples.csv"
 		CSV.foreach(samples_file, {:headers=>:first_row}) do |row|
 			identifier = row[0]
@@ -71,10 +72,12 @@ namespace :db do
 			freezer_label = row[8]
 			if !row[9].nil?
 				(box_type, box_type_dimensions) = row[9].split('|')
+				(box_container_x, box_container_y) = box_type_dimensions.split('x')
 			end
 			box_label = row[10]
 			if !row[11].nil?
 				(container_tube_type, container_tube_dimensions) = row[11].split('|')
+				(tube_container_x, tube_container_y) = container_tube_dimensions.split('x') if container_tube_dimensions
 			end
 			shipped = false
 			if row[12] == "yes"
@@ -82,66 +85,83 @@ namespace :db do
 			end
 			receiver = row[13]
 			collOS = row[14]
-			study_identifier = row[15]
+			sex = row[15]
+			study_identifier = row[16]
 			
-			taxon = Taxon.find_by_scientific_name(organism)
-			if !taxon
-				taxon = Taxon.create(:ncbi_id => nil, :scientific_name => organism, :common_name => nil)
-			end
-			
-			container_freezer = Container.find_by_name(freezer_label)
-			if !container_freezer
-				container_type = ContainerType.find_by_name(freezer_type)
-				if !container_type
-					ontology_term = OntologyTerm.find_by_name("freezer")
-					container_type = ContainerType.create(:name => freezer_type, :type => ontology_term, :can_have_children => true, :retired => false, :shipable => false)
+			# collOS says whether a sample is supposed to be entered in the db or not
+			if collOS == "yes"
+				taxon = Taxon.find_by_scientific_name(organism)
+				if !taxon
+					puts "#{organism}"
+					taxon = Taxon.create(:scientific_name => organism)
 				end
-				container_freezer = Container.create(:name => freezer_label, :barcode => Barcode.generate(), :container_type => container_type, :retired => false)
-			end
-			
-			container_box = Container.find_by_name(box_label)
-			if !container_box
-				container_type = ContainerType.find_by_name(box_type)
-				if !container_type
-					ontology_term = OntologyTerm.find_by_name("box")
-					container_type = ContainerType.create(:name => box_type, :type => ontology_term, :can_have_children => true, :retired => false, :shipable => true)
+				
+				# if the containers are not defined, the sample has been splitted or retired, either way it is labeled as retired and the containers cannot get created
+				if freezer_type.nil? && box_type.nil? && container_tube_type.nil? && parent.nil?
+					puts "HERE ::: #{identifier} | #{sample_name} | #{parent} | #{source_name} | #{material_types.join("|")} | #{organism} | #{protocol_refs.join("|")} | #{freezer_type} | #{freezer_label} | #{box_type} | #{box_type_dimensions} | #{box_label} | #{container_tube_type} | #{container_tube_dimensions} | #{shipped} | #{receiver} | #{collOS} | #{study_identifier}"
+					puts
+					sample = Sample.create(:name => sample_name, :barcode => Barcode.generate() , :taxon_id => taxon.id, :study_id => studies[study_identifier].id, :retired => true) 
+					next #TODO: to materials omos? 
 				end
-				container_box = Container.create(:name => box_label, :barcode => Barcode.generate(), :container_type => container_type, :retired => false, :parent => container_freezer)
+
+				container_freezer = Container.find_by_name(freezer_label)
+				if !container_freezer
+					container_type = ContainerType.find_by_name(freezer_type)
+					if !container_type
+						ontology_term = OntologyTerm.find_by_name("freezer")
+						container_type = ContainerType.create(:name => freezer_type, :type => ontology_term, :can_have_children => true, :retired => false, :shipable => false)
+					end
+					puts "#{freezer_label} | #{container_type}"
+					puts
+					container_freezer = Container.create(:name => freezer_label, :barcode => Barcode.generate(), :container_type => container_type, :retired => false)
+				end
+				
+				container_box = Container.find_by_name(box_label)
+				if !container_box
+					container_type = ContainerType.find_by_name(box_type)
+					if !container_type
+						ontology_term = OntologyTerm.find_by_name("box")
+						container_type = ContainerType.create(:name => box_type, :type => ontology_term, :can_have_children => true, :retired => false, :shipable => true, :x_dimension => box_container_x, :y_dimension => box_container_y)
+					end
+					puts "#{box_label} | #{container_type} | #{container_freezer}"
+					puts
+					container_box = Container.create(:name => box_label, :barcode => Barcode.generate(), :container_type => container_type, :retired => false, :parent => container_freezer, :container_x => box_container_x, :container_y => box_container_y)
+				end
+				
+				container_type = ContainerType.find_by_name(container_tube_type)
+				if !container_type
+					ontology_term = OntologyTerm.find_by_name("test tube")
+					container_type = ContainerType.create(:name => container_tube_type, :type => ontology_term, :can_have_children => false, :retired => false, :shipable => true, :x_dimension => tube_container_x, :y_dimension => tube_container_y)
+				end
+				puts "#{sample_name}_container | #{container_type} | #{container_box} | #{shipped}"
+				puts
+				container_tube = Container.create(:name => sample_name + "_container", :barcode => Barcode.generate(), :container_type => container_type, :retired => false, :parent => container_box, :shipped => shipped, :container_x => tube_container_x, :container_y => tube_container_y)
+				
+				# TODO: has many materials, protocols ids to create
+				puts "#{identifier} | #{sample_name} | #{parent} | #{source_name} | #{material_types.join("|")} | #{organism} | #{protocol_refs.join("|")} | #{freezer_type} | #{freezer_label} | #{box_type} | #{box_container_x} | #{box_container_y} | #{box_label} | #{container_tube_type} | #{tube_container_x} | #{tube_container_y} | #{shipped} | #{receiver} | #{collOS} | #{study_identifier} | #{sex}"
+				puts
+				sex_ontology_term = OntologyTerm.find_by_name(sex)
+				sample = Sample.create(:name => sample_name, :barcode => Barcode.generate() , :taxon_id => taxon.id,  :container_id => container_tube.id, :study_id => studies[study_identifier].id, :parent => Sample.find_by_name(parent), :sex => sex_ontology_term, :source_name => source_name, :container_x => tube_container_x, :container_y => tube_container_y)
+
+				material_types.each do |material_type_name|
+					material_type = MaterialType.find_by_name(material_type_name)
+					if !material_type
+						material_type = MaterialType.create(:name => material_type_name)
+					end
+					sample_material_type = SamplesMaterialTypes.create(:sample_id => sample.id, :material_type_id =>material_type.id)
+				end
+
 			end
-			
-			container_type = ContainerType.find_by_name(container_tube_type)
-			if !container_type
-				ontology_term = OntologyTerm.find_by_name("test tube")
-				container_type = ContainerType.create(:name => container_tube_type, :type => ontology_term, :can_have_children => false, :retired => false, :shipable => true)
-			end
-			container_tube = Container.create(:name => sample_name, :barcode => Barcode.generate(), :container_type => container_type, :retired => false, :parent => container_box, :shipped => shipped)
-			
-			puts "#{identifier} | #{sample_name} | #{parent} | #{source_name} | #{material_types.join("|")} | #{organism} | #{protocol_refs.join("|")} | #{freezer_type} | #{freezer_label} | #{box_type} | #{box_type_dimensions} | #{box_label} | #{container_tube_type} | #{container_tube_dimensions} | #{shipped} | #{receiver} | #{collOS} | #{study_identifier}"
-			puts taxon.id
-			puts container_tube.id
-			puts studies[study_identifier].id
-			sample = Sample.create(:name => sample_name, :barcode => Barcode.generate() , :taxon_id => taxon.id,  :container_id => container_tube.id, :study_id => studies[study_identifier].id)
 		end
 		
-# 				protocol_refs.each do |protocol|
-# # 					new_protocol = Protocol.create(:name => protocol)
-# # 					protocol_app = ProtocolApplication.create(:protocol_id => new_protocol.id)
-# 				end
-# 				
-# 				material_types.each do |material_type|
-# # 					new_material_type = Material_Type.create(:name => material_type)
-# 				end
-# 				
-# 				# TODO: add barcode generation here
-# 				# TODO: has many materials, protocols ids to create
-# 				sample = Sample.create(:name => sample_name, :barcode_string => ? , :taxon_id => organism_id,  :container_id => ?, :container_x => ?, :container_y => ?, :protocol_application_id => ?, :notes => nil, :tags => nil, :material_type_id => new_material_type.id)
-# 				
-# 				# # add associations
-# 				# sample_protocolapp = Sample_protocolapp.create(:sample_id => sample.id, :protocolapp_id => protocol_app.id)
-# 				# sample_materialtype = Sample_materialtype.create(:sample_id => sample.id, :material_type_id => material_type.id)
-# 
-# 			end
-# 		end
+# protocol_refs.each do |protocol|
+	# new_protocol = Protocol.create(:name => protocol)
+	# protocol_app = ProtocolApplication.create(:protocol_id => new_protocol.id)
+# end
+
+
+# # # add associations
+# # sample_protocolapp = Sample_protocolapp.create(:sample_id => sample.id, :protocolapp_id => protocol_app.id)
 
 	end
 end		

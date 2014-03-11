@@ -6,12 +6,15 @@
 %br
 
 %table.table.table-bordered
-    %tr
-        %th Title
-        %td=@investigation.title
-    %tr
-        %th Identifier
-        %td=@investigation.identifier
-    %tr
-        %th Studies
-        %td 
+	%tr
+		%th Title
+		%td=@investigation.title
+	%tr
+		%th Identifier
+		%td=@investigation.identifier
+	%tr
+		%th Studies
+		%td 
+			-@investigation.studies.each do |study|
+				=link_to study.title, url_for(study)
+				%br
