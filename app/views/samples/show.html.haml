@@ -5,6 +5,7 @@
     - if can? :destroy , @sample and !@sample.retired
         =link_to "Retire sample", edit_sample_path(@sample), method: 'get', class: 'btn btn-danger'
     =link_to "See all samples", samples_path, method: 'get', class: 'btn'
+    =link_to "Split sample", create_multiple_samples_path, method: 'get', class: 'btn'
 %br
 #annotation
     %table.table.table-bordered
@@ -43,12 +44,15 @@
                         =link_to("#{@sample.container} (#{@sample.container_x}, #{@sample.container_y})", @sample.container)
                     -else
                         =link_to(@sample.container, @sample.container)
-        %tr
-            %th Parent Containers
-            %td
-                -@sample.container.ancestors.each do |container|
-                    =link_to container.name_for_selects, url_for(container)
-                    %br
+                -else
+                    None
+        -if @sample.container
+            %tr
+                %th Parent Containers
+                %td
+                    -@sample.container.ancestors.each do |container|
+                        =link_to container.name_for_selects, url_for(container)
+                        %br
         %tr
             %th Notes
             %td=@sample.notes

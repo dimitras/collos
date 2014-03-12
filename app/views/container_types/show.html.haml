@@ -20,6 +20,9 @@
         %th Can contain other container type
         %td=@container_type.can_have_children? ? "Yes" : "No"
     %tr
+        %th Can be shipped
+        %td=@container_type.shipable? ? "Yes" : "No"
+    %tr
         %th Retired
         %td=@container_type.retired? ? "Yes" : "No"
 

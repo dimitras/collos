@@ -1,0 +1,38 @@
+%br
+%h4 Batch edit the selected containers
+%br
+%h6 Selected containers
+=simple_form_for :container, :url => update_multiple_containers_path, :html => {:method => :put, :class => 'form-horizontal'} do |f|
+
+  -for container in @containers
+    =hidden_field_tag "container_ids[]", container.id
+    %table.table.table-bordered
+      %tr
+        %th Name
+        %td=container.name
+      %tr
+        %th.span3 Parent containers
+        %td
+          -container.ancestors.each do |parent|
+            =parent.name+" > "
+          %em=container.name
+      %tr
+        %th Retired
+        %td=container.retired? ? "yes" : "no"
+ 
+
+  /=f.input :container_x, :label => "x-coordinate", hint: "eg. for 96 well plate choose between 1-12 on the x-axis"
+  /=f.input :container_y, :label => "y-coordinate", hint: 'eg. for 96 well plate choose between A-H on the y-axis'
+
+  %br
+  %h6 Tranfer the selected containers to another parent container
+  =f.collection_select :container_id, Container.non_retired.with_children.order('containers.container_type_id, name').all, :id, :name, :include_blank => true
+  %br
+  %br
+  %h6 Retire the selected containers
+  =f.select :retired, [["Yes", true], ["No", false]], :include_blank => true
+  %br
+  %br
+
+  = f.submit "Submit", class: 'btn'
+  = link_to 'Cancel', containers_path(), class: 'btn btn-warning'

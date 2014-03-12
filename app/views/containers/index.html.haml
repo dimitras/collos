@@ -1,35 +1,47 @@
 %h3 Containers
+
+=link_to "Create a new Container", new_container_path, class: 'btn btn-primary btn-large'
+%br
+%br
 -if params[:show_all]
     =link_to("Hide Retired Containers", containers_url())
 -else
     =link_to('Show Retired Containers', containers_url(params: {show_all: true}))
-%table.table.table-striped.table-condensed.table-bordered
-    %thead
-        %tr
-            %th.span2 Name
-            %th.span1 Barcode
-            %th.span2 Container Type
-            %th.span3 Parent Container            
-            %th.span1 Retired?
-            %th.span3 &nbsp;
-    %tbody
-        -for container in @containers
+
+=will_paginate(@containers)
+
+=form_tag edit_multiple_containers_path do
+    %table.table.table-striped.table-condensed.table-bordered
+        %thead
             %tr
-                %td=link_to container.name, container
-                %td
-                    =container.barcode.barcode
-                    /=link_to("Barcode set #{container.barcode.barcode_set}", fetch_barcodes_url(barcode_set: container.barcode.barcode_set))
-                %td=link_to container.container_type.name, container_type_url(container.container_type)
-                -if container.parent
-                    %td=container.parent.name
-                -else
-                    %td None
-                %td=container.retired? ? "Yes" : "No"
-                %td
-                    =link_to "Show", container_path(container), class: 'btn'
-                    - if can?(:edit, container)
-                        =link_to "Edit", edit_container_path(container), class: 'btn btn-success'
-                    -if can?(:destroy, container) and !container.retired
-                        = link_to "Retire", container_path(container), method: 'delete', class: 'btn btn-danger'
+                %th.span1
+                %th.span2 Name
+                %th.span1 Barcode
+                %th.span2 Container Type
+                %th.span3 Parent Container            
+                %th.span1 Retired?
+                %th.span3 &nbsp;
+        %tbody
+            -for container in @containers
+                %tr
+                    %td=check_box_tag "container_ids[]", container.id
+                    %td=link_to container.name, container
+                    %td
+                        =container.barcode.barcode
+                        /=link_to("Barcode set #{container.barcode.barcode_set}", fetch_barcodes_url(barcode_set: container.barcode.barcode_set))
+                    %td=link_to container.container_type.name, container_type_url(container.container_type)
+                    -if container.parent
+                        %td=container.parent.name
+                    -else
+                        %td None
+                    %td=container.retired? ? "Yes" : "No"
+                    %td
+                        =link_to "Show", container_path(container), class: 'btn'
+                        - if can?(:edit, container)
+                            =link_to "Edit", edit_container_path(container), class: 'btn btn-success'
+                        -if can?(:destroy, container) and !container.retired
+                            = link_to "Retire", container_path(container), method: 'delete', class: 'btn btn-danger'
+    =submit_tag "Edit selected", class: 'btn'
+
 =will_paginate(@containers)
 =link_to "Create a new Container", new_container_path, class: 'btn btn-primary btn-large'

@@ -40,4 +40,30 @@ class SamplesController < ApplicationController
             redirect_to samples_url, error: "Sample was not deleted"
         end
     end
+
+    def edit_multiple
+      @samples = Sample.find(params[:sample_ids])
+    end
+
+    def update_multiple
+      @samples = Sample.find(params[:sample_ids])
+      @samples.each do |sample|
+        sample.update_attributes!(params[:sample].reject { |k,v| v.blank? })
+      end
+      flash[:notice] = "Samples were successfully updated!"
+      redirect_to samples_path
+    end
+
+    def create_multiple
+        @sample = Sample.new()
+        3.times do
+            @sample.save
+        end
+        # @samples = Sample.find(params[:sample_ids])
+        # @samples.each do |sample|
+        #     sample.save#!(params[:sample].reject { |k,v| v.blank? })
+        # end
+        flash[:notice] = "Sample was successfully split!"
+        redirect_to samples_path
+    end
 end

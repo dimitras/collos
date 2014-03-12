@@ -1,0 +1,14 @@
+%br
+%h4 Split the sample
+%br
+=simple_form_for @sample, :url => update_multiple_samples_path, :html => {:method => :put, :class => 'form-horizontal'} do |f|
+
+  = f.fields_for @samples do |builder|
+    = builder.label :name, "Sub-sample"
+    = builder.text_field :name
+    = builder.check_box :_destroy 
+    = builder.label :_destroy, "Remove" 
+
+
+  = f.submit "Submit", class: 'btn'
+  = link_to 'Cancel', samples_path(), class: 'btn btn-warning'

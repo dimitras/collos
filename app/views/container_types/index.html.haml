@@ -1,8 +1,12 @@
 %h3 Container Types
+
 -if params[:show_all]
     =link_to("Hide Retired Container types", container_types_url())
 -else
     =link_to('Show Retired Container types', container_types_url(params: {show_all: true}))
+
+=will_paginate(@container_types, params: params)
+
 %table.table.table-striped.table-condensed.table-bordered
     %thead
         %tr

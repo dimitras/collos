@@ -9,6 +9,8 @@
         =f.input :source_name, :label => "Tissue", hint: "eg. whole organism, blood"
         =f.association :study
         =f.association :sex, collection: Sample.where(retired: false).gender_type_terms.order('name')
+        =f.label :parent
+        =f.collection_select :parent_id, Sample.all, :id, :name, :include_blank => true
         =f.input :retired, hint: "Enable if the sample is to be retired, eg. the sample is used or split"
 
     =field_set_tag "Container for sample" do

@@ -38,6 +38,11 @@ class Container < ActiveRecord::Base
 
     validates_presence_of :container_type
 
+    scope :non_retired, where(:retired => false)
+    scope :with_children, ->() {
+		joins(:container_type).where(container_types: {can_have_children: true})
+	}
+    
     # some handy methods
     alias_method :container, :parent
     

@@ -1,0 +1,48 @@
+%br
+%h4 Batch edit the selected samples
+%br
+%h6 Selected samples
+=simple_form_for :sample, :url => update_multiple_samples_path, :html => {:method => :put, :class => 'form-horizontal'} do |f|
+  -title=nil
+  -for sample in @samples
+    -title=sample.title
+    =hidden_field_tag "sample_ids[]", sample.id
+    %table.table.table-bordered
+      %tr
+        %th Name
+        %td=sample.name
+      %tr
+        %th Study
+        %td=sample.title
+      %tr
+        %th Retired
+        %td=sample.retired? ? "yes" : "no"
+
+
+  /=f.association :study
+  /=f.association :container, collection: Container.order('containers.container_type_id, name').all, hint: link_to("Create a new container", new_container_url), label_method: :to_s
+  /=f.input :container_x, :label => "x-coordinate", hint: "eg. for 96 well plate choose between 1-12 on the x-axis"
+  /=f.input :container_y, :label => "y-coordinate", hint: 'eg. for 96 well plate choose between A-H on the y-axis'
+  %br
+  %h6 Retire the selected samples
+  =f.select :retired, [["Yes", true], ["No", false]], :include_blank => true
+  %br
+  %br
+  %h6 Add the selected samples to another study
+  =f.collection_select :study_id, Study.where('title != ?',title).all, :id, :title, :include_blank => true
+  %br
+  %br
+  %h6 Join the selected samples
+
+  %h7 1. Retire the selected samples
+  =f.select :retired, [["Yes", true]], :include_blank => true
+  %br
+  %br
+  %h7=link_to "2. Create a new sample", new_sample_path, :target => "_blank"
+  (this opens in a new page so you can submit your changes)
+
+  %br
+  %br
+
+  = f.submit "Submit", class: 'btn'
+  = link_to 'Cancel', samples_path(), class: 'btn btn-warning'

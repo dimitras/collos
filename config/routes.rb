@@ -63,6 +63,9 @@ Collos::Application.routes.draw do
     collection do
       get 'search'
       post 'upload'
+      post :edit_multiple
+      put :update_multiple
+      put :create_multiple
     end
     member do
       post 'place' # place this object into a container
@@ -75,6 +78,8 @@ Collos::Application.routes.draw do
       get 'search'
       get 'collect_objects'
       post 'place_objects'
+      post :edit_multiple
+      put :update_multiple
     end
     member do
       post 'place' # place this object into a container
@@ -105,6 +110,5 @@ Collos::Application.routes.draw do
   # Any path that is not found get re-directed to the root path
   # match ':not_found' => redirect(), :constraints => { :not_found => /.*/ }
   root :to => "pages#index"
-
 
 end

@@ -47,4 +47,17 @@ class ContainersController < ApplicationController
             render @container
         end
     end
+
+    def edit_multiple
+      @containers = Container.find(params[:container_ids])
+    end
+
+    def update_multiple
+      @containers = Container.find(params[:container_ids])
+      @containers.each do |container|
+        container.update_attributes!(params[:container].reject { |k,v| v.blank? })
+      end
+      flash[:notice] = "Containers were successfully updated!"
+      redirect_to containers_path
+    end
 end

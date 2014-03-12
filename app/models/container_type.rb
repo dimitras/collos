@@ -24,6 +24,10 @@ class ContainerType < ActiveRecord::Base
     belongs_to :type, class_name: "OntologyTerm", foreign_key: "type_id"
     has_many :containers, inverse_of: :container_types
 
+    scope :with_children, where(:can_have_children, true)
+    scope :without_children, where(:can_have_children, false)
+    scope :non_retired, where(:retired, false)
+
     def container_type_terms
         OntologyTerm.where(
             name: "container",
