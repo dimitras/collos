@@ -19,7 +19,7 @@
                 %th.span1 Barcode
                 %th.span2 Container Type
                 %th.span3 Parent Container            
-                %th.span1 Retired?
+                /%th.span1 Retired?
                 %th.span3 &nbsp;
         %tbody
             -for container in @containers
@@ -34,7 +34,7 @@
                         %td=container.parent.name
                     -else
                         %td None
-                    %td=container.retired? ? "Yes" : "No"
+                    /%td=container.retired? ? "Yes" : "No"
                     %td
                         =link_to "Show", container_path(container), class: 'btn'
                         - if can?(:edit, container)
@@ -42,6 +42,8 @@
                         -if can?(:destroy, container) and !container.retired
                             = link_to "Retire", container_path(container), method: 'delete', class: 'btn btn-danger'
     =submit_tag "Edit selected", class: 'btn'
+    /TODO: fix cases
+    =submit_tag "Ship selected", class: 'btn'
 
 =will_paginate(@containers)
 =link_to "Create a new Container", new_container_path, class: 'btn btn-primary btn-large'

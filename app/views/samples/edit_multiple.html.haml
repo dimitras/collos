@@ -3,33 +3,48 @@
 %br
 %h6 Selected samples
 =simple_form_for :sample, :url => update_multiple_samples_path, :html => {:method => :put, :class => 'form-horizontal'} do |f|
-  -title=nil
+  -studies_list=[]
   -for sample in @samples
-    -title=sample.title
     =hidden_field_tag "sample_ids[]", sample.id
     %table.table.table-bordered
       %tr
         %th Name
         %td=sample.name
       %tr
-        %th Study
-        %td=sample.title
+        %th.span2 Material type(s)
+        %td
+          -sample.material_types.each do |type|
+            =type.name
+            %br
+      %tr
+        %th Study(ies)
+        %td
+          -sample.studies.each do |study|
+            =study.title
+            -studies_list.append(study)
+            %br
       %tr
         %th Retired
         %td=sample.retired? ? "yes" : "no"
 
-
-  /=f.association :study
   /=f.association :container, collection: Container.order('containers.container_type_id, name').all, hint: link_to("Create a new container", new_container_url), label_method: :to_s
   /=f.input :container_x, :label => "x-coordinate", hint: "eg. for 96 well plate choose between 1-12 on the x-axis"
   /=f.input :container_y, :label => "y-coordinate", hint: 'eg. for 96 well plate choose between A-H on the y-axis'
+
   %br
   %h6 Retire the selected samples
   =f.select :retired, [["Yes", true], ["No", false]], :include_blank => true
-  %br
-  %br
-  %h6 Add the selected samples to another study
-  =f.collection_select :study_id, Study.where('title != ?',title).all, :id, :title, :include_blank => true
+
+  /TODO: it changes the value of the field, so it loses the previous multi selection
+  / %br
+  / %br
+  / %h6 Assign the selected samples to a study
+  / =f.collection_select :study_ids, Study.where('title != ?',:title).all, :id, :title, {:selected => studies_list, :include_blank => true}, {:multiple => true}
+  / %br
+  / %br
+  / %h6 Assign material type(s) to the selected samples
+  / =f.collection_select :material_type_ids, MaterialType.where('name != ?',:name).all, :id, :name, {:selected => :material_type_ids, :include_blank => true}, {:multiple => true}
+  
   %br
   %br
   %h6 Join the selected samples

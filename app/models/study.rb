@@ -15,7 +15,7 @@ class Study < ActiveRecord::Base
 	attr_accessible :title, :identifier, :description, :investigation_id, :investigation_title
 
 	belongs_to :investigation
-	has_many :samples, foreign_key: "id"
+	has_and_belongs_to_many :samples#, foreign_key: "id"
 	has_and_belongs_to_many :people
 
 	def investigation_title

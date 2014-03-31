@@ -8,7 +8,8 @@
 		/=f.association @user.addresses
 		=f.input :complete
 	=field_set_tag "Package Information" do
-		=f.association :past_container
+		/=f.association :past_container
+		=f.association :past_container, collection: Container.non_tube.order('containers.container_type_id, name').all, label_method: :to_s #TODO: the ones that are able to be shipped
 		=f.association :new_container
 	%fieldset
 		=f.button :submit

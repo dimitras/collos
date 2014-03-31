@@ -1,0 +1,19 @@
+%h3 Material types
+
+%table.table.table-striped.table-condensed.table-bordered
+  %thead
+    %tr
+      %th.span1 Name
+      %th.span2 &nbsp;
+  %tbody
+    -@material_types.each do |type|
+      %tr
+        %td= link_to(type.name, type)
+        %td
+          =link_to "Show", material_type_path(type), class: 'btn'
+          -if can?(:edit, type)
+            =link_to "Edit", edit_material_type_path(type), class: 'btn btn-success'
+
+%br
+
+=link_to 'Create a new Material type', new_material_type_path, class: 'btn btn-primary btn-large'

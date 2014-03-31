@@ -17,7 +17,7 @@
         %td=@study.description
     %tr
         %th Investigation
-        %td=link_to(@study.investigation_title, @study.investigation)
+        %td=link_to(@study.investigation_title, @study.investigation) if @study.investigation
     %tr
         %th Samples
         %td

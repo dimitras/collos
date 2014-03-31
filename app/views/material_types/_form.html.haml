@@ -1,0 +1,6 @@
+= simple_form_for @material_type, :html => {:class => 'form-horizontal'} do |f|
+	%br
+	= f.input :name
+	%br
+	= f.button :submit
+	=link_to "Cancel", @material_type, method: 'get', class: 'btn btn-warning'

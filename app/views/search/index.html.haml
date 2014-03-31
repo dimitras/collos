@@ -1,7 +1,7 @@
 %br
 
 -if @results.count > 0
-    %h4==#{@results.count} samples found
+    %h4==#{@results.count} entries found
     %table.table.table-striped.table-condensed.table-bordered
         %thead
             %tr
@@ -9,8 +9,6 @@
                 %th.span1 Barcode
                 %th.span2 Name
                 /%th.span2 Tags
-                /%th.span2 Notes
-                %th.span2 Study
                 %th.span1 Retired?
         %tbody
             -for result in @results
@@ -20,14 +18,12 @@
                     %td= o.barcode
                     %td= link_to(o.name, o)
                     /%td= format_tags(o.tags)
-                    /%td= o.notes
-                    %td= o.study
                     %td= o.retired? ? "yes" : "no"
     =will_paginate(@results, params: params, method: 'post')
     =link_to "Download CSV", search_path(results: @results, format: "csv"), class:'btn'
     / =link_to "Download CSV", search_path(params.merge(format: 'csv')), class:'btn'
 -else
-    %i==#{@results.count} samples found
+    %i==#{@results.count} entries found
 
 %br
 %br

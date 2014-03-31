@@ -33,3 +33,17 @@
 	%tr
 		%th.span1 Complete
 		%td=@shipment.complete
+
+
+%br
+%h5 Audit Trail (History)
+-@shipment.versions.each do |version|
+	==Event: #{version.event}
+	%br
+	==User: #{User.find_by_id(version.whodunnit).name if version.whodunnit}
+	%br
+	==Date: #{version.created_at}
+	%br
+	==Fields: #{version.object}
+	%br
+	%br

@@ -1,0 +1,19 @@
+%h3= @material_type.name
+
+=link_to "Edit material type", edit_material_type_path(@material_type), method: 'get', class: 'btn btn-success'
+=link_to "See all material types", material_types_path, method: 'get', class: 'btn'
+
+%br
+
+%table.table.table-bordered
+    %tr
+        %th.span1 Name
+        %td=@material_type.name
+    -if @material_type.samples.count>0
+        %tr
+            %th Samples
+            %td
+                -if @material_type.samples
+                    -@material_type.samples.each do |sample|
+                        =link_to sample.name, url_for(sample)
+                        %br

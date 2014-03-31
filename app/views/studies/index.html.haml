@@ -10,7 +10,7 @@
   %tbody
     -@studies.each do |study|
       %tr
-        %td= study.title
+        %td= link_to(study.title, study)
         %td= study.identifier
         %td= study.investigation_title
         %td

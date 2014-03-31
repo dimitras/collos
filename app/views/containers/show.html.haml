@@ -1,5 +1,12 @@
 %h3= @container.name
 
+- if can? :edit , @container
+    =link_to "Edit container", edit_container_path(@container), method: 'get', class: 'btn btn-success'
+- if can? :destroy , @container and !@container.retired
+    =link_to "Retire container", edit_container_path(@container), method: 'get', class: 'btn btn-danger'
+=link_to "See all containers", containers_path(), class: 'btn', method: 'get'
+%br
+%br
 %table.table.table-bordered
     %tr
         %th.span3 Name
@@ -24,7 +31,9 @@
     %tr
         %th Retired
         %td=@container.retired? ? "Yes" : "No"
-
+    %tr
+        %th Shipped
+        %td=@container.shipped? ? "Yes" : "No"
     %tr
         %th Tags
         %th=format_tags(@container.tags)
@@ -41,9 +50,15 @@
                 %br
 
 
-- if can? :edit , @container
-    =button_to "Edit container", edit_container_path(@container), method: 'get', class: 'btn btn-success'
-- if can? :destroy , @container and !@container.retired
-    =button_to "Retire container", container_path(@container), method: 'delete', class: 'btn btn-danger'
-
-=button_to "See all containers", containers_path(), class: 'btn', method: 'get'
+%br
+%h5 Audit Trail (History)
+-@container.versions.each do |version|
+    ==Event: #{version.event}
+    %br
+    ==User: #{User.find_by_id(version.whodunnit).name if version.whodunnit}
+    %br
+    ==Date: #{version.created_at}
+    %br
+    ==Fields: #{version.object}
+    %br
+    %br

@@ -16,6 +16,8 @@ class SamplesController < ApplicationController
         # scientific_name = params[:sample].delete(:scientific_name)
         # @sample = Sample.new(params[:sample])
         # @sample.taxon = Taxon.find_by_scientific_name(scientific_name)
+        @studies = Study.all
+        @material_types = MaterialType.all
         if @sample.save
             redirect_to @sample, success: "Sample created successfully"
         else
@@ -58,12 +60,14 @@ class SamplesController < ApplicationController
         @sample = Sample.new()
         3.times do
             @sample.save
+            # study = @sample.studies.build
+            # material_type = @sample.material_types.build
         end
         # @samples = Sample.find(params[:sample_ids])
         # @samples.each do |sample|
         #     sample.save#!(params[:sample].reject { |k,v| v.blank? })
         # end
-        flash[:notice] = "Sample was successfully split!"
+        flash[:notice] = "Sample's children were successfully created!"
         redirect_to samples_path
     end
 end

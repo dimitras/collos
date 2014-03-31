@@ -305,6 +305,16 @@ ALTER SEQUENCE material_types_id_seq OWNED BY material_types.id;
 
 
 --
+-- Name: material_types_samples; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE material_types_samples (
+    material_type_id integer,
+    sample_id integer
+);
+
+
+--
 -- Name: oauth_access_grants; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -743,7 +753,8 @@ CREATE TABLE samples (
     study_id integer,
     ancestry character varying(500),
     ancestry_depth integer DEFAULT 0,
-    sex_id integer
+    sex_id integer,
+    material_type_id integer
 );
 
 
@@ -767,14 +778,12 @@ ALTER SEQUENCE samples_id_seq OWNED BY samples.id;
 
 
 --
--- Name: samples_material_types; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: samples_studies; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE TABLE samples_material_types (
-    sample_id integer NOT NULL,
-    material_type_id integer NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+CREATE TABLE samples_studies (
+    sample_id integer,
+    study_id integer
 );
 
 
@@ -1437,6 +1446,20 @@ CREATE INDEX index_containers_shipments_on_shipment_id ON containers_shipments U
 
 
 --
+-- Name: index_material_types_samples_on_material_type_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_material_types_samples_on_material_type_id ON material_types_samples USING btree (material_type_id);
+
+
+--
+-- Name: index_material_types_samples_on_sample_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_material_types_samples_on_sample_id ON material_types_samples USING btree (sample_id);
+
+
+--
 -- Name: index_oauth_access_grants_on_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1598,20 +1621,6 @@ CREATE INDEX index_sample_relationships_on_descendant_id ON sample_relationships
 
 
 --
--- Name: index_samples_material_types_on_material_type_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_samples_material_types_on_material_type_id ON samples_material_types USING btree (material_type_id);
-
-
---
--- Name: index_samples_material_types_on_sample_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_samples_material_types_on_sample_id ON samples_material_types USING btree (sample_id);
-
-
---
 -- Name: index_samples_on_ancestry; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1644,6 +1653,20 @@ CREATE INDEX index_samples_on_protocol_application_id ON samples USING btree (pr
 --
 
 CREATE INDEX index_samples_on_taxon_id ON samples USING btree (taxon_id);
+
+
+--
+-- Name: index_samples_studies_on_sample_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_studies_on_sample_id ON samples_studies USING btree (sample_id);
+
+
+--
+-- Name: index_samples_studies_on_study_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_studies_on_study_id ON samples_studies USING btree (study_id);
 
 
 --
@@ -1886,3 +1909,9 @@ INSERT INTO schema_migrations (version) VALUES ('20140227165540');
 INSERT INTO schema_migrations (version) VALUES ('20140227195323');
 
 INSERT INTO schema_migrations (version) VALUES ('20140228023732');
+
+INSERT INTO schema_migrations (version) VALUES ('20140317175031');
+
+INSERT INTO schema_migrations (version) VALUES ('20140317202700');
+
+INSERT INTO schema_migrations (version) VALUES ('20140324192331');

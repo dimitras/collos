@@ -35,4 +35,7 @@ class Shipment < ActiveRecord::Base
   def receiver_address
     receiver.contact.address
   end
+
+  # versioned records
+  has_paper_trail
 end

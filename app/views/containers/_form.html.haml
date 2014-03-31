@@ -7,11 +7,14 @@
     = f.association :container_type
     /"field_name", list_of_objects, "value_field", "display_field"
     =f.label :parent
-    =f.collection_select :parent_id, @containers, :id, :name_for_selects, :include_blank => true
+    / =f.collection_select :parent_id, @containers, :id, :name_for_selects, :include_blank => true
+    =f.collection_select :parent_id, Container.with_children.order('@containers.container_type_id, name').all, :id, :name_for_selects, :include_blank => true
+    =link_to("Create a new container", new_container_url, :target => "_blank")
     %br
     %br
     = f.input :tags, hint: 'Press "Tab" key to enter a tag. Delete by clicking each tags "x"'
     = f.input :notes
+    = f.input :shipped, as: :radio_buttons
     = f.input :retired, as: :radio_buttons
     = f.button :submit
     = link_to 'Cancel', @container, class: 'btn btn-warning'

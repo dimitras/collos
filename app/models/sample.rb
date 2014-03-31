@@ -21,18 +21,19 @@
 #  ancestry                :string(500)
 #  ancestry_depth          :integer          default(0)
 #  sex_id                  :integer
+#  material_type_id        :integer
 #
 
 class Sample < ActiveRecord::Base
-  attr_accessible :name,
-    :taxon, :taxon_id,
-    :scientific_name, :common_name,
-    :container, :container_id,
-    :container_x, :container_y,
+  attr_accessible :name, :barcode,
+    :taxon, :taxon_id, :scientific_name, :common_name,
+    :container, :container_id, :container_x, :container_y,
     :protocol_application, :protocol_application_id,
-    :notes, :retired, :tags, :study_id, :study_title, 
-    :sex, :sex_id, :source_name, :barcode, :ancestry, :parent_id, :parent
-
+    :notes, :retired, :tags, :sex, :sex_id, :source_name,
+    :ancestry, :parent_id, :parent,
+    :material_type_ids, :material_type_id,
+    :study_titles, :study_ids, :study_id,
+    :child_type
 
   # Needed to parse out comma delimited tags from forms into a strict Array
   # def tags=(tgs)
@@ -58,10 +59,11 @@ class Sample < ActiveRecord::Base
   has_one :barcode, as: :barcodeable
   belongs_to :container
   # belongs_to_many :protocol_applications
-  has_and_belongs_to_many :material_types
+  has_and_belongs_to_many :material_types, :order => "LOWER(name)"
   belongs_to :taxon
   belongs_to :sex, class_name: "OntologyTerm", foreign_key: "sex_id"
-  belongs_to :study
+  has_and_belongs_to_many :studies, :order => "LOWER(title)"
+  #has_one :container_type, :through => :container
 
   # parent-child-sibling relationships
   has_ancestry :orphan_strategy => :rootify, :cache_depth => true
@@ -82,8 +84,11 @@ class Sample < ActiveRecord::Base
     end
   end
 
-  def title
-    study.try(:title)
+  def study_titles
+    titles=[]
+    studies.each do |study|
+      titles << study.try(:title)
+    end
   end
 
   def barcode_string

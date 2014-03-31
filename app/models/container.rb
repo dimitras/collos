@@ -33,19 +33,26 @@ class Container < ActiveRecord::Base
     # parent-child-sibling relationships
     has_ancestry :orphan_strategy => :rootify, :cache_depth => true
 
-    # version information
-    has_paper_trail
-
     validates_presence_of :container_type
-
-    scope :non_retired, where(:retired => false)
-    scope :with_children, ->() {
-		joins(:container_type).where(container_types: {can_have_children: true})
-	}
     
     # some handy methods
     alias_method :container, :parent
     
+    scope :non_retired, where(:retired => false)
+    scope :with_children, ->() {
+        joins(:container_type).where(container_types: {can_have_children: true})
+    }
+    scope :non_tube, ->() {
+        # joins(:container_type).where('container_types.type' => 'test tube')
+        joins(:container_type).where(container_types: {name: "1.5 mL tube"})
+        # joins(:container_type).where(container_types: {"test tube" not in (?) :type})
+    }
+    #scope :not_in_use, where(samples_count = 0)
+
+    # def not_in_use
+    #     samples if samples.count == 0
+    # end
+
 	def container_type_name
         container_type.name
     end
@@ -70,7 +77,8 @@ class Container < ActiveRecord::Base
 	end
 
 	def name_for_selects
-		"#{'-' * depth} #{name}"
+		# "#{'-' * depth} #{name}"
+        "[#{barcode}] #{name} (#{container_type_name})"
 	end
 
 	def possible_parents
@@ -118,5 +126,8 @@ class Container < ActiveRecord::Base
             tsvector_column: 'tsv_content'
           }
         }
+
+    # versioned records
+    has_paper_trail
 
 end

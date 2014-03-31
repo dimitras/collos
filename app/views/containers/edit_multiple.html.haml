@@ -33,6 +33,13 @@
   =f.select :retired, [["Yes", true], ["No", false]], :include_blank => true
   %br
   %br
+  / %h6 Ship the selected containers
+  / %h7 1. Mark as shipped the selected containers
+  / =f.select :shipped, [["Yes", true]], :include_blank => true
+  / %br
+  / %h7=link_to "2. Create a shipment", new_shipment_path, :target => "_blank"
+  / %br
+  / %br
 
   = f.submit "Submit", class: 'btn'
   = link_to 'Cancel', containers_path(), class: 'btn btn-warning'
