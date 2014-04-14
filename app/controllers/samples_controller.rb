@@ -70,4 +70,22 @@ class SamplesController < ApplicationController
         flash[:notice] = "Sample's children were successfully created!"
         redirect_to samples_path
     end
+
+    # def update_laboratory_select
+    #     laboratories = Container.where(:container_type_id=>params[:id]).order(:name) unless params[:id].blank?
+    #     render :partial => "laboratories", :container_types => { :laboratories => laboratories }
+    # end
+    # def update_freezer_select
+    #     freezers = Container.where(:container_type_id=>params[:id]).order(:name) unless params[:id].blank?
+    #     render :partial => "freezers", :container_types => { :freezers => freezers }
+    # end
+    # def update_box_select
+    #     boxes = Container.where(:container_type_id=>params[:id]).order(:name) unless params[:id].blank?
+    #     render :partial => "boxes", :container_types => { :boxes => boxes }
+    # end
+    # def update_tube_select
+    #     tubes = Container.where(:container_type_id=>params[:id]).order(:name) unless params[:id].blank?
+    #     render :partial => "tubes", :container_types => { :tubes => tubes }
+    # end
+
 end

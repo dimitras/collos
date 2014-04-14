@@ -1,5 +1,15 @@
 %h3 Container Type Information
 
+#buttons
+    - if can? :edit , @container_type
+        =link_to "Edit container type", edit_container_type_path(@container_type), method: 'get', class: 'btn btn-success'
+    - if can? :destroy , @container_type
+        =link_to "Retire container type", container_type_path(@container_type), method: 'get', class: 'btn btn-danger'
+    =link_to "See all container types", container_types_path(), method: 'get', class: 'btn'
+
+%br
+%br
+
 %table.table.table-bordered
     %tr
         %th.span3 Name
@@ -26,8 +36,3 @@
         %th Retired
         %td=@container_type.retired? ? "Yes" : "No"
 
-- if can? :edit , @container_type
-    =button_to "Edit container type", edit_container_type_path(@container_type), method: 'get', class: 'btn btn-success'
-- if can? :destroy , @container_type
-    =button_to "Retire container type", container_type_path(@container_type), method: 'delete', class: 'btn btn-danger'
-=button_to "See all container types", container_types_path(), class: 'btn', method: 'get'

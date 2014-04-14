@@ -9,6 +9,22 @@ class ShipmentsController < ApplicationController
     end
     def show
         # @shipment.containers
+        @shipment = Shipment.find(params[:id])
+        respond_to do |format|
+            format.html
+            format.pdf do
+                # pdf = render :pdf => "public/manifests/manifest_#{@shipment.tracking_number}.pdf"
+                
+                WickedPdf.new.pdf_from_string(
+                    render_to_string('shipments/show.html.haml', :layout => "public/manifests/manifest_#{@shipment.tracking_number}.pdf")
+                )
+                
+                save_path = Rails.root.join("public/manifests/","manifest_#{@shipment.tracking_number}.pdf")
+                File.open(save_path, 'wb') do |file|
+                    file << pdf
+                end
+            end
+        end
     end
     def new; end
     def create

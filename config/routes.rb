@@ -66,6 +66,10 @@ Collos::Application.routes.draw do
       post :edit_multiple
       put :update_multiple
       put :create_multiple
+      # match 'containers/update_laboratory_select/:id', :controller=>'containers', :action => 'update_laboratory_select'
+      # match 'containers/update_freezer_select/:id', :controller=>'containers', :action => 'update_freezer_select'
+      # match 'containers/update_box_select/:id', :controller=>'containers', :action => 'update_box_select'
+      # match 'containers/update_tube_select/:id', :controller=>'containers', :action => 'update_tube_select'
     end
     member do
       post 'place' # place this object into a container

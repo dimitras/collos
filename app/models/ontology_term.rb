@@ -13,7 +13,7 @@
 #
 
 class OntologyTerm < ActiveRecord::Base
-    attr_accessible :accession, :definition, :name, :obsolete, :ontology_id, :ontology, :parent, :parent_id
+    attr_accessible :accession, :definition, :name, :obsolete, :ontology_id, :ontology, :parent, :parent_id, :ancestry, :ancestry_depth
 
     belongs_to :ontology, inverse_of: :ontology_terms
 
@@ -24,6 +24,10 @@ class OntologyTerm < ActiveRecord::Base
     has_ancestry :orphan_strategy => :rootify, :cache_depth => true
 
     alias_method :ontology_term, :parent
+
+    def parents_only
+        OntologyTerm.where("ontology_terms.ancestry_depth =?",0).all
+    end
 
     def pretty_string
         "[#{self.accession}] #{self.name}"

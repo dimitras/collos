@@ -30,6 +30,10 @@ gem "will_paginate"
 gem 'will_paginate_twitter_bootstrap'
 gem 'simple_form'
 
+# For pdf generation
+gem 'wkhtmltopdf-binary'
+gem 'wicked_pdf'
+
 # May need this gem if the set of countries can grow big
 # gem 'country_select'
 

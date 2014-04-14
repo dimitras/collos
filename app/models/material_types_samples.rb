@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: samples_material_types
+# Table name: material_types_samples
 #
 #  sample_id        :integer          not null
 #  material_type_id :integer          not null
@@ -8,6 +8,6 @@
 #  updated_at       :datetime         not null
 #
 
-class SamplesMaterialTypes < ActiveRecord::Base
+class MaterialTypesSamples < ActiveRecord::Base
 	attr_accessible :sample_id, :material_type_id
 end

@@ -32,8 +32,7 @@ class Sample < ActiveRecord::Base
     :notes, :retired, :tags, :sex, :sex_id, :source_name,
     :ancestry, :parent_id, :parent,
     :material_type_ids, :material_type_id,
-    :study_titles, :study_ids, :study_id,
-    :child_type
+    :study_titles, :study_ids, :study_id
 
   # Needed to parse out comma delimited tags from forms into a strict Array
   # def tags=(tgs)
@@ -63,7 +62,7 @@ class Sample < ActiveRecord::Base
   belongs_to :taxon
   belongs_to :sex, class_name: "OntologyTerm", foreign_key: "sex_id"
   has_and_belongs_to_many :studies, :order => "LOWER(title)"
-  #has_one :container_type, :through => :container
+  # has_many :container_types, :through => :container
 
   # parent-child-sibling relationships
   has_ancestry :orphan_strategy => :rootify, :cache_depth => true
@@ -90,6 +89,22 @@ class Sample < ActiveRecord::Base
       titles << study.try(:title)
     end
   end
+
+  # def container_name
+  #   Container.find_by_id(:container_id).name
+  # end
+  # def tubes
+  #   tubes = []
+  #   if container.container_type_id == 3
+  #     tubes.push(container_name)
+  #   end
+  # end
+  # def boxes
+  #   boxes = []
+  #   if container.container_type_id == 5
+  #     boxes.push(container_name)
+  #   end
+  # end
 
   def barcode_string
     barcode.barcode

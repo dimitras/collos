@@ -43,7 +43,7 @@
     %tr
         %th Contained Samples
         %th
-            -for sample in @container.samples
+            -@container.samples.each do |sample|
                 = link_to sample.name, url_for(sample) 
                 = "[" + sample.barcode_string + "]"
                 = "[" + sample.scientific_name + "] "

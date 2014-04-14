@@ -16,11 +16,30 @@
         =f.association :sex, collection: Sample.where(retired: false).gender_type_terms.order('name'), hint: link_to("Create a new biological sex/mating type", new_ontology_term_url, :target => "_blank")
         =f.label :parent
         =f.collection_select :parent_id, Sample.all, :id, :name, :include_blank => true
+        %br
+        %br
         =f.input :retired, hint: "Enable if the sample is to be retired, eg. the sample is used or split"
 
     =field_set_tag "Container for sample" do
-        /=f.association :container_type, collection: ContainerType.order('container_types.type_id, name').all, hint: link_to("Create a new container type", new_container_type_url, :target => "_blank")
-        =f.association :container, collection: Container.non_tube.order('containers.container_type_id, name').all, hint: link_to("Create a new container", new_container_url, :target => "_blank"), label_method: :to_s
+        /TODO
+        / http://www.petermac.com/rails-3-jquery-and-multi-select-dependencies/
+        / = f.input :container_id, collection: Container.non_retired.where(:ancestry_depth => 0).order(:name).all.collect{ |c| [c.name,c.id]}
+        / %div{:id=>"addressLaboratories"}
+        /     = render :partial => 'laboratories'
+        / %div{:id=>"addressFreezers"}
+        /     = render :partial => 'freezers'
+        / %div{:id=>"addressBoxes"}
+        /     = render :partial => 'boxes'
+        / %div{:id=>"addressTubes"}
+        /     = render :partial => 'tubes'
+
+        / http://www.samuelmullen.com/2011/02/dynamic-dropdowns-with-rails-jquery-and-ajax/
+        / =f.collection_select :container_id, :container, @containers, :id, :name, :input_html => {:rel => "/containers/child_containers_by_depth"}
+        / =f.collection_select :container_id, :child_container, @child_containers, :id, :name
+
+        =f.association :container, collection: Container.shipable, hint: link_to("Create a new container", new_container_url, :target => "_blank"), label_method: :to_s
+        /=f.association :container_type, collection: ContainerType.order('container_type.type_id, name').all, hint: link_to("Create a new container type", new_container_type_url, :target => "_blank")
+        /=f.association :container, collection: Container.empty_non_tube.order('containers.container_type_id, name').all, hint: link_to("Create a new container", new_container_url, :target => "_blank"), label_method: :to_s
         ==Choose the position of the sample in the plate. The origin is at the top left corner, starts with zero. 
         %br
         Tubes only have one position (0,0).

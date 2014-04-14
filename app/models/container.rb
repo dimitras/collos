@@ -42,16 +42,32 @@ class Container < ActiveRecord::Base
     scope :with_children, ->() {
         joins(:container_type).where(container_types: {can_have_children: true})
     }
-    scope :non_tube, ->() {
-        # joins(:container_type).where('container_types.type' => 'test tube')
-        joins(:container_type).where(container_types: {name: "1.5 mL tube"})
-        # joins(:container_type).where(container_types: {"test tube" not in (?) :type})
+    scope :shipable, ->() {
+        joins(:container_type).where(container_types: {shipable: true})
     }
-    #scope :not_in_use, where(samples_count = 0)
 
-    # def not_in_use
-    #     samples if samples.count == 0
-    # end
+    # TODO!!!
+    # scope :non_tube, ->() {
+    #     # joins(:container_type).where(container_types: {type: "test tube"})
+    #     joins(:container_type).where(container_types: {name: "1.5 mL tube"})
+    # }
+    # scope :empty, includes(:samples).where("samples=?", nil)
+    # scope :empty, ->() {
+    #     joins(:samples).where(samples: {container_id: nil})
+    # }
+    # scope :empty, where(samples => nil)
+    scope :tube_in_use, joins(:container_type).where(container_types: {type: "test tube"})
+
+    # TODO
+    def container_type_type
+        container_type.type
+    end
+    def empty_non_tube
+        if container_type_type != "test tube" && samples.nil?
+            container_type_type
+        end
+    end
+
 
 	def container_type_name
         container_type.name
