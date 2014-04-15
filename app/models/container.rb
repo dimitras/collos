@@ -2,25 +2,26 @@
 #
 # Table name: containers
 #
-#  id                :integer          not null, primary key
-#  container_type_id :integer
-#  name              :string(255)
-#  barcode_string    :string(255)
-#  ancestry          :string(500)
-#  ancestry_depth    :integer          default(0)
-#  container_x       :integer          default(0)
-#  container_y       :integer          default(0)
-#  retired           :boolean          default(FALSE)
-#  tags              :string(500)
-#  notes             :text
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#  tsv_content       :tsvector
-#  shipped           :boolean
+#  id                  :integer          not null, primary key
+#  container_type_id   :integer
+#  name                :string(255)
+#  barcode_string      :string(255)
+#  ancestry            :string(500)
+#  ancestry_depth      :integer          default(0)
+#  container_x         :integer          default(0)
+#  container_y         :integer          default(0)
+#  retired             :boolean          default(FALSE)
+#  tags                :string(500)
+#  notes               :text
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  tsv_content         :tsvector
+#  shipped             :boolean
+#  external_identifier :string(255)
 #
 
 class Container < ActiveRecord::Base
-    attr_accessible :name, :barcode,
+    attr_accessible :name, :barcode, :external_identifier,
         :ancestry, :container_x, :container_y,
         :container_type_name, :container_type, :container_type_id,
         :retired, :tags, :notes, :parent_id, :shipped, :parent
@@ -124,7 +125,7 @@ class Container < ActiveRecord::Base
 
     # Full text search of containers
     include PgSearch
-    multisearchable against: [:name, :barcode_string, :tags, :notes],
+    multisearchable against: [:name, :barcode_string, :tags, :notes, :external_identifier],
         using: {
             tsearch: {
                 dictionary: "english",
@@ -133,7 +134,7 @@ class Container < ActiveRecord::Base
                 tsvector_column: 'tsv_content'
             }
         }
-      pg_search_scope :search, against:  [:name, :barcode_string, :tags, :notes],
+      pg_search_scope :search, against:  [:name, :barcode_string, :tags, :notes, :external_identifier],
         using: {
           tsearch: {
             dictionary: "english",

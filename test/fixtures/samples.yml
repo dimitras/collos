@@ -22,6 +22,7 @@
 #  ancestry_depth          :integer          default(0)
 #  sex_id                  :integer
 #  material_type_id        :integer
+#  external_identifier     :string(255)
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

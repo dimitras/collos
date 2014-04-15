@@ -125,7 +125,7 @@ namespace :db do
 					end
 					puts "#{box_label} | #{container_type} | #{container_freezer}"
 					puts
-					container_box = Container.create(:name => box_label, :barcode => Barcode.generate(), :container_type => container_type, :retired => false, :parent => container_freezer, :container_x => box_container_x, :container_y => box_container_y)
+					container_box = Container.create(:name => box_label, :barcode => Barcode.generate(), :container_type => container_type, :retired => false, :parent => container_freezer, :container_x => box_container_x, :container_y => box_container_y, :external_identifier => box_external_identifier)
 				end
 				
 				container_type = ContainerType.find_by_name(container_tube_type)
@@ -141,7 +141,7 @@ namespace :db do
 				puts "#{identifier} | #{sample_name} | #{parent} | #{source_name} | #{material_types.join("|")} | #{organism} | #{protocol_refs.join("|")} | #{freezer_type} | #{freezer_label} | #{box_type} | #{box_container_x} | #{box_container_y} | #{box_label} | #{container_tube_type} | #{tube_container_x} | #{tube_container_y} | #{shipped} | #{receiver} | #{collOS} | #{study_identifier} | #{sex}"
 				puts
 				sex_ontology_term = OntologyTerm.find_by_name(sex)
-				sample = Sample.create(:name => sample_name, :barcode => Barcode.generate() , :taxon_id => taxon.id,  :container_id => container_tube.id, :study_id => studies[study_identifier].id, :parent => Sample.find_by_name(parent), :sex => sex_ontology_term, :source_name => source_name, :container_x => tube_container_x, :container_y => tube_container_y)
+				sample = Sample.create(:name => sample_name, :barcode => Barcode.generate() , :taxon_id => taxon.id,  :container_id => container_tube.id, :study_id => studies[study_identifier].id, :parent => Sample.find_by_name(parent), :sex => sex_ontology_term, :source_name => source_name, :container_x => tube_container_x, :container_y => tube_container_y, :external_identifier => sample_external_identifier)
 
 				material_types.each do |material_type_name|
 					material_type = MaterialType.find_by_name(material_type_name)

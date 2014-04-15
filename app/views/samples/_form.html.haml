@@ -8,6 +8,7 @@
             =f.input :barcode, disabled: true, hint: "Barcodes are permanent. If you really want to change it, then contact the site admin."
         - else
             =f.input :barcode, disabled: true, hint: "Barcodes are automatically generated"
+        =f.input :external_identifier, hint: "Identifiers assigned outside of CollOS"
         =f.association :taxon, label_method: :scientific_name, hint: link_to("Create a new taxon", new_taxon_url, :target => "_blank")
         =f.input :source_name, :label => "Subject (source)", hint: "eg. mouse123, mlims_id, or study_id_&_subject_id for clinical studies"
         /TODO

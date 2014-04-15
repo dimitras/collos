@@ -19,6 +19,10 @@
             %td
                 =@sample.barcode.barcode
                 / =link_to("Barcode set #{@sample.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @sample.barcode.barcode_set))
+        -if @sample.external_identifier
+            %tr
+                %th External identifier
+                %td=@sample.external_identifier
         -if @sample.scientific_name
             %tr
                 %th Species

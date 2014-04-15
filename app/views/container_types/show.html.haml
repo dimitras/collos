@@ -12,7 +12,7 @@
 
 %table.table.table-bordered
     %tr
-        %th.span3 Name
+        %th.span4 Name
         %td=@container_type.name
     -if @type
         %tr
@@ -29,6 +29,9 @@
     %tr
         %th Can contain other container type
         %td=@container_type.can_have_children? ? "Yes" : "No"
+    %tr
+        %th Can have an external identifier
+        %td=@container_type.can_have_external_identifier? ? "Yes" : "No"
     %tr
         %th Can be shipped
         %td=@container_type.shipable? ? "Yes" : "No"

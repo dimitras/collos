@@ -166,7 +166,8 @@ CREATE TABLE container_types (
     updated_at timestamp without time zone NOT NULL,
     retired boolean DEFAULT false,
     label character varying(255),
-    shipable boolean
+    shipable boolean,
+    can_have_external_identifier boolean DEFAULT false
 );
 
 
@@ -208,7 +209,8 @@ CREATE TABLE containers (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     tsv_content tsvector,
-    shipped boolean
+    shipped boolean,
+    external_identifier character varying(255)
 );
 
 
@@ -754,7 +756,8 @@ CREATE TABLE samples (
     ancestry character varying(500),
     ancestry_depth integer DEFAULT 0,
     sex_id integer,
-    material_type_id integer
+    material_type_id integer,
+    external_identifier character varying(255)
 );
 
 
@@ -1425,6 +1428,13 @@ CREATE INDEX index_containers_on_container_type_id ON containers USING btree (co
 
 
 --
+-- Name: index_containers_on_external_identifier; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_containers_on_external_identifier ON containers USING btree (external_identifier);
+
+
+--
 -- Name: index_containers_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1632,6 +1642,13 @@ CREATE INDEX index_samples_on_ancestry ON samples USING btree (ancestry);
 --
 
 CREATE INDEX index_samples_on_container_id ON samples USING btree (container_id);
+
+
+--
+-- Name: index_samples_on_external_identifier; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_external_identifier ON samples USING btree (external_identifier);
 
 
 --
@@ -1915,3 +1932,9 @@ INSERT INTO schema_migrations (version) VALUES ('20140317175031');
 INSERT INTO schema_migrations (version) VALUES ('20140317202700');
 
 INSERT INTO schema_migrations (version) VALUES ('20140324192331');
+
+INSERT INTO schema_migrations (version) VALUES ('20140415153903');
+
+INSERT INTO schema_migrations (version) VALUES ('20140415161039');
+
+INSERT INTO schema_migrations (version) VALUES ('20140415164126');

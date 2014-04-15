@@ -22,10 +22,11 @@
 #  ancestry_depth          :integer          default(0)
 #  sex_id                  :integer
 #  material_type_id        :integer
+#  external_identifier     :string(255)
 #
 
 class Sample < ActiveRecord::Base
-  attr_accessible :name, :barcode,
+  attr_accessible :name, :barcode, :external_identifier,
     :taxon, :taxon_id, :scientific_name, :common_name,
     :container, :container_id, :container_x, :container_y,
     :protocol_application, :protocol_application_id,
@@ -131,7 +132,7 @@ class Sample < ActiveRecord::Base
 
   # Full text search of samples
   include PgSearch
-  multisearchable against: [:name, :barcode_string, :tags, :notes, :source_name],
+  multisearchable against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier],
     using: {
       tsearch: {
         dictionary: "english",
@@ -141,7 +142,7 @@ class Sample < ActiveRecord::Base
       }
     }
 
-  pg_search_scope :search, against: [:name, :barcode_string, :tags, :notes, :source_name],
+  pg_search_scope :search, against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier],
     using: {
       tsearch: {
         dictionary: "english",

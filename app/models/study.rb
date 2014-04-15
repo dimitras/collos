@@ -21,4 +21,7 @@ class Study < ActiveRecord::Base
 	def investigation_title
 		investigation.try(:title)
 	end
+
+	# versioned records
+    has_paper_trail
 end

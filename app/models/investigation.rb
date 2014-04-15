@@ -16,4 +16,6 @@ class Investigation < ActiveRecord::Base
 	has_many :samples
 	has_and_belongs_to_many :people
 
+	# versioned records
+    has_paper_trail
 end

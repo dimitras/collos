@@ -4,6 +4,7 @@
         =f.input :barcode, disabled: true, hint: "Barcodes are permanent. If you really want to change it, then contact the site admin.", label_method: 'barcode.barcode'
     - else
         =f.input :barcode, disabled: true, hint: "Barcodes are automatically generated"
+    =f.input :external_identifier, hint: "Identifiers assigned outside of CollOS"
     = f.association :container_type
     /"field_name", list_of_objects, "value_field", "display_field"
     =f.label :parent

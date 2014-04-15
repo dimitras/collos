@@ -19,6 +19,10 @@
         %td
             =@container.barcode.barcode
             /=link_to("Barcode set #{@container.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @container.barcode.barcode_set))
+    -if @container.external_identifier
+        %tr
+            %th External identifier
+            %td=@container.external_identifier
     %tr
         %th Parent Containers
         -if @container.ancestors

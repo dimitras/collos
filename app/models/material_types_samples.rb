@@ -2,10 +2,8 @@
 #
 # Table name: material_types_samples
 #
-#  sample_id        :integer          not null
-#  material_type_id :integer          not null
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  material_type_id :integer
+#  sample_id        :integer
 #
 
 class MaterialTypesSamples < ActiveRecord::Base
