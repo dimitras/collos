@@ -9,6 +9,7 @@
 #  identifier       :string(255)
 #  description      :text
 #  investigation_id :integer
+#  tsv_content      :tsvector
 #
 
 class Study < ActiveRecord::Base
@@ -21,6 +22,28 @@ class Study < ActiveRecord::Base
 	def investigation_title
 		investigation.try(:title)
 	end
+
+	# Full text search of samples
+	include PgSearch
+	multisearchable against: [:title, :identifier, :description, :investigation_title],
+	using: {
+		tsearch: {
+			dictionary: "english",
+			any_word: true,
+			prefix: true,
+			tsvector_column: 'tsv_content'
+		}
+	}
+
+	pg_search_scope :search, against: [:title, :identifier, :description, :investigation_title],
+	using: {
+		tsearch: {
+			dictionary: "english",
+			any_word: true,
+			prefix: true,
+			tsvector_column: 'tsv_content'
+		}
+	}
 
 	# versioned records
     has_paper_trail

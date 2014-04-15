@@ -252,7 +252,8 @@ CREATE TABLE investigations (
     title text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    identifier text
+    identifier text,
+    tsv_content tsvector
 );
 
 
@@ -283,7 +284,8 @@ CREATE TABLE material_types (
     id integer NOT NULL,
     name character varying(255),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    tsv_content tsvector
 );
 
 
@@ -505,7 +507,8 @@ CREATE TABLE people (
     phone integer,
     lastname character varying(255),
     user_id integer,
-    study_id integer
+    study_id integer,
+    tsv_content tsvector
 );
 
 
@@ -816,7 +819,8 @@ CREATE TABLE shipments (
     new_container character varying(255),
     complete boolean,
     past_container_id integer,
-    new_container_id integer
+    new_container_id integer,
+    tsv_content tsvector
 );
 
 
@@ -850,7 +854,8 @@ CREATE TABLE studies (
     updated_at timestamp without time zone NOT NULL,
     identifier character varying(255),
     description text,
-    investigation_id integer
+    investigation_id integer,
+    tsv_content tsvector
 );
 
 
@@ -881,7 +886,8 @@ CREATE TABLE taxons (
     id integer NOT NULL,
     ncbi_id integer NOT NULL,
     scientific_name character varying(255),
-    common_name character varying(255)
+    common_name character varying(255),
+    tsv_content tsvector
 );
 
 
@@ -1778,6 +1784,27 @@ CREATE TRIGGER containers_tsvupdate BEFORE INSERT OR UPDATE ON containers FOR EA
 
 
 --
+-- Name: investigations_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER investigations_tsvupdate BEFORE INSERT OR UPDATE ON investigations FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'title', 'identifier');
+
+
+--
+-- Name: material_types_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER material_types_tsvupdate BEFORE INSERT OR UPDATE ON material_types FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'name');
+
+
+--
+-- Name: people_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER people_tsvupdate BEFORE INSERT OR UPDATE ON people FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'firstname', 'lastname', 'email', 'institution');
+
+
+--
 -- Name: pg_search_documents_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -1789,6 +1816,27 @@ CREATE TRIGGER pg_search_documents_tsvupdate BEFORE INSERT OR UPDATE ON pg_searc
 --
 
 CREATE TRIGGER samples_tsvupdate BEFORE INSERT OR UPDATE ON samples FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'name', 'barcode_string', 'tags', 'notes');
+
+
+--
+-- Name: shipments_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER shipments_tsvupdate BEFORE INSERT OR UPDATE ON shipments FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'receiver', 'shipper', 'tracking_number');
+
+
+--
+-- Name: studies_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER studies_tsvupdate BEFORE INSERT OR UPDATE ON studies FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'title', 'identifier', 'description', 'investigation_title');
+
+
+--
+-- Name: taxons_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER taxons_tsvupdate BEFORE INSERT OR UPDATE ON taxons FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'ncbi_id', 'scientific_name', 'common_name');
 
 
 --
@@ -1938,3 +1986,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140415153903');
 INSERT INTO schema_migrations (version) VALUES ('20140415161039');
 
 INSERT INTO schema_migrations (version) VALUES ('20140415164126');
+
+INSERT INTO schema_migrations (version) VALUES ('20140415181154');

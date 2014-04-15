@@ -3,22 +3,37 @@ require 'api_constraints'
 
 Collos::Application.routes.draw do
 
-  resources :shipments
+  resources :material_types do
+    collection do
+      get 'search'
+    end
+  end
 
 
-  resources :material_types
+  resources :people do
+    collection do
+      get 'search'
+    end
+  end
 
 
-  resources :people
+  resources :investigations do
+    collection do
+      get 'search'
+    end
+  end
 
 
-  resources :investigations
-
-
-  resources :studies
-
+  resources :studies do
+    collection do
+      get 'search'
+    end
+  end
 
   resources :shipments do
+    collection do
+      get 'search'
+    end
     member do
       post 'receive'
       post 'ship'
@@ -53,7 +68,12 @@ Collos::Application.routes.draw do
     end
   end
 
-  resources :taxons
+  resources :taxons do
+    collection do
+      get 'search'
+    end
+  end
+
   resources :protocols
   # resources :protocol_parameters
   resources :protocol_applications
@@ -74,7 +94,6 @@ Collos::Application.routes.draw do
     member do
       post 'place' # place this object into a container
     end
-
   end
 
   resources :containers do

@@ -15,10 +15,10 @@
                 - o = result.searchable
                 %tr
                     %td= result.searchable_type
-                    %td= o.barcode
-                    %td= link_to(o.name, o)
+                    /%td= o.barcode if o.barcode
+                    /%td= link_to(o.name, o) if o.name
                     /%td= format_tags(o.tags)
-                    %td= o.retired? ? "yes" : "no"
+                    /%td= o.retired? ? "yes" : "no" if o.retired
     =will_paginate(@results, params: params, method: 'post')
     =link_to "Download CSV", search_path(results: @results, format: "csv"), class:'btn'
     / =link_to "Download CSV", search_path(params.merge(format: 'csv')), class:'btn'

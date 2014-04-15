@@ -6,6 +6,7 @@
 #  ncbi_id         :integer          not null
 #  scientific_name :string(255)
 #  common_name     :string(255)
+#  tsv_content     :tsvector
 #
 
 require 'test_helper'

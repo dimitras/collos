@@ -15,6 +15,7 @@
 #  complete          :boolean
 #  past_container_id :integer
 #  new_container_id  :integer
+#  tsv_content       :tsvector
 #
 
 require 'test_helper'

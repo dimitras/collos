@@ -15,6 +15,7 @@
 #  complete          :boolean
 #  past_container_id :integer
 #  new_container_id  :integer
+#  tsv_content       :tsvector
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

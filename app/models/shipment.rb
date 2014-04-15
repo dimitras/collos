@@ -15,6 +15,7 @@
 #  complete          :boolean
 #  past_container_id :integer
 #  new_container_id  :integer
+#  tsv_content       :tsvector
 #
 
 class Shipment < ActiveRecord::Base
@@ -35,6 +36,28 @@ class Shipment < ActiveRecord::Base
   def receiver_address
     receiver.contact.address
   end
+
+  # Full text search of samples
+  include PgSearch
+  multisearchable against: [:receiver, :shipper, :tracking_number],
+  using: {
+    tsearch: {
+      dictionary: "english",
+      any_word: true,
+      prefix: true,
+      tsvector_column: 'tsv_content'
+    }
+  }
+
+  pg_search_scope :search, against: [:receiver, :shipper, :tracking_number],
+  using: {
+    tsearch: {
+      dictionary: "english",
+      any_word: true,
+      prefix: true,
+      tsvector_column: 'tsv_content'
+    }
+  }
 
   # versioned records
   has_paper_trail

@@ -9,6 +9,7 @@
 #  identifier       :string(255)
 #  description      :text
 #  investigation_id :integer
+#  tsv_content      :tsvector
 #
 
 require 'test_helper'

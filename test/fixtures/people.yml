@@ -13,6 +13,7 @@
 #  lastname    :string(255)
 #  user_id     :integer
 #  study_id    :integer
+#  tsv_content :tsvector
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
