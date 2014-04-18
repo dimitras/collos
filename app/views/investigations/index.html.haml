@@ -9,7 +9,7 @@
   %tbody
     - @investigations.each do |investigation|
       %tr
-        %td= investigation.title
+        %td= link_to(investigation.title, investigation)
         %td= investigation.identifier
         %td
           =link_to "Show", investigation_path(investigation), class: 'btn'

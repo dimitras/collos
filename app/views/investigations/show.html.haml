@@ -13,9 +13,10 @@
 	%tr
 		%th Identifier
 		%td=@investigation.identifier
-	%tr
-		%th Studies
-		%td 
-			-@investigation.studies.each do |study|
-				=link_to study.title, url_for(study)
-				%br
+	-if @investigation.studies.count > 0
+		%tr
+			%th Studies
+			%td 
+				-@investigation.studies.each do |study|
+					=link_to study.title, url_for(study)
+					%br

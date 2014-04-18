@@ -9,20 +9,17 @@ Collos::Application.routes.draw do
     end
   end
 
-
   resources :people do
     collection do
       get 'search'
     end
   end
 
-
   resources :investigations do
     collection do
       get 'search'
     end
   end
-
 
   resources :studies do
     collection do

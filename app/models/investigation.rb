@@ -11,7 +11,7 @@
 #
 
 class Investigation < ActiveRecord::Base
-	attr_accessible :title, :identifier
+	attr_accessible :title, :identifier, :study_ids
 
   	has_many :studies, foreign_key: "id"
 	has_many :samples

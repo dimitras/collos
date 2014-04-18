@@ -44,14 +44,29 @@
     %tr
         %th Notes
         %th=@container.notes
+    -if @container.children.count > 0
+        %tr
+            %th Contained Containers
+            %td
+                -@container.children.each do |container|
+                    =link_to container.name_for_selects, url_for(container)
+                    %br
     %tr
         %th Contained Samples
-        %th
-            -@container.samples.each do |sample|
-                = link_to sample.name, url_for(sample) 
-                = "[" + sample.barcode_string + "]"
-                = "[" + sample.scientific_name + "] "
-                %br
+        %td
+            -if @container.descendants.count > 0
+                -@container.descendants.each do |container|
+                    -container.samples.each do |sample|
+                        = "[" + sample.barcode_string + "]"
+                        = link_to sample.name, url_for(sample) 
+                        = "(" + sample.scientific_name + ")"
+                        %br
+            -else
+                -@container.samples.each do |sample|
+                    = "[" + sample.barcode_string + "]"
+                    = link_to sample.name, url_for(sample) 
+                    = "(" + sample.scientific_name + ")"
+                    %br
 
 
 %br

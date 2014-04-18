@@ -3,12 +3,15 @@
     =render "sessions/form"
 -else
     %br
-    %h4 Search for samples/containers
+    %h4 Search
     = form_tag(search_path, method: 'get', class: 'form-inline form-search') do
         .fieldset
-            =text_field_tag :query, nil,class: 'span4', placeholder: '"PBF78E5" or "sample123" or "container123"'
+            =text_field_tag :query, nil,class: 'span4', placeholder: 'ex. PBF78E5 | IL-1-beta | box | zebrafish | blood'
             =submit_tag "Search", class:'btn btn-primary'
             =submit_tag "Advanced Search", class:'btn'
+            %br
+            %br
+            %em=label_tag "search by sample, container, barcode, organism, tissue, shipment tracking number, investigator etc"
  
     %br
     %br
@@ -30,7 +33,7 @@
     %br
     
     %h4 Bulk upload
-    %em==Upload your files to enter the samples in the system (file format #{link_to "help",help_path()}).
+    %em==Enter the samples in the system (file format #{link_to "help",help_path()}).
     %br
     %br
     / = form_tag(uploader_path, method: 'get') do
