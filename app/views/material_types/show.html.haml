@@ -1,8 +1,11 @@
 %h3= @material_type.name
 
 =link_to "Edit material type", edit_material_type_path(@material_type), method: 'get', class: 'btn btn-success'
+- if can? :destroy , @material_type
+    =link_to "Delete material type", material_type_path(@material_type), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
 =link_to "See all material types", material_types_path, method: 'get', class: 'btn'
 
+%br
 %br
 
 %table.table.table-bordered

@@ -4,7 +4,7 @@
   %thead
     %tr
       %th.span1 Name
-      %th.span2 &nbsp;
+      %th.span3 &nbsp;
   %tbody
     -@material_types.each do |type|
       %tr
@@ -13,6 +13,8 @@
           =link_to "Show", material_type_path(type), class: 'btn'
           -if can?(:edit, type)
             =link_to "Edit", edit_material_type_path(type), class: 'btn btn-success'
+          -if can?(:destroy, type)
+            = link_to "Delete", material_type_path(type), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
 
 %br
 
