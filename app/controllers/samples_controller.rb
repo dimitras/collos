@@ -6,10 +6,19 @@ class SamplesController < ApplicationController
         unless params[:show_all]
             @samples = @samples.where(retired: false)
         end
+
+        # TODO: for the number of children to be created
+        # if params[:number_of_children] && params[:number_of_children] != ''
+        #    @samples = @samples.number_of_children(params[:number_of_children].to_i)
+        # end
+
         @samples = @samples.page(params[:page] || 1)
     end
 
-    def show;end
+    def show
+        # @sample = @sample.find(params[:id])
+        # @children = @sample.children
+    end
 
     def new;end
     def create
@@ -39,7 +48,7 @@ class SamplesController < ApplicationController
         if @sample.save
             redirect_to samples_url, success: "Sample was retired"
         else
-            redirect_to samples_url, error: "Sample was not deleted"
+            redirect_to samples_url, error: "Sample was not retired"
         end
     end
 
@@ -56,10 +65,19 @@ class SamplesController < ApplicationController
       redirect_to samples_path
     end
 
+    #TODO
+    # def new_multiple
+    #     3.times do
+    #         @sample.children.build
+    #     end
+    # end
     def create_multiple
-        @sample = Sample.new()
+        @sample = Sample.find(params[:id])
         3.times do
-            @sample.save
+            # @child = Sample.new
+            @child = @sample.children.create!
+            @child.save
+            #@sample.save
             # study = @sample.studies.build
             # material_type = @sample.material_types.build
         end

@@ -3,6 +3,7 @@
 		=f.input :tracking_number
 		=f.association :shipper
 		=f.association :receiver
+		/=f.input :created_at, disabled: true, hint: "Date is automatically generated when you create the shipment.", label: "Ship date"
 		=f.input :ship_date, :as => :string, :input_html => {:class => 'datepicker col-span-3'}
 		=f.input :recieve_date, :as => :string, :input_html => {:class => 'datepicker col-span-3'}, :label => "Receive date"
 		=f.label "Shipper address"

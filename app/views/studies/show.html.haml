@@ -1,6 +1,8 @@
 %h3= @study.title
 
 =link_to "Edit study", edit_study_path(@study), method: 'get', class: 'btn btn-success'
+- if can? :destroy , @study
+    =link_to "Delete study", study_path(@study), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
 =link_to "See all studies", studies_path, method: 'get', class: 'btn'
 
 %br
@@ -26,3 +28,23 @@
                 -@study.samples.each do |sample|
                     =link_to sample.name, url_for(sample)
                     %br
+    / -if @study.people.count > 0
+    /     %tr
+    /         %th Contacts
+    /         %td 
+    /             -@study.people.each do |person|
+    /                 =link_to person.firstname + person.lastname, url_for(person)
+    /                 %br
+
+-if @study.versions.count > 0
+    %h5 Audit Trail (History)
+    -@study.versions.each do |version|
+        ==Event: #{version.event}
+        %br
+        ==User: #{User.find_by_id(version.whodunnit).name if version.whodunnit}
+        %br
+        ==Date: #{version.created_at}
+        %br
+        ==Fields: #{version.object}
+        %br
+        %br

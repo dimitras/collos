@@ -15,6 +15,8 @@
           =link_to "Show", investigation_path(investigation), class: 'btn'
           -if can?(:edit, investigation)
             =link_to "Edit", edit_investigation_path(investigation), class: 'btn btn-success'
+          -if can?(:destroy, investigation)
+            = link_to "Delete", investigation_path(investigation), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
 
 %br
 

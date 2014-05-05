@@ -12,14 +12,17 @@
       %tr
         %td= link_to(study.title, study)
         %td= study.identifier
-        %td= study.investigation_title
+        %td
+          -if study.investigation_title
+            =link_to(study.investigation_title, study)
+          -else
+            %nbsp
         %td
           =link_to "Show", study_path(study), class: 'btn'
           -if can?(:edit, study)
             =link_to "Edit", edit_study_path(study), class: 'btn btn-success'
-          / -if can?(:destroy, study)
-          /   =link_to "Retire", study_path(study), method: 'delete', class: 'btn btn-danger'
-
+          -if can?(:destroy, study)
+            = link_to "Delete", study_path(study), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
 %br
 
 =link_to 'Create a new Study', new_study_path, class: 'btn btn-primary btn-large'

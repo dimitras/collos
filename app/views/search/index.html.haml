@@ -18,14 +18,14 @@
                         %td= o.barcode
                     -elsif o.has_attribute?("barcode")
                         %td= o.barcode
-                    -else
+                    -elsif !o.has_attribute?("barcode_string") && !o.has_attribute?("barcode")
                         %td NA
 
                     -if o.has_attribute?("name")
                         %td= link_to(o.name, o)
                     -elsif o.has_attribute?("title")
                         %td= link_to(o.title, o)
-                    -else
+                    -elsif !o.has_attribute?("name") && !o.has_attribute?("title")
                         %td NA
 
                     -if o.has_attribute?("retired")

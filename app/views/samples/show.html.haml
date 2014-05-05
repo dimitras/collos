@@ -2,11 +2,17 @@
 
 #buttons
     =link_to "Edit sample", edit_sample_path(@sample), method: 'get', class: 'btn btn-success'
-    -if @sample.children.count == 0
-        =link_to "Create child(ren)", create_multiple_samples_path, method: 'get', class: 'btn btn-primary'
     - if can? :destroy , @sample and !@sample.retired
-        =link_to "Retire sample", edit_sample_path(@sample), method: 'get', class: 'btn btn-danger'
+        =link_to "Retire sample", sample_path(@sample), method: 'delete', class: 'btn btn-danger'
     =link_to "See all samples", samples_path, method: 'get', class: 'btn'
+    %br
+    %br
+    -if @sample.children.count == 0 and !@sample.retired
+        / TODO: for the number of children to be created
+        / =simple_form_for @sample, html: {class: 'form-horizontal'} do |f|
+        /     =f.number_field :number_of_children, params[:number_of_children], :size => 3, :min => 1
+        /     =f.button :submit, :value => "Create children", class: 'btn btn-primary'
+        =link_to "Create child(ren)", create_multiple_samples_path, method: 'get', class: 'btn btn-primary'
     
 %br
 #annotation
@@ -105,14 +111,15 @@
 / %a{:href => "#", :onclick => "show('show_history'); return false;"} Show Audit Trail(History)
 
 / %div{:id => "show_history"}
-%h5 Audit Trail (History)
--@sample.versions.each do |version|
-    ==Event: #{version.event}
-    %br
-    ==User: #{User.find_by_id(version.whodunnit).name if version.whodunnit}
-    %br
-    ==Date: #{version.created_at}
-    %br
-    ==Fields: #{version.object}
-    %br
-    %br
+-if @sample.versions.count > 0
+    %h5 Audit Trail (History)
+    -@sample.versions.each do |version|
+        ==Event: #{version.event}
+        %br
+        ==User: #{User.find_by_id(version.whodunnit).name if version.whodunnit}
+        %br
+        ==Date: #{version.created_at}
+        %br
+        ==Fields: #{version.object}
+        %br
+        %br

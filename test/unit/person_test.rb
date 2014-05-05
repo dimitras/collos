@@ -14,6 +14,8 @@
 #  user_id     :integer
 #  study_id    :integer
 #  tsv_content :tsvector
+#  laboratory  :string(255)
+#  identifier  :string(255)
 #
 
 require 'test_helper'

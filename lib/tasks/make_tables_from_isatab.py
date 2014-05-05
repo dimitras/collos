@@ -186,7 +186,7 @@ def write_investigation_to_csv(investigation, filename):
 	'''
 	with open(filename, 'w') as fp:
 		a = csv.writer(fp, delimiter=',')
-		fields = ['Investigation Identifier','Investigation Title','Investigation Description','Investigation Submission Date','Investigation Public Release Date','Comment [Created with configuration]','Comment [Last Opened With Configuration]','Comment [Created With Configuration]']
+		fields = ['Investigation Identifier','Investigation Title','Investigation Description','Investigation Submission Date','Investigation Public Release Date','Comment [Created with configuration]']
 		a.writerow(fields)
 		a.writerow([investigation.attribute(field) for field in fields])
 
@@ -194,7 +194,7 @@ def write_investigation_studies_to_csv(investigation, filename):
 	'''
 	Write studies list to a csv file.
 	'''
-	fields = ['Study Identifier', 'Study Title', 'Study Public Release Date', 'Study Description', 'Study Submission Date', 'Study File Name']
+	fields = ['Study Identifier', 'Study Title', 'Study Public Release Date', 'Study Description', 'Study Submission Date']
 	
 	with open(filename, 'w') as fp:
 		a = csv.writer(fp, delimiter=',')
@@ -206,7 +206,7 @@ def write_investigation_studies_contacts_to_csv(investigation, filename):
 	'''
 	Write contacts table to csv file
 	'''
-	fields = ['Comment[Lab]','Study Person Last Name','Study Person Mid Initials','Study Person Roles','Study Person Phone','Study Person Affiliation','Study Person Roles Term Accession Number','Study Person First Name','Study Person Fax','Study Person Address','Study Person Email','Study Person Roles Term Source REF']
+	fields = ['Comment[Lab]','Study Person Last Name','Study Person Mid Initials','Study Person Roles','Study Person Phone','Study Person Affiliation','Study Person First Name','Study Person Fax','Study Person Address','Study Person Email']
 	
 	with open(filename, 'w') as fp:
 		a = csv.writer(fp, delimiter=',')
@@ -219,7 +219,7 @@ def write_investigation_studies_samples_to_csv(investigation, filename):
 	'''
 	Write samples table to csv file
 	'''
-	fields = ['Sample_Name', 'parent', 'Source_Name', 'Material_Type', 'organism', 'Protocol_REF', 'freezer_type', 'freezer_label', 'box_type', 'box_label', 'container_type', 'shipped', 'receiver', 'collOS', 'sex', 'sample_external_identifier', 'box_external_identifier']
+	fields = ['Sample_Name', 'parent', 'Source_Name', 'Material_Type', 'organism', 'Protocol_REF', 'freezer_type', 'freezer_label', 'box_type', 'box_label', 'box_external_identifier', 'container_type', 'container_external_identifier', 'shipped', 'receiver', 'collOS', 'sex']
 	
 	with open(filename, 'w') as fp:
 		a = csv.writer(fp, delimiter=',')

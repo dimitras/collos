@@ -6,20 +6,21 @@
 #  title       :text
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  identifier  :text
+#  identifier  :string(255)
 #  tsv_content :tsvector
+#  description :text
 #
 
 class Investigation < ActiveRecord::Base
-	attr_accessible :title, :identifier, :study_ids
+	attr_accessible :title, :identifier, :description, :study_ids
 
-  	has_many :studies, foreign_key: "id"
+  	has_many :studies, :inverse_of => :investigation
 	has_many :samples
 	has_and_belongs_to_many :people
 
 	# Full text search of samples
 	include PgSearch
-	multisearchable against: [:title, :identifier],
+	multisearchable against: [:title, :identifier, :description],
 	using: {
 		tsearch: {
 			dictionary: "english",
@@ -29,7 +30,7 @@ class Investigation < ActiveRecord::Base
 		}
 	}
 
-	pg_search_scope :search, against: [:title, :identifier],
+	pg_search_scope :search, against: [:title, :identifier, :description],
 	using: {
 		tsearch: {
 			dictionary: "english",

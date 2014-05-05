@@ -32,18 +32,6 @@
                     %br
         -else
             %td None
-    %tr
-        %th Retired
-        %td=@container.retired? ? "Yes" : "No"
-    %tr
-        %th Shipped
-        %td=@container.shipped? ? "Yes" : "No"
-    %tr
-        %th Tags
-        %th=format_tags(@container.tags)
-    %tr
-        %th Notes
-        %th=@container.notes
     -if @container.children.count > 0
         %tr
             %th Contained Containers
@@ -67,17 +55,29 @@
                     = link_to sample.name, url_for(sample) 
                     = "(" + sample.scientific_name + ")"
                     %br
-
-
+    %tr
+        %th Retired
+        %td=@container.retired? ? "Yes" : "No"
+    %tr
+        %th Shipped
+        %td=@container.shipped? ? "Yes" : "No"
+    %tr
+        %th Tags
+        %th=format_tags(@container.tags)
+    %tr
+        %th Notes
+        %th=@container.notes
 %br
-%h5 Audit Trail (History)
--@container.versions.each do |version|
-    ==Event: #{version.event}
-    %br
-    ==User: #{User.find_by_id(version.whodunnit).name if version.whodunnit}
-    %br
-    ==Date: #{version.created_at}
-    %br
-    ==Fields: #{version.object}
-    %br
-    %br
+
+-if @container.versions.count > 0
+    %h5 Audit Trail (History)
+    -@container.versions.each do |version|
+        ==Event: #{version.event}
+        %br
+        ==User: #{User.find_by_id(version.whodunnit).name if version.whodunnit}
+        %br
+        ==Date: #{version.created_at}
+        %br
+        ==Fields: #{version.object}
+        %br
+        %br

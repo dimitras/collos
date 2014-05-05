@@ -39,7 +39,7 @@ class Shipment < ActiveRecord::Base
 
   # Full text search of samples
   include PgSearch
-  multisearchable against: [:receiver, :shipper, :tracking_number],
+  multisearchable against: [:tracking_number],
   using: {
     tsearch: {
       dictionary: "english",
@@ -49,7 +49,7 @@ class Shipment < ActiveRecord::Base
     }
   }
 
-  pg_search_scope :search, against: [:receiver, :shipper, :tracking_number],
+  pg_search_scope :search, against: [:tracking_number],
   using: {
     tsearch: {
       dictionary: "english",

@@ -72,13 +72,14 @@ class StudiesController < ApplicationController
 
   # DELETE /studies/1
   # DELETE /studies/1.json
-  def destroy
-    @study = Study.find(params[:id])
-    @study.destroy
 
-    respond_to do |format|
-      format.html { redirect_to studies_url }
-      format.json { head :no_content }
-    end
+  def destroy
+    # @study = Study.find(params[:id])
+    @study.destroy
+    redirect_to studies_url, notice: "Study was deleted"
+    # respond_to do |format|
+    #   format.html { redirect_to studies_url }
+    #   format.json { head :no_content }
+    # end
   end
 end

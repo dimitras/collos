@@ -13,11 +13,13 @@
 #
 
 class Study < ActiveRecord::Base
-	attr_accessible :title, :identifier, :description, :investigation_id, :investigation_title
+	attr_accessible :title, :identifier, :description, :investigation_id, :investigation_title, :investigation
 
-	belongs_to :investigation
+	belongs_to :investigation, :inverse_of => :studies
 	has_and_belongs_to_many :samples#, foreign_key: "id"
 	has_and_belongs_to_many :people
+
+	validates_presence_of :investigation
 
 	def investigation_title
 		investigation.try(:title)
@@ -25,7 +27,7 @@ class Study < ActiveRecord::Base
 
 	# Full text search of samples
 	include PgSearch
-	multisearchable against: [:title, :identifier, :description, :investigation_title],
+	multisearchable against: [:title, :identifier, :description],
 	using: {
 		tsearch: {
 			dictionary: "english",
@@ -35,7 +37,7 @@ class Study < ActiveRecord::Base
 		}
 	}
 
-	pg_search_scope :search, against: [:title, :identifier, :description, :investigation_title],
+	pg_search_scope :search, against: [:title, :identifier, :description],
 	using: {
 		tsearch: {
 			dictionary: "english",

@@ -70,6 +70,14 @@ class Sample < ActiveRecord::Base
 
   alias_method :sample, :parent
 
+  # TODO: for the number of children to be created
+  # scope :number_of_children, lambda { |count|
+  #   {
+  #     :conditions => ["COUNT(sample.children.count) == ?", count]
+  #   }
+  # }
+  # accepts_nested_attributes_for :children, :reject_if => lambda { |a| a[:content].blank? }, :allow_destroy => true
+
   def scientific_name
     taxon.try(:scientific_name)
   end

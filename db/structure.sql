@@ -252,8 +252,9 @@ CREATE TABLE investigations (
     title text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    identifier text,
-    tsv_content tsvector
+    identifier character varying(255),
+    tsv_content tsvector,
+    description text
 );
 
 
@@ -274,6 +275,16 @@ CREATE SEQUENCE investigations_id_seq
 --
 
 ALTER SEQUENCE investigations_id_seq OWNED BY investigations.id;
+
+
+--
+-- Name: investigations_people; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE investigations_people (
+    investigation_id integer,
+    person_id integer
+);
 
 
 --
@@ -508,7 +519,9 @@ CREATE TABLE people (
     lastname character varying(255),
     user_id integer,
     study_id integer,
-    tsv_content tsvector
+    tsv_content tsvector,
+    laboratory character varying(255),
+    identifier character varying(255)
 );
 
 
@@ -529,6 +542,16 @@ CREATE SEQUENCE people_id_seq
 --
 
 ALTER SEQUENCE people_id_seq OWNED BY people.id;
+
+
+--
+-- Name: people_studies; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE people_studies (
+    person_id integer,
+    study_id integer
+);
 
 
 --
@@ -1462,6 +1485,20 @@ CREATE INDEX index_containers_shipments_on_shipment_id ON containers_shipments U
 
 
 --
+-- Name: index_investigations_people_on_investigation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_investigations_people_on_investigation_id ON investigations_people USING btree (investigation_id);
+
+
+--
+-- Name: index_investigations_people_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_investigations_people_on_person_id ON investigations_people USING btree (person_id);
+
+
+--
 -- Name: index_material_types_samples_on_material_type_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1557,6 +1594,20 @@ CREATE INDEX index_ontology_terms_on_name ON ontology_terms USING btree (name);
 --
 
 CREATE INDEX index_ontology_terms_on_ontology_id ON ontology_terms USING btree (ontology_id);
+
+
+--
+-- Name: index_people_studies_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_people_studies_on_person_id ON people_studies USING btree (person_id);
+
+
+--
+-- Name: index_people_studies_on_study_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_people_studies_on_study_id ON people_studies USING btree (study_id);
 
 
 --
@@ -1822,21 +1873,21 @@ CREATE TRIGGER samples_tsvupdate BEFORE INSERT OR UPDATE ON samples FOR EACH ROW
 -- Name: shipments_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER shipments_tsvupdate BEFORE INSERT OR UPDATE ON shipments FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'receiver', 'shipper', 'tracking_number');
+CREATE TRIGGER shipments_tsvupdate BEFORE INSERT OR UPDATE ON shipments FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'tracking_number');
 
 
 --
 -- Name: studies_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER studies_tsvupdate BEFORE INSERT OR UPDATE ON studies FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'title', 'identifier', 'description', 'investigation_title');
+CREATE TRIGGER studies_tsvupdate BEFORE INSERT OR UPDATE ON studies FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'title', 'identifier', 'description');
 
 
 --
 -- Name: taxons_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
 --
 
-CREATE TRIGGER taxons_tsvupdate BEFORE INSERT OR UPDATE ON taxons FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'ncbi_id', 'scientific_name', 'common_name');
+CREATE TRIGGER taxons_tsvupdate BEFORE INSERT OR UPDATE ON taxons FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'scientific_name', 'common_name');
 
 
 --
@@ -1988,3 +2039,15 @@ INSERT INTO schema_migrations (version) VALUES ('20140415161039');
 INSERT INTO schema_migrations (version) VALUES ('20140415164126');
 
 INSERT INTO schema_migrations (version) VALUES ('20140415181154');
+
+INSERT INTO schema_migrations (version) VALUES ('20140429152125');
+
+INSERT INTO schema_migrations (version) VALUES ('20140429152415');
+
+INSERT INTO schema_migrations (version) VALUES ('20140429200120');
+
+INSERT INTO schema_migrations (version) VALUES ('20140429200437');
+
+INSERT INTO schema_migrations (version) VALUES ('20140501145227');
+
+INSERT INTO schema_migrations (version) VALUES ('20140501151246');

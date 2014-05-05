@@ -44,16 +44,17 @@
 / %div{:class=>"document"}
 / 	=render partial: 'edit'
 
-
 %br
-%h5 Audit Trail (History)
--@shipment.versions.each do |version|
-	==Event: #{version.event}
-	%br
-	==User: #{User.find_by_id(version.whodunnit).name if version.whodunnit}
-	%br
-	==Date: #{version.created_at}
-	%br
-	==Fields: #{version.object}
-	%br
-	%br
+
+-if @shipment.versions.count > 0
+	%h5 Audit Trail (History)
+	-@shipment.versions.each do |version|
+		==Event: #{version.event}
+		%br
+		==User: #{User.find_by_id(version.whodunnit).name if version.whodunnit}
+		%br
+		==Date: #{version.created_at}
+		%br
+		==Fields: #{version.object}
+		%br
+		%br

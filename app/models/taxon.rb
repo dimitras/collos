@@ -15,7 +15,7 @@ class Taxon < ActiveRecord::Base
 
   # Full text search of samples
   include PgSearch
-  multisearchable against: [:ncbi_id, :scientific_name, :common_name],
+  multisearchable against: [:scientific_name, :common_name],
   using: {
     tsearch: {
       dictionary: "english",
@@ -25,7 +25,7 @@ class Taxon < ActiveRecord::Base
     }
   }
 
-  pg_search_scope :search, against: [:ncbi_id, :scientific_name, :common_name],
+  pg_search_scope :search, against: [:scientific_name, :common_name],
   using: {
     tsearch: {
       dictionary: "english",
