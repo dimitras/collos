@@ -16,11 +16,11 @@
 		=link_to("Create a new address", new_address_url, :target => "_blank")
 		%br
 		%br
-		=f.input :complete
+		=f.input :complete, hint: "If you are the receiver, check as completed if you have received the shipped samples."
 	=field_set_tag "Package Information" do
 		/=f.association :past_container
-		=f.association :past_container, collection: Container.shipable.order('containers.container_type_id, name').all, label_method: :to_s
-		=f.association :new_container, collection: Container.shipable.order('containers.container_type_id, name').all, label_method: :to_s
+		=f.association :past_container, collection: Container.shipable.order('containers.container_type_id, name').all, label_method: :to_s, hint: "If you are the shipper, specify the container that is being shipped."
+		=f.association :new_container, collection: Container.shipable.order('containers.container_type_id, name').all, label_method: :to_s, hint: "If you are the receiver, specify the container you are storing the shipped samples."
 	%fieldset
 		=f.button :submit
 		=link_to 'Cancel', @shipment, class: 'btn btn-warning'
