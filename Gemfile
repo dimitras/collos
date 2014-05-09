@@ -64,7 +64,7 @@ gem 'enumify'
 gem 'cancan'
 
 # Audit trails
-gem 'paper_trail', '~> 2' # for audit trails
+gem 'paper_trail', '~> 2'
 
 #barcodes
 gem 'zint'

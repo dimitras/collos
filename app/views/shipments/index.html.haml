@@ -1,5 +1,13 @@
 %h3 Shipments
 
+-if params[:show_all]
+    =link_to("Show all shipments", shipments_url())
+-else
+    =link_to('Show pending shipments', shipments_url(params: {show_all: false}))
+
+%br
+%br
+
 %table.table.table-striped.table-condensed.table-bordered
     %thead
         %tr
@@ -17,7 +25,7 @@
                 %td=link_to(shipment.tracking_number, shipment)
                 %td=shipment.shipper.name
                 %td=shipment.receiver.name
-                %td=shipment.ship_date
+                %td=shipment.created_at#ship_date
                 /%td=shipment.recieve_date
                 %td=shipment.past_container
                 %td=shipment.complete? ? "yes" : "no"

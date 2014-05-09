@@ -6,6 +6,12 @@ class ShipmentsController < ApplicationController
         if params.has_key? :open
            @shipments = @shipments.where("ship_date <= ? and recieve_date is NULL",  Time.now())
         end
+
+        unless params[:show_all]
+            @shipments
+        else
+            @shipments = @shipments.where(complete: false)
+        end
     end
     def show
         # @shipment.containers
