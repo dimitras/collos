@@ -2,6 +2,18 @@
     =@ontology_term.name
     -if @ontology_term.obsolete?
         %span.text-error(style='font-size: smaller;') * obsolete term *
+
+#buttons
+    - if can? :edit , @ontology_term
+        =link_to "Edit ontology term", edit_ontology_term_path(@ontology_term), method: 'get', class: 'btn btn-success'
+    - if can? :destroy , @ontology_term
+        =link_to "Delete ontology term", ontology_term_path(@ontology_term), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
+    =link_to "See all ontology terms", ontology_terms_path, method: 'get', class: 'btn'
+    =link_to "Create new ontology term", new_ontology_term_path, class: 'btn btn-primary'
+
+%br
+%br
+
 %table.table.table-bordered
     %tr
         %th.span3 Term Name
@@ -27,9 +39,3 @@
                     =child.name
                     %br
 
-
-- if can? :edit , @ontology_term
-    =button_to "Edit", edit_ontology_term_path(@ontology_term), method: 'get', class: 'btn btn-success'
-- if can? :destroy , @ontology_term
-    =button_to "Delete", ontology_term_path(@ontology_term), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
-=link_to "See all ontology terms", ontology_terms_path, method: 'get', class: 'btn'
