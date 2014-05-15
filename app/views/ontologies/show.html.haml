@@ -1,5 +1,15 @@
 %h3= @ontology.name
 
+#buttons
+    - if can? :edit , @ontology
+        =link_to "Edit ontology", edit_ontology_path(@ontology), method: 'get', class: 'btn btn-success'
+    - if can? :destroy , @ontology
+        =link_to "Delete ontology", ontology_path(@ontology), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
+    =link_to "See all ontologies", ontologies_path, method: 'get', class: 'btn'
+
+%br 
+%br
+
 %table.table.table-bordered
     %tr
         %th.span3 Name
@@ -14,7 +24,4 @@
         %th Description
         %td=@ontology.description
 
-- if can? :edit , @ontology
-    =button_to "Edit Ontology", edit_ontology_path(@ontology), method: 'get', class: 'btn btn-success'
-- if can? :destroy , @ontology
-    =button_to "Delete Ontology", ontology_path(@ontology), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
+
