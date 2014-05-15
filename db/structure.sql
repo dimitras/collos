@@ -783,7 +783,10 @@ CREATE TABLE samples (
     ancestry_depth integer DEFAULT 0,
     sex_id integer,
     material_type_id integer,
-    external_identifier character varying(255)
+    external_identifier character varying(255),
+    age integer,
+    time_point character varying(255),
+    age_id integer
 );
 
 
@@ -2051,3 +2054,7 @@ INSERT INTO schema_migrations (version) VALUES ('20140429200437');
 INSERT INTO schema_migrations (version) VALUES ('20140501145227');
 
 INSERT INTO schema_migrations (version) VALUES ('20140501151246');
+
+INSERT INTO schema_migrations (version) VALUES ('20140515192917');
+
+INSERT INTO schema_migrations (version) VALUES ('20140515201348');

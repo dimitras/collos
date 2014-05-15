@@ -33,7 +33,10 @@ class Sample < ActiveRecord::Base
     :notes, :retired, :tags, :sex, :sex_id, :source_name,
     :ancestry, :parent_id, :parent,
     :material_type_ids, :material_type_id,
-    :study_titles, :study_ids, :study_id
+    :study_titles, :study_ids, :study_id, 
+    :age_id, :age, :time_point
+
+  validates :age, :inclusion => 0..1000
 
   # Needed to parse out comma delimited tags from forms into a strict Array
   # def tags=(tgs)
@@ -62,6 +65,7 @@ class Sample < ActiveRecord::Base
   has_and_belongs_to_many :material_types, :order => "LOWER(name)"
   belongs_to :taxon
   belongs_to :sex, class_name: "OntologyTerm", foreign_key: "sex_id"
+  belongs_to :timeunit, class_name: "OntologyTerm", foreign_key: "age_id"
   has_and_belongs_to_many :studies, :order => "LOWER(title)"
   # has_many :container_types, :through => :container
 
@@ -138,9 +142,16 @@ class Sample < ActiveRecord::Base
     ).first.children()
   end
 
+  def self.time_type_terms
+    OntologyTerm.where(
+      name: "time unit",
+      accession: "UO:0000003"
+    ).first.children()
+  end
+
   # Full text search of samples
   include PgSearch
-  multisearchable against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier],
+  multisearchable against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier, :age, :time_point, :sex, :timeunit],
     using: {
       tsearch: {
         dictionary: "english",
@@ -150,7 +161,7 @@ class Sample < ActiveRecord::Base
       }
     }
 
-  pg_search_scope :search, against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier],
+  pg_search_scope :search, against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier, :age, :time_point, :sex, :timeunit],
     using: {
       tsearch: {
         dictionary: "english",

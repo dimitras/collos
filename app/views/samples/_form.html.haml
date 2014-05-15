@@ -15,6 +15,9 @@
         =f.association :material_types, :multiple => true, hint: link_to("Create a new material type", new_material_type_url, :target => "_blank")
         =f.association :studies, :multiple => true, hint: link_to("Create a new study", new_study_url, :target => "_blank")
         =f.association :sex, collection: Sample.where(retired: false).gender_type_terms.order('name'), hint: link_to("Create a new biological sex/mating type", new_ontology_term_url, :target => "_blank")
+        =f.input :age, hint: "Enter the age at collection time"
+        =f.association :timeunit, collection: Sample.where(retired: false).time_type_terms.order('name'), hint: link_to("Create a new time unit type", new_ontology_term_url, :target => "_blank"), :label => "Age time unit"
+        =f.input :time_point, hint: "Enter the collection time of the sample"
         =f.label :parent
         =f.collection_select :parent_id, Sample.all, :id, :name, :include_blank => true
         %span.hint If this is a child (aliquot, extract, split) of another sample, then you can define here the parent sample

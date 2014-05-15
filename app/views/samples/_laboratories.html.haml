@@ -1,0 +1,17 @@
+:javascript
+    $(function() {
+    $("#sample_container_id").change(function() {
+    var laboratory = $('select#sample_container_id :selected').val();
+    if(laboratory == "") laboratory="0";
+    jQuery.get('/samples/update_freezer_select/' + laboratory, function(data){
+        $("#addressFreezers").html(data);
+    })
+    return false;
+    });
+
+=simple_form_for @sample, html: {class: 'form-horizontal'} do |f|
+    -if !laboratories.blank?
+        =f.input :container_id, :collection=>laboratories.collect{ |s| [s.name,s.id]}
+    -else
+        =f.input :container_id, :collection=>[]  
+

@@ -41,6 +41,15 @@
             %tr
                 %th Sex
                 %td=@sample.sex.try(:name)
+        -if @sample.age
+            %tr
+                %th Age (at collection time)
+                /%td=@sample.age
+                %td==#{@sample.try(:age)} #{@sample.timeunit.try(:name)}
+        -if @sample.time_point
+            %tr
+                %th Collection time point
+                %td=@sample.try(:time_point)
         -if @sample.material_types.count>0
             %tr
                 %th Material types
