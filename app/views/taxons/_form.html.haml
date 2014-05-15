@@ -1,5 +1,5 @@
 =simple_form_for @taxon, :html => {:class => 'form-horizontal' } do |f|
-    = f.input :ncbi_id
+    = f.input :ncbi_id, :hint => link_to("Find the NCBI id ", "http://www.ontobee.org/browser/index.php?o=NCBITaxon", :target => "_blank") 
     = f.input :scientific_name
     = f.input :common_name
     = f.button :submit
