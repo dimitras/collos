@@ -29,34 +29,70 @@
             %tr
                 %th External identifier
                 %td=@sample.external_identifier
-        -if @sample.scientific_name
-            %tr
-                %th Species
-                %td=link_to @sample.scientific_name, url_for(@sample.taxon)
         -if @sample.source_name
             %tr
                 %th Subject (source)
                 %td=@sample.try(:source_name)
+        -if @sample.scientific_name
+            %tr
+                %th Species
+                %td=link_to @sample.scientific_name, url_for(@sample.taxon)
+        -if @sample.strain
+            %tr
+                %th Strain
+                %td=@sample.strain.try(:name)
+        -if @sample.genotype
+            %tr
+                %th Genotype
+                %td=@sample.try(:genotype)
         -if @sample.sex.try(:name)
             %tr
                 %th Sex
                 %td=@sample.sex.try(:name)
-        -if @sample.age
-            %tr
-                %th Age (at collection time)
-                /%td=@sample.age
-                %td==#{@sample.try(:age)} #{@sample.timeunit.try(:name)}
         -if @sample.time_point
             %tr
                 %th Collection time point
-                %td=@sample.try(:time_point)
-        -if @sample.material_types.count>0
+                %td=@sample.try(:time_point) 
+        -if @sample.age
             %tr
-                %th Material types
-                %td
-                    -@sample.material_types.each do |type|
-                        =link_to type.try(:name), url_for(type)
-                        %br
+                %th Age (at collection time)
+                %td==#{@sample.try(:age)} #{@sample.timeunit.try(:name)}     
+        -if @sample.treatments
+            %tr
+                %th Treatments
+                %td=@sample.try(:treatments) 
+        -if @sample.replicate
+            %tr
+                %th Replicate
+                %td=@sample.try(:replicate)
+        -if @sample.tissue_type.try(:name)
+            %tr
+                %th Tissue type
+                %td=@sample.tissue_type.try(:name)
+        -if @sample.material_type.try(:name)
+            %tr
+                %th Material type
+                %td=@sample.material_type.try(:name)
+        -if @sample.primary_cell.try(:name)
+            %tr
+                %th Primary cell
+                %td=@sample.primary_cell.try(:name)
+        / -if @sample.material_types.count>0
+        /     %tr
+        /         %th Material types
+        /         %td
+        /             -@sample.material_types.each do |type|
+        /                 =link_to type.try(:name), url_for(type)
+        /                 %br
+        
+        /TODO
+        / -if @sample.external_links.count>0
+        /     %tr
+        /         %th External links
+        /         %td
+        /             -@sample.external_links.each do |elink|
+        /                 =link_to elink.try(:name), url_for(elink)
+        /                 %br
         -if !@sample.tags.empty?
             %tr
                 %th Tags 

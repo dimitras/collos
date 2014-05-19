@@ -20,7 +20,7 @@
                 %th.span2 Taxon
                 /%th.span1 Container
                 %th.span2 Subject
-                %th.span2 Material type
+                /%th.span2 Material type
                 /%th.span2 Study
                 /%th.span1 Retired?
                 %th.span3 &nbsp;
@@ -37,10 +37,11 @@
                     /    -else
                     /        %i None
                     %td=sample.source_name
-                    %td
-                        -sample.material_types.each do |type|
-                            =type.name
-                            %br
+                    / TODO
+                    / %td
+                    /     -sample.material_types.each do |type|
+                    /         =type.name
+                    /         %br
                     /%td=link_to(sample.study.try(:title),sample.study) if sample.study
                     /%td= sample.retired? ? "yes" : "no"
                     %td

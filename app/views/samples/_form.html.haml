@@ -9,20 +9,27 @@
         - else
             =f.input :barcode, disabled: true, hint: "Barcodes are automatically generated"
         =f.input :external_identifier, hint: "Identifiers assigned outside of CollOS"
-        =f.association :taxon, label_method: :scientific_name, hint: link_to("Create a new taxon", new_taxon_url, :target => "_blank")
         =f.input :source_name, :label => "Subject (source)", hint: "eg. mouse123, mlims_id, or study_id_&_subject_id for clinical studies"
+        =f.association :taxon, label_method: :scientific_name, hint: link_to("Create a new taxon", new_taxon_url, :target => "_blank")
         /TODO
-        =f.association :material_types, :multiple => true, hint: link_to("Create a new material type", new_material_type_url, :target => "_blank")
-        =f.association :studies, :multiple => true, hint: link_to("Create a new study", new_study_url, :target => "_blank")
+        /=f.association :material_types, :multiple => true, hint: link_to("Create a new material type", new_material_type_url, :target => "_blank")
         =f.association :sex, collection: Sample.where(retired: false).gender_type_terms.order('name'), hint: link_to("Create a new biological sex/mating type", new_ontology_term_url, :target => "_blank")
-        =f.input :age, hint: "Enter the age at collection time"
+        =f.input :genotype, hint: "Specify the genetic alterations using the official gene symbol, eg. Ptgs1 knock-out"
+        =f.association :strain, collection: Sample.where(retired: false).strain_type_terms.order('name'), hint: link_to("Add a new strain", new_ontology_term_url, :target => "_blank")
+        =f.input :treatments, hint: "Specify treatments the samples received"
+        =f.input :replicate, hint: "Specify replicate, eg. brep1 for biological replicate 1"
         =f.association :timeunit, collection: Sample.where(retired: false).time_type_terms.order('name'), hint: link_to("Create a new time unit type", new_ontology_term_url, :target => "_blank"), :label => "Age time unit"
+        =f.input :age, hint: "Enter the age at collection time"
         =f.input :time_point, hint: "Enter the collection time of the sample"
+        =f.association :tissue_type, collection: Sample.where(retired: false).tissue_type_terms.order('name'), hint: link_to("Add a new tissue type", new_ontology_term_url, :target => "_blank")
+        =f.association :material_type, collection: Sample.where(retired: false).material_type_terms.order('name'), hint: link_to("Add a new material type", new_ontology_term_url, :target => "_blank")
+        =f.association :primary_cell, collection: Sample.where(retired: false).primary_cell_type_terms.order('name'), hint: link_to("Add a new primary cell type", new_ontology_term_url, :target => "_blank")
         =f.label :parent
         =f.collection_select :parent_id, Sample.all, :id, :name, :include_blank => true
         %span.hint If this is a child (aliquot, extract, split) of another sample, then you can define here the parent sample
         %br
         %br
+        =f.association :studies, :multiple => true, hint: link_to("Create a new study", new_study_url, :target => "_blank")
         =f.input :retired, hint: "Enable if the sample is to be retired, eg. the sample is used or split"
 
     =field_set_tag "Container for sample" do
@@ -54,7 +61,8 @@
         =f.input :container_y, :label => "y-coordinate", hint: 'eg. for 96 well plate choose between A-H on the y-axis'
 
     =field_set_tag "Other Annotations" do
-
+        /TODO
+        /=f.input :external_links, :label => "External link" #,hint: link_to("Add an external link", new_external_link_url, :target => "_blank")
         =f.input :tags, hint: 'Press "Tab" key to enter a tag. Delete by clicking each tags "x"'
         =f.input :notes
     %fieldset
