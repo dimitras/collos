@@ -23,6 +23,9 @@
 #  sex_id                  :integer
 #  material_type_id        :integer
 #  external_identifier     :string(255)
+#  age                     :integer
+#  time_point              :string(255)
+#  age_id                  :integer
 #
 
 require 'test_helper'

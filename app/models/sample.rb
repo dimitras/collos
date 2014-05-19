@@ -23,6 +23,9 @@
 #  sex_id                  :integer
 #  material_type_id        :integer
 #  external_identifier     :string(255)
+#  age                     :integer
+#  time_point              :string(255)
+#  age_id                  :integer
 #
 
 class Sample < ActiveRecord::Base
@@ -30,11 +33,13 @@ class Sample < ActiveRecord::Base
     :taxon, :taxon_id, :scientific_name, :common_name,
     :container, :container_id, :container_x, :container_y,
     :protocol_application, :protocol_application_id,
-    :notes, :retired, :tags, :sex, :sex_id, :source_name,
+    :notes, :retired, :tags,
     :ancestry, :parent_id, :parent,
-    :material_type_ids, :material_type_id,
-    :study_titles, :study_ids, :study_id, 
-    :age_id, :age, :time_point
+    # :material_type_ids, :material_type_id,
+    :study_titles, :study_ids, :study_id,
+    :time_point, :genotype, :treatments, :replicate, :source_name,
+    :material_type, :material_type_id, :tissue_type, :tissue_type_id, :primary_cell, :primary_cell_id,
+    :strain, :strain_id, :age_id, :age, :sex, :sex_id
 
   validates :age, :inclusion => 0..1000
 
@@ -61,12 +66,17 @@ class Sample < ActiveRecord::Base
   # validates :name, presence: true
   has_one :barcode, as: :barcodeable
   belongs_to :container
-  # belongs_to_many :protocol_applications
-  has_and_belongs_to_many :material_types, :order => "LOWER(name)"
   belongs_to :taxon
   belongs_to :sex, class_name: "OntologyTerm", foreign_key: "sex_id"
+  belongs_to :strain, class_name: "OntologyTerm", foreign_key: "strain_id"
+  belongs_to :material_type, class_name: "OntologyTerm", foreign_key: "material_type_id"
+  belongs_to :tissue_type, class_name: "OntologyTerm", foreign_key: "tissue_type_id"
+  belongs_to :primary_cell, class_name: "OntologyTerm", foreign_key: "primary_cell_id"
   belongs_to :timeunit, class_name: "OntologyTerm", foreign_key: "age_id"
   has_and_belongs_to_many :studies, :order => "LOWER(title)"
+  has_many :external_links
+  # belongs_to_many :protocol_applications
+  # has_and_belongs_to_many :material_types, :order => "LOWER(name)"
   # has_many :container_types, :through => :container
 
   # parent-child-sibling relationships
@@ -146,6 +156,34 @@ class Sample < ActiveRecord::Base
     OntologyTerm.where(
       name: "time unit",
       accession: "UO:0000003"
+    ).first.children()
+  end
+
+  def self.strain_type_terms
+    OntologyTerm.where(
+      name: "strain",
+      accession: "EFO_000"
+    ).first.children()
+  end
+
+  def self.material_type_terms
+    OntologyTerm.where(
+      name: "material type",
+      accession: "BTO:000"
+    ).first.children()
+  end
+
+  def self.tissue_type_terms
+    OntologyTerm.where(
+      name: "tissue type",
+      accession: "BTO:0000000"
+    ).first.children()
+  end
+
+  def self.primary_cell_type_terms
+    OntologyTerm.where(
+      name: "primary cell / cell line / tissue type",
+      accession: "BTO"
     ).first.children()
   end
 

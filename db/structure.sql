@@ -244,6 +244,39 @@ CREATE TABLE containers_shipments (
 
 
 --
+-- Name: external_links; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE external_links (
+    id integer NOT NULL,
+    name character varying(255),
+    url character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    sample_id integer
+);
+
+
+--
+-- Name: external_links_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE external_links_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: external_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE external_links_id_seq OWNED BY external_links.id;
+
+
+--
 -- Name: investigations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -786,7 +819,13 @@ CREATE TABLE samples (
     external_identifier character varying(255),
     age integer,
     time_point character varying(255),
-    age_id integer
+    age_id integer,
+    strain_id integer,
+    tissue_type_id integer,
+    primary_cell_id integer,
+    treatments character varying(255),
+    genotype character varying(255),
+    replicate character varying(255)
 );
 
 
@@ -1046,6 +1085,13 @@ ALTER TABLE ONLY containers ALTER COLUMN id SET DEFAULT nextval('containers_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY external_links ALTER COLUMN id SET DEFAULT nextval('external_links_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY investigations ALTER COLUMN id SET DEFAULT nextval('investigations_id_seq'::regclass);
 
 
@@ -1228,6 +1274,14 @@ ALTER TABLE ONLY containers
 
 ALTER TABLE ONLY investigations
     ADD CONSTRAINT experiments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: external_links_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY external_links
+    ADD CONSTRAINT external_links_pkey PRIMARY KEY (id);
 
 
 --
@@ -2058,3 +2112,9 @@ INSERT INTO schema_migrations (version) VALUES ('20140501151246');
 INSERT INTO schema_migrations (version) VALUES ('20140515192917');
 
 INSERT INTO schema_migrations (version) VALUES ('20140515201348');
+
+INSERT INTO schema_migrations (version) VALUES ('20140516154718');
+
+INSERT INTO schema_migrations (version) VALUES ('20140516174912');
+
+INSERT INTO schema_migrations (version) VALUES ('20140517173046');
