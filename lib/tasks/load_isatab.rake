@@ -36,8 +36,8 @@ namespace :db do
 		CSV.foreach(studies_file, {:headers=>:first_row}) do |row|
 			study_identifier = row[0]
 			study_title = row[1]
-			study_description = row[3]
-			investigation_identifier = row[5]
+			study_description = row[2]
+			investigation_identifier = row[3]
 			puts "#STUDIES"
 			puts "#{study_title} | #{study_identifier} | #{study_description} | #{investigation_identifier}"
 			puts
@@ -50,15 +50,15 @@ namespace :db do
 		contacts_file = "#{isatab_directory}contacts.csv"
 		CSV.foreach(contacts_file, {:headers=>:first_row}) do |row|
 			identifier = row[0]
-			laboratory = row[1]
+			firstname = row[1]
 			lastname = row[2]
-			role = row[4]
-			phone = row[5]
-			institution = row[6]
-			firstname = row[7]
-			(line_1, line_2, line_3, city, province, state, zip, country) = row[9].split(",")
-			email = row[10]
-			study_identifier = row[11]
+			role = row[3]
+			laboratory = row[4]
+			institution = row[5]
+			(line_1, line_2, line_3, city, province, state, zip, country) = row[6].split(",")
+			email = row[7]
+			phone = row[8]
+			study_identifier = row[9]
 
 			puts "#INVESTIGATORS"
 			puts "#{identifier} | #{firstname} | #{lastname} | #{role} | #{phone} | #{email} | #{institution} | #{study_identifier}"
@@ -98,33 +98,43 @@ namespace :db do
 		samples_file = "#{isatab_directory}samples.csv"
 		CSV.foreach(samples_file, {:headers=>:first_row}) do |row|
 			identifier = row[0]
-			sample_name = row[1]
-			parent = row[2]
-			source_name = row[3]
-			material_types = row[4].split('|')
-			organism = row[5]
-			protocol_refs = row[6].split('|')
-			freezer_type = row[7]
-			freezer_label = row[8]
-			if !row[9].nil?
-				(box_type, box_type_dimensions) = row[9].split('|')
-				(box_container_x, box_container_y) = box_type_dimensions.split('x')
-			end
-			box_label = row[10]
-			box_external_identifier = row[11]
-			if !row[12].nil?
-				(container_tube_type, container_tube_dimensions) = row[12].split('|')
+			sample_name = row[0]
+			parent = row[1]
+			source_name = row[2]
+			organism = row[3]
+			strain = row[4]
+			genotype = row[5]
+			sex = row[6]
+			collection_time = row[7]
+			treatments = row[8]
+			replicate = row[9]
+			tissue_type = row[10]
+			primary_cell = row[11]
+			material_type = row[12]
+			age = row[13]
+			age_unit = row[14]
+			# protocol_refs = row[15].split('|')
+			sample_external_identifier = row[16]
+			if !row[17].nil?
+				(container_tube_type, container_tube_dimensions) = row[17].split('|')
 				(tube_container_x, tube_container_y) = container_tube_dimensions.split('x') if container_tube_dimensions
 			end
-			container_external_identifier = row[13]
+			box_external_identifier = row[18]
+			box_label = row[19]
+			if !row[20].nil?
+				(box_type, box_type_dimensions) = row[20].split('|')
+				(box_container_x, box_container_y) = box_type_dimensions.split('x')
+			end
+			freezer_label = row[21]
+			freezer_type = row[22]
 			shipped = false
-			if row[14] == "yes"
+			if row[23] == "yes"
 				shipped = true
 			end
-			receiver = row[15]
-			collOS = row[16]
-			sex = row[17]
-			study_identifier = row[18]
+			shipper = row[24]
+			receiver = row[25]
+			collOS = row[26]
+			study_identifier = row[27]
 			
 			# collOS says whether a sample is supposed to be entered in the db or not
 			if collOS == "yes"
@@ -135,11 +145,12 @@ namespace :db do
 					# taxon = Taxon.create(:scientific_name => organism)
 				end
 				
+				age_unit_ontology_term = OntologyTerm.find_by_name(age_unit)
 				# if the containers are not defined, the sample has been splitted or retired, either way it is labeled as retired and the containers cannot get created
 				if freezer_type.nil? && box_type.nil? && container_tube_type.nil? && parent.nil?
 					puts "HERE ::: #{identifier} | #{sample_name} | #{parent} | #{source_name} | #{material_types.join("|")} | #{organism} | #{protocol_refs.join("|")} | #{freezer_type} | #{freezer_label} | #{box_type} | #{box_type_dimensions} | #{box_label} | #{container_tube_type} | #{container_tube_dimensions} | #{shipped} | #{receiver} | #{collOS} | #{study_identifier}"
 					puts
-					# sample = Sample.create(:name => sample_name, :barcode => Barcode.generate() , :taxon_id => taxon.id, :study_id => studies[study_identifier].id, :retired => true) 
+					# sample = Sample.create(:name => sample_name, :barcode => Barcode.generate(), :taxon_id => taxon.id, :study_id => studies[study_identifier].id, :retired => true, :age => age, :age_id => age_unit_ontology_term.id, :strain => strain, :genotype => genotype, :time_point => collection_time, :treatments => treatments, :replicate => replicate, :tissue_type => tissue_type, :primary_cell => primary_cell, :material_type => material_type)
 					next #TODO: to materials omos? 
 				end
 
@@ -183,21 +194,33 @@ namespace :db do
 				puts "#SAMPLES"
 				puts "#{identifier} | #{sample_name} | #{parent} | #{source_name} | #{material_types.join("|")} | #{organism} | #{protocol_refs.join("|")} | #{freezer_type} | #{freezer_label} | #{box_type} | #{box_container_x} | #{box_container_y} | #{box_label} | #{container_tube_type} | #{tube_container_x} | #{tube_container_y} | #{shipped} | #{receiver} | #{collOS} | #{study_identifier} | #{sex}"
 				puts
+
 				sex_ontology_term = OntologyTerm.find_by_name(sex)
-				# sample = Sample.create(:name => sample_name, :barcode => Barcode.generate() , :taxon_id => taxon.id,  :container_id => container_tube.id, :study_id => studies[study_identifier].id, :parent => Sample.find_by_name(parent), :sex => sex_ontology_term, :source_name => source_name, :container_x => tube_container_x, :container_y => tube_container_y, :external_identifier => sample_external_identifier)
+				# sample = Sample.create(:name => sample_name, :barcode => Barcode.generate() , :taxon_id => taxon.id,  :container_id => container_tube.id, :study_id => studies[study_identifier].id, :parent => Sample.find_by_name(parent), :sex_id => sex_ontology_term.id, :source_name => source_name, :container_x => tube_container_x, :container_y => tube_container_y, :external_identifier => sample_external_identifier, :age => age, :age_id => age_unit_ontology_term.id, :strain => strain, :genotype => genotype, :time_point => collection_time, :treatments => treatments, :replicate => replicate, :tissue_type => tissue_type, :primary_cell => primary_cell, :material_type => material_type)
 
 				# sample_study = SamplesStudies.create(:sample_id => sample.id, :study_id => studies[study_identifier].id)
+				
 
-				material_types.each do |material_type_name|
-					material_type = MaterialType.find_by_name(material_type_name)
-					if !material_type
-						puts "#MATERIAL TYPES"
-						puts material_type_name
-						puts
-						# material_type = MaterialType.create(:name => material_type_name)
-					end
-					# sample_material_type = MaterialTypesSamples.create(:sample_id => sample.id, :material_type_id =>material_type.id)
-				end
+				### TODO first block is adjusted for one material type, second block is for multiple material types, material types table is not needed anymore.
+				
+				# if !MaterialType.find_by_name(material_type)
+				# 	puts "#MATERIAL TYPE"
+				# 	puts material_type
+				# 	puts
+				# 	# material_type = MaterialType.create(:name => material_type)
+				# end
+				# # sample_material_type = MaterialTypesSamples.create(:sample_id => sample.id, :material_type_id =>material_type.id)
+
+				# material_types.each do |material_type_name|
+				# 	material_type = MaterialType.find_by_name(material_type_name)
+				# 	if !material_type
+				# 		puts "#MATERIAL TYPES"
+				# 		puts material_type_name
+				# 		puts
+				# 		# material_type = MaterialType.create(:name => material_type_name)
+				# 	end
+				# 	# sample_material_type = MaterialTypesSamples.create(:sample_id => sample.id, :material_type_id =>material_type.id)
+				# end
 
 				# TODO: we have to know which level of container has been shipped and the shipping info >> we can do it manually for now
 				# if shipped == true
