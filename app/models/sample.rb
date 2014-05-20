@@ -36,10 +36,10 @@ class Sample < ActiveRecord::Base
     :notes, :retired, :tags,
     :ancestry, :parent_id, :parent,
     # :material_type_ids, :material_type_id,
-    :study_titles, :study_ids, :study_id,
+    :study_titles, :studies, :study_id,
     :time_point, :genotype, :treatments, :replicate, :source_name,
     :material_type, :material_type_id, :tissue_type, :tissue_type_id, :primary_cell, :primary_cell_id,
-    :strain, :strain_id, :age_id, :age, :sex, :sex_id
+    :strain, :strain_id, :timeunit, :age, :sex, :sex_id
 
   validates :age, :inclusion => 0..1000
 

@@ -12,26 +12,27 @@
             -for result in @results
                 - o = result.searchable
                 %tr
+                    %td=result.inspect
                     %td= result.searchable_type
 
-                    -if o.has_attribute?("barcode_string")
-                        %td= o.barcode
-                    -elsif o.has_attribute?("barcode")
-                        %td= o.barcode
-                    -elsif !o.has_attribute?("barcode_string") && !o.has_attribute?("barcode")
-                        %td NA
+                    / -if o.has_attribute?("barcode_string")
+                    /     %td= o.barcode
+                    / -elsif o.has_attribute?("barcode")
+                    /     %td= o.barcode
+                    / -elsif !o.has_attribute?("barcode_string") && !o.has_attribute?("barcode")
+                    /     %td NA
 
-                    -if o.has_attribute?("name")
-                        %td= link_to(o.name, o)
-                    -elsif o.has_attribute?("title")
-                        %td= link_to(o.title, o)
-                    -elsif !o.has_attribute?("name") && !o.has_attribute?("title")
-                        %td NA
+                    / -if o.has_attribute?("name")
+                    /     %td= link_to(o.name, o)
+                    / -elsif o.has_attribute?("title")
+                    /     %td= link_to(o.title, o)
+                    / -elsif !o.has_attribute?("name") && !o.has_attribute?("title")
+                    /     %td NA
 
-                    -if o.has_attribute?("retired")
-                        %td= o.retired? ? "yes" : "no"
-                    -else
-                        %td NA
+                    / -if o.has_attribute?("retired")
+                    /     %td= o.retired? ? "yes" : "no"
+                    / -else
+                    /     %td NA
     =will_paginate(@results, params: params, method: 'post')
     =link_to "Download CSV", search_path(results: @results, format: "csv"), class:'btn'
     / =link_to "Download CSV", search_path(params.merge(format: 'csv')), class:'btn'

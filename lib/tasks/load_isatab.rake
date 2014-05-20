@@ -17,7 +17,7 @@ namespace :db do
 	# USAGE: rake db:load_isatab --trace
 	desc "import isatab file data"
 	task :load_isatab  => :environment do
-		isatab_directory = "workspace/data/test/"
+		isatab_directory = "workspace/data/TG_1503/"
 		investigations = {}
 		investigation_file = "#{isatab_directory}investigation.csv"
 		CSV.foreach(investigation_file, {:headers=>:first_row}) do |row|
@@ -27,8 +27,8 @@ namespace :db do
 			puts "#INVESTIGATIONS"
 			puts "#{investigation_identifier} | #{investigation_title} | #{investigation_description}"
 			puts
-			# investigation = Investigation.create(:title => investigation_title, :identifier => investigation_identifier, :description => investigation_description)
-			# investigations[investigation_identifier] = investigation
+			investigation = Investigation.create(:title => investigation_title, :identifier => investigation_identifier, :description => investigation_description)
+			investigations[investigation_identifier] = investigation
 		end
 		
 		studies = {}
@@ -41,8 +41,13 @@ namespace :db do
 			puts "#STUDIES"
 			puts "#{study_title} | #{study_identifier} | #{study_description} | #{investigation_identifier}"
 			puts
-			# study = Study.create(:title => study_title, :identifier => study_identifier, :description => study_description, :investigation_id => investigations[investigation_identifier].id)
-			# studies[study_identifier] = study
+			study = Study.create(
+				:title         => study_title,
+				:identifier    => study_identifier,
+				:description   => study_description,
+				:investigation => investigations[investigation_identifier]
+			)
+			studies[study_identifier] = study
 		end
 		
 		# TODO: connect to user_id
@@ -55,7 +60,7 @@ namespace :db do
 			role = row[3]
 			laboratory = row[4]
 			institution = row[5]
-			(line_1, line_2, line_3, city, province, state, zip, country) = row[6].split(",")
+			(line_1, line_2, line_3, city, province, state, zip, country) = row[6].split("|")
 			email = row[7]
 			phone = row[8]
 			study_identifier = row[9]
@@ -63,9 +68,19 @@ namespace :db do
 			puts "#INVESTIGATORS"
 			puts "#{identifier} | #{firstname} | #{lastname} | #{role} | #{phone} | #{email} | #{institution} | #{study_identifier}"
 			puts
-			# person = Person.create(:identifier => identifier, :firstname => firstname, :lastname => lastname, :type => role, :email => email, :phone => phone, :laboratory => laboratory, :institution => institution, :study_id => studies[study_identifier].id)
-			# person_study = PeopleStudies.create(:person_id => person.id, :study_id =>studies[study_identifier].id)
-			# investigation_person = InvestigationsPeople.create(:person_id => person.id, :investigation_id => investigations[investigation_identifier].id)
+			# TODO: :type => role, > rename type
+			person = Person.create(
+				:identifier  => identifier,
+				:firstname   => firstname,
+				:lastname    => lastname,
+				:email       => email,
+				:phone       => phone,
+				:laboratory  => laboratory,
+				:institution => institution
+			)
+			person.studies << studies[study_identifier]
+# 			person_study = PeopleStudies.create(:person_id => person.id, :study_id =>studies[study_identifier].id)
+# 			investigation_person = InvestigationsPeople.create(:person_id => person.id, :investigation_id => investigations[investigation_identifier].id)
 
 			container_institution = Container.find_by_name(institution)
 			if !container_institution
@@ -73,7 +88,7 @@ namespace :db do
 				puts "#UNIVERSITY"
 				puts "#{institution} | #{container_type}"
 				puts
-				# container_institution = Container.create(:name => institution, :barcode => Barcode.generate(), :container_type => container_type, :retired => false, :shipped => false)
+				container_institution = Container.create(:name => institution, :barcode => Barcode.generate(), :container_type => container_type, :retired => false, :shipped => false)
 			end
 
 			container_laboratory = Container.find_by_name(laboratory)
@@ -82,7 +97,7 @@ namespace :db do
 				puts "#LAB"
 				puts "#{laboratory} | #{container_type}"
 				puts
-				# container_laboratory = Container.create(:name => laboratory, :barcode => Barcode.generate(), :container_type => container_type, :retired => false, :parent => container_institution, :shipped => false)
+				container_laboratory = Container.create(:name => laboratory, :barcode => Barcode.generate(), :container_type => container_type, :retired => false, :parent => container_institution, :shipped => false)
 			end
 
 			address_line1 = Address.find_by_line_1(line_1)
@@ -90,7 +105,7 @@ namespace :db do
 				puts "#ADDRESS"
 				puts "#{line_1} | #{city}"
 				puts
-				# new_address = Address.create(:city => city, :country => country, :line_1 => line_1, :line_2 => line_2, :line_3 => line_3, :province => province, :state => state, :zip => zip)
+				new_address = Address.create(:city => city, :country => country, :line_1 => line_1, :line_2 => line_2, :line_3 => line_3, :province => province, :state => state, :zip => zip)
 			end
 		end
 		
@@ -142,16 +157,34 @@ namespace :db do
 				if !taxon
 					puts "#TAXON"
 					puts "#{organism}"
-					# taxon = Taxon.create(:scientific_name => organism)
+					taxon = Taxon.create(:scientific_name => organism)
 				end
 				
-				age_unit_ontology_term = OntologyTerm.find_by_name(age_unit)
 				# if the containers are not defined, the sample has been splitted or retired, either way it is labeled as retired and the containers cannot get created
 				if freezer_type.nil? && box_type.nil? && container_tube_type.nil? && parent.nil?
-					puts "HERE ::: #{identifier} | #{sample_name} | #{parent} | #{source_name} | #{material_types.join("|")} | #{organism} | #{protocol_refs.join("|")} | #{freezer_type} | #{freezer_label} | #{box_type} | #{box_type_dimensions} | #{box_label} | #{container_tube_type} | #{container_tube_dimensions} | #{shipped} | #{receiver} | #{collOS} | #{study_identifier}"
+					puts "HERE ::: #{identifier} | #{sample_name} | #{parent} | #{source_name} | #{material_type} | #{organism} | #{freezer_type} | #{freezer_label} | #{box_type} | #{box_type_dimensions} | #{box_label} | #{container_tube_type} | #{container_tube_dimensions} | #{shipped} | #{receiver} | #{collOS} | #{study_identifier}"
 					puts
-					# sample = Sample.create(:name => sample_name, :barcode => Barcode.generate(), :taxon_id => taxon.id, :study_id => studies[study_identifier].id, :retired => true, :age => age, :age_id => age_unit_ontology_term.id, :strain => strain, :genotype => genotype, :time_point => collection_time, :treatments => treatments, :replicate => replicate, :tissue_type => tissue_type, :primary_cell => primary_cell, :material_type => material_type)
-					next #TODO: to materials omos? 
+					# TODO: retired = false!!! REVERSE!!!
+					sample = Sample.create(
+						:name          => sample_name,
+						:barcode       => Barcode.generate(),
+						:taxon         => taxon,
+						:retired       => false,
+						:age           => age,
+						:source_name   => source_name,
+						:sex           => OntologyTerm.find_by_name(sex),
+						:timeunit      => OntologyTerm.find_by_name(age_unit),
+						:strain        => OntologyTerm.find_by_name(strain),
+						:genotype      => genotype,
+						:time_point    => collection_time,
+						:treatments    => treatments,
+						:replicate     => replicate,
+						:tissue_type   => OntologyTerm.find_by_name(tissue_type),
+						:primary_cell  => OntologyTerm.find_by_name(primary_cell),
+						:material_type => OntologyTerm.find_by_name(material_type)
+					)
+					sample.studies << studies[study_identifier]
+					next
 				end
 
 				container_freezer = Container.find_by_name(freezer_label)
@@ -159,12 +192,12 @@ namespace :db do
 					container_type = ContainerType.find_by_name(freezer_type)
 					if !container_type
 						ontology_term = OntologyTerm.find_by_name("freezer")
-						# container_type = ContainerType.create(:name => freezer_type, :type => ontology_term, :can_have_children => true, :retired => false, :shipable => false)
+						container_type = ContainerType.create(:name => freezer_type, :type => ontology_term, :can_have_children => true, :retired => false, :shipable => false)
 					end
 					puts "#FREEZER"
 					puts "#{freezer_label} | #{container_type}"
 					puts
-					# container_freezer = Container.create(:name => freezer_label, :barcode => Barcode.generate(), :container_type => container_type, :retired => false, :parent => container_laboratory, :shipped => false)
+					container_freezer = Container.create(:name => freezer_label, :barcode => Barcode.generate(), :container_type => container_type, :retired => false, :parent => container_laboratory, :shipped => false)
 				end
 				
 				container_box = Container.find_by_name(box_label)
@@ -172,33 +205,53 @@ namespace :db do
 					container_type = ContainerType.find_by_name(box_type)
 					if !container_type
 						ontology_term = OntologyTerm.find_by_name("box")
-						# container_type = ContainerType.create(:name => box_type, :type => ontology_term, :can_have_children => true, :retired => false, :shipable => true, :x_dimension => box_container_x, :y_dimension => box_container_y)
+						container_type = ContainerType.create(:name => box_type, :type => ontology_term, :can_have_children => true, :retired => false, :shipable => true, :x_dimension => box_container_x, :y_dimension => box_container_y)
 					end
 					puts "#BOX"
 					puts "#{box_label} | #{container_type} | #{container_freezer}"
 					puts
-					# container_box = Container.create(:name => box_label, :barcode => Barcode.generate(), :container_type => container_type, :retired => false, :parent => container_freezer, :container_x => box_container_x, :container_y => box_container_y, :external_identifier => box_external_identifier)
+					container_box = Container.create(:name => box_label, :barcode => Barcode.generate(), :container_type => container_type, :retired => false, :parent => container_freezer, :container_x => box_container_x, :container_y => box_container_y, :external_identifier => box_external_identifier)
 				end
 				
 				container_type = ContainerType.find_by_name(container_tube_type)
 				if !container_type
 					ontology_term = OntologyTerm.find_by_name("test tube")
-					# container_type = ContainerType.create(:name => container_tube_type, :type => ontology_term, :can_have_children => false, :retired => false, :shipable => true, :x_dimension => tube_container_x, :y_dimension => tube_container_y)
+					container_type = ContainerType.create(:name => container_tube_type, :type => ontology_term, :can_have_children => false, :retired => false, :shipable => true, :x_dimension => tube_container_x, :y_dimension => tube_container_y)
 				end
 				puts "#TUBE"
 				puts "#{sample_name}_container | #{container_type} | #{container_box} | #{shipped}"
 				puts
-				# container_tube = Container.create(:name => sample_name + "_container", :barcode => Barcode.generate(), :container_type => container_type, :retired => false, :parent => container_box, :shipped => shipped, :container_x => tube_container_x, :container_y => tube_container_y)
+				container_tube = Container.create(:name => sample_name + "_container", :barcode => Barcode.generate(), :container_type => container_type, :retired => false, :parent => container_box, :shipped => shipped, :container_x => tube_container_x, :container_y => tube_container_y)
 				
 				# TODO: has many materials, protocols ids to create
 				puts "#SAMPLES"
-				puts "#{identifier} | #{sample_name} | #{parent} | #{source_name} | #{material_types.join("|")} | #{organism} | #{protocol_refs.join("|")} | #{freezer_type} | #{freezer_label} | #{box_type} | #{box_container_x} | #{box_container_y} | #{box_label} | #{container_tube_type} | #{tube_container_x} | #{tube_container_y} | #{shipped} | #{receiver} | #{collOS} | #{study_identifier} | #{sex}"
+				puts "#{identifier} | #{sample_name} | #{parent} | #{source_name} | #{material_types.join("|")} | #{organism} | #{freezer_type} | #{freezer_label} | #{box_type} | #{box_container_x} | #{box_container_y} | #{box_label} | #{container_tube_type} | #{tube_container_x} | #{tube_container_y} | #{shipped} | #{receiver} | #{collOS} | #{study_identifier} | #{sex}"
 				puts
 
-				sex_ontology_term = OntologyTerm.find_by_name(sex)
-				# sample = Sample.create(:name => sample_name, :barcode => Barcode.generate() , :taxon_id => taxon.id,  :container_id => container_tube.id, :study_id => studies[study_identifier].id, :parent => Sample.find_by_name(parent), :sex_id => sex_ontology_term.id, :source_name => source_name, :container_x => tube_container_x, :container_y => tube_container_y, :external_identifier => sample_external_identifier, :age => age, :age_id => age_unit_ontology_term.id, :strain => strain, :genotype => genotype, :time_point => collection_time, :treatments => treatments, :replicate => replicate, :tissue_type => tissue_type, :primary_cell => primary_cell, :material_type => material_type)
-
-				# sample_study = SamplesStudies.create(:sample_id => sample.id, :study_id => studies[study_identifier].id)
+				sample = Sample.create(
+					:name				 => sample_name, 
+					:barcode			 => Barcode.generate(), 
+					:taxon_id			 => taxon.id,  
+					:container_id		 => container_tube.id, 
+					:parent				 => Sample.find_by_name(parent), 
+					:sex				 => OntologyTerm.find_by_name(sex), 
+					:source_name		 => source_name, 
+					:container_x		 => tube_container_x, 
+					:container_y		 => tube_container_y, 
+					:external_identifier => sample_external_identifier, 
+					:age 				 => age, 
+					:timeunit 			 => OntologyTerm.find_by_name(age_unit), 
+					:strain				 => OntologyTerm.find_by_name(strain), 
+					:genotype 			 => genotype, 
+					:time_point			 => collection_time, 
+					:treatments			 => treatments, 
+					:replicate			 => replicate, 
+					:tissue_type  		 => OntologyTerm.find_by_name(tissue_type),
+					:primary_cell 		 => OntologyTerm.find_by_name(primary_cell),
+					:material_type		 => OntologyTerm.find_by_name(material_type)
+				)
+				sample.studies << studies[study_identifier]
+# 				sample_study = SamplesStudies.create(:sample_id => sample.id, :study_id => studies[study_identifier].id)
 				
 
 				### TODO first block is adjusted for one material type, second block is for multiple material types, material types table is not needed anymore.

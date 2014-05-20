@@ -10,12 +10,12 @@
       %tr
         %th Name
         %td=sample.name
-      %tr
-        %th.span2 Material type(s)
-        %td
-          -sample.material_types.each do |type|
-            =type.name
-            %br
+      / %tr
+      /   %th.span2 Material type(s)
+      /   %td
+      /     -sample.material_types.each do |type|
+      /       =type.name
+      /       %br
       %tr
         %th Study(ies)
         %td

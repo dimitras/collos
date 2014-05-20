@@ -92,12 +92,13 @@
         /         %td
         /             -@sample.external_links.each do |elink|
         /                 =link_to elink.try(:name), url_for(elink)
-        /                 %br
-        -if !@sample.tags.empty?
+        / 
+
+        -if !@sample.tags.nil?
             %tr
                 %th Tags 
                 %td=format_tags(@sample.tags)
-        -if !@sample.notes.empty?
+        -if !@sample.notes.nil?
             %tr
                 %th Notes
                 %td=@sample.notes

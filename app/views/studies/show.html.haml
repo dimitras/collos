@@ -10,6 +10,9 @@
 
 %table.table.table-bordered
     %tr
+        %th ID
+        %td=@study.id
+    %tr
         %th Title
         %td=@study.title
     %tr
@@ -26,7 +29,7 @@
         %td
             -if @study.samples
                 -@study.samples.each do |sample|
-                    =link_to sample.name, url_for(sample)
+                    =link_to "#{sample.barcode.barcode},#{sample.name}", url_for(sample)
                     %br
     / -if @study.people.count > 0
     /     %tr

@@ -3,6 +3,7 @@
 %table.table.table-striped.table-condensed.table-bordered
   %thead
     %tr
+      %th.span1 ID
       %th.span1 Title
       %th.span1 Identifier
       %th.span1 Investigation
@@ -10,6 +11,7 @@
   %tbody
     -@studies.each do |study|
       %tr
+        %td= study.id
         %td= link_to(study.title, study)
         %td= study.identifier
         %td
