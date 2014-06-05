@@ -825,7 +825,10 @@ CREATE TABLE samples (
     primary_cell_id integer,
     treatments character varying(255),
     genotype character varying(255),
-    replicate character varying(255)
+    replicate character varying(255),
+    protocols character varying(255),
+    race character varying(255),
+    ethnicity character varying(255)
 );
 
 
@@ -2118,3 +2121,7 @@ INSERT INTO schema_migrations (version) VALUES ('20140516154718');
 INSERT INTO schema_migrations (version) VALUES ('20140516174912');
 
 INSERT INTO schema_migrations (version) VALUES ('20140517173046');
+
+INSERT INTO schema_migrations (version) VALUES ('20140527193107');
+
+INSERT INTO schema_migrations (version) VALUES ('20140528214038');

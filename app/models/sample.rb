@@ -39,7 +39,8 @@ class Sample < ActiveRecord::Base
     :study_titles, :studies, :study_id,
     :time_point, :genotype, :treatments, :replicate, :source_name,
     :material_type, :material_type_id, :tissue_type, :tissue_type_id, :primary_cell, :primary_cell_id,
-    :strain, :strain_id, :timeunit, :age, :sex, :sex_id
+    :strain, :strain_id, :timeunit, :age, :sex, :sex_id, :race, :race_id, :ethnicity, :ethnicity_id,
+    :protocols
 
   validates :age, :inclusion => 0..1000
 
@@ -69,6 +70,8 @@ class Sample < ActiveRecord::Base
   belongs_to :taxon
   belongs_to :sex, class_name: "OntologyTerm", foreign_key: "sex_id"
   belongs_to :strain, class_name: "OntologyTerm", foreign_key: "strain_id"
+  belongs_to :race, class_name: "OntologyTerm", foreign_key: "race_id"
+  belongs_to :ethnicity, class_name: "OntologyTerm", foreign_key: "ethnicity_id"
   belongs_to :material_type, class_name: "OntologyTerm", foreign_key: "material_type_id"
   belongs_to :tissue_type, class_name: "OntologyTerm", foreign_key: "tissue_type_id"
   belongs_to :primary_cell, class_name: "OntologyTerm", foreign_key: "primary_cell_id"
@@ -166,6 +169,20 @@ class Sample < ActiveRecord::Base
     ).first.children()
   end
 
+  def self.race_type_terms
+    OntologyTerm.where(
+      name: "race",
+      accession: "OBO:race"
+    ).first.children()
+  end
+
+  def self.ethnicity_type_terms
+    OntologyTerm.where(
+      name: "ethnicity",
+      accession: "OBO:ethnicity"
+    ).first.children()
+  end
+
   def self.material_type_terms
     OntologyTerm.where(
       name: "material type",
@@ -189,7 +206,7 @@ class Sample < ActiveRecord::Base
 
   # Full text search of samples
   include PgSearch
-  multisearchable against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier, :age, :time_point, :sex, :timeunit],
+  multisearchable against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier, :age, :time_point, :sex, :timeunit, :material_type, :treatments, :tissue_type, :primary_cell, :strain, :genotype, :race, :ethnicity, :protocols],
     using: {
       tsearch: {
         dictionary: "english",
@@ -199,7 +216,7 @@ class Sample < ActiveRecord::Base
       }
     }
 
-  pg_search_scope :search, against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier, :age, :time_point, :sex, :timeunit],
+  pg_search_scope :search, against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier, :age, :time_point, :sex, :timeunit, :material_type, :treatments, :tissue_type, :primary_cell, :strain, :genotype, :race, :ethnicity, :protocols],
     using: {
       tsearch: {
         dictionary: "english",

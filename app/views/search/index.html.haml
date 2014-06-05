@@ -2,31 +2,29 @@
 -if @results.count > 0
     %h4==#{@results.count} entries found
     %table.table.table-striped.table-condensed.table-bordered
-        %thead
-            %tr
-                %th.span1 Type
-                %th.span1 Barcode
-                %th.span1 Name/Title
-                %th.span1 Retired?
+        / %thead
+        /     %tr
+        /         %th.span1 Type
+        /         %th.span1 Barcode
+        /         %th.span1 Name/Title
+        /         %th.span1 Retired?
         %tbody
             -for result in @results
                 - o = result.searchable
                 %tr
-                    %td=result.inspect
+                    %td= result.content
                     %td= result.searchable_type
 
-                    / -if o.has_attribute?("barcode_string")
+                    / -if o.has_attribute?("barcode_string") || o.has_attribute?("barcode")
                     /     %td= o.barcode
-                    / -elsif o.has_attribute?("barcode")
-                    /     %td= o.barcode
-                    / -elsif !o.has_attribute?("barcode_string") && !o.has_attribute?("barcode")
+                    / -else
                     /     %td NA
 
                     / -if o.has_attribute?("name")
                     /     %td= link_to(o.name, o)
                     / -elsif o.has_attribute?("title")
                     /     %td= link_to(o.title, o)
-                    / -elsif !o.has_attribute?("name") && !o.has_attribute?("title")
+                    / -else
                     /     %td NA
 
                     / -if o.has_attribute?("retired")
@@ -45,9 +43,4 @@
     .fieldset
         =text_field_tag :query, nil,class: 'span4', placeholder: '"PBF78E5" or "zfish123"', value: params[:query]
         =submit_tag "Search", class:'btn btn-primary'
-
-
-        
-
-
 

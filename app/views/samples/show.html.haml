@@ -41,6 +41,14 @@
             %tr
                 %th Strain
                 %td=@sample.strain.try(:name)
+        -if @sample.race
+            %tr
+                %th Race
+                %td=@sample.race
+        -if @sample.ethnicity
+            %tr
+                %th Ethnicity
+                %td=@sample.ethnicity
         -if @sample.genotype
             %tr
                 %th Genotype
@@ -75,7 +83,7 @@
                 %td=@sample.material_type.try(:name)
         -if @sample.primary_cell.try(:name)
             %tr
-                %th Primary cell
+                %th Primary cell/Cell line
                 %td=@sample.primary_cell.try(:name)
         / -if @sample.material_types.count>0
         /     %tr
@@ -105,6 +113,10 @@
         %tr
             %th Retired
             %td=@sample.retired? ? "Yes" : "No"
+        -if !@sample.container.nil?
+            %tr
+                %th Shipped
+                %td=@sample.container.shipped? ? "Yes" : "No"
         %tr
             %th Containers
             %td
