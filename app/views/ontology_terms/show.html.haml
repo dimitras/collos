@@ -30,12 +30,12 @@
     - if @ontology_term.parent
         %tr
             %th.span3 Parent
-            %td=@ontology_term.parent.name
+            %td=link_to @ontology_term.parent.name, @ontology_term.parent
     - if @ontology_term.children.count > 0
         %tr
             %th.span3 Children
             %td
                 - @ontology_term.children.each do |child|
-                    =child.name
+                    =link_to child.name, child
                     %br
 
