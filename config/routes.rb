@@ -3,6 +3,18 @@ require 'api_constraints'
 
 Collos::Application.routes.draw do
 
+  resources :ethnicities do
+    collection do
+      get 'search'
+    end
+  end
+
+  resources :races do
+    collection do
+      get 'search'
+    end
+  end
+
   resources :material_types do
     collection do
       get 'search'

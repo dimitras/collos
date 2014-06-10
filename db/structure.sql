@@ -244,6 +244,37 @@ CREATE TABLE containers_shipments (
 
 
 --
+-- Name: ethnicities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE ethnicities (
+    id integer NOT NULL,
+    name character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: ethnicities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE ethnicities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ethnicities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE ethnicities_id_seq OWNED BY ethnicities.id;
+
+
+--
 -- Name: external_links; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -760,6 +791,37 @@ ALTER SEQUENCE protocols_id_seq OWNED BY protocols.id;
 
 
 --
+-- Name: races; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE races (
+    id integer NOT NULL,
+    name character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: races_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE races_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: races_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE races_id_seq OWNED BY races.id;
+
+
+--
 -- Name: sample_relationships; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -827,8 +889,8 @@ CREATE TABLE samples (
     genotype character varying(255),
     replicate character varying(255),
     protocols character varying(255),
-    race character varying(255),
-    ethnicity character varying(255)
+    race_id integer,
+    ethnicity_id integer
 );
 
 
@@ -1088,6 +1150,13 @@ ALTER TABLE ONLY containers ALTER COLUMN id SET DEFAULT nextval('containers_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY ethnicities ALTER COLUMN id SET DEFAULT nextval('ethnicities_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY external_links ALTER COLUMN id SET DEFAULT nextval('external_links_id_seq'::regclass);
 
 
@@ -1186,6 +1255,13 @@ ALTER TABLE ONLY protocols ALTER COLUMN id SET DEFAULT nextval('protocols_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY races ALTER COLUMN id SET DEFAULT nextval('races_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY sample_relationships ALTER COLUMN id SET DEFAULT nextval('sample_relationships_id_seq'::regclass);
 
 
@@ -1269,6 +1345,14 @@ ALTER TABLE ONLY container_types
 
 ALTER TABLE ONLY containers
     ADD CONSTRAINT containers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ethnicities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY ethnicities
+    ADD CONSTRAINT ethnicities_pkey PRIMARY KEY (id);
 
 
 --
@@ -1381,6 +1465,14 @@ ALTER TABLE ONLY protocol_parameters
 
 ALTER TABLE ONLY protocols
     ADD CONSTRAINT protocols_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: races_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY races
+    ADD CONSTRAINT races_pkey PRIMARY KEY (id);
 
 
 --
@@ -1748,6 +1840,13 @@ CREATE INDEX index_sample_relationships_on_descendant_id ON sample_relationships
 
 
 --
+-- Name: index_samples_on_age_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_age_id ON samples USING btree (age_id);
+
+
+--
 -- Name: index_samples_on_ancestry; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1762,10 +1861,31 @@ CREATE INDEX index_samples_on_container_id ON samples USING btree (container_id)
 
 
 --
+-- Name: index_samples_on_ethnicity_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_ethnicity_id ON samples USING btree (ethnicity_id);
+
+
+--
 -- Name: index_samples_on_external_identifier; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_samples_on_external_identifier ON samples USING btree (external_identifier);
+
+
+--
+-- Name: index_samples_on_genotype; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_genotype ON samples USING btree (genotype);
+
+
+--
+-- Name: index_samples_on_material_type_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_material_type_id ON samples USING btree (material_type_id);
 
 
 --
@@ -1776,6 +1896,13 @@ CREATE INDEX index_samples_on_name ON samples USING btree (name);
 
 
 --
+-- Name: index_samples_on_primary_cell_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_primary_cell_id ON samples USING btree (primary_cell_id);
+
+
+--
 -- Name: index_samples_on_protocol_application_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1783,10 +1910,66 @@ CREATE INDEX index_samples_on_protocol_application_id ON samples USING btree (pr
 
 
 --
+-- Name: index_samples_on_protocols; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_protocols ON samples USING btree (protocols);
+
+
+--
+-- Name: index_samples_on_race_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_race_id ON samples USING btree (race_id);
+
+
+--
+-- Name: index_samples_on_sex_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_sex_id ON samples USING btree (sex_id);
+
+
+--
+-- Name: index_samples_on_source_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_source_name ON samples USING btree (source_name);
+
+
+--
+-- Name: index_samples_on_strain_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_strain_id ON samples USING btree (strain_id);
+
+
+--
 -- Name: index_samples_on_taxon_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_samples_on_taxon_id ON samples USING btree (taxon_id);
+
+
+--
+-- Name: index_samples_on_time_point; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_time_point ON samples USING btree (time_point);
+
+
+--
+-- Name: index_samples_on_tissue_type_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_tissue_type_id ON samples USING btree (tissue_type_id);
+
+
+--
+-- Name: index_samples_on_treatments; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_treatments ON samples USING btree (treatments);
 
 
 --
@@ -2125,3 +2308,9 @@ INSERT INTO schema_migrations (version) VALUES ('20140517173046');
 INSERT INTO schema_migrations (version) VALUES ('20140527193107');
 
 INSERT INTO schema_migrations (version) VALUES ('20140528214038');
+
+INSERT INTO schema_migrations (version) VALUES ('20140605183754');
+
+INSERT INTO schema_migrations (version) VALUES ('20140605190459');
+
+INSERT INTO schema_migrations (version) VALUES ('20140606201614');

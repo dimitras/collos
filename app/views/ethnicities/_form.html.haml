@@ -1,0 +1,4 @@
+=simple_form_for @ethnicity, :html => {:class => 'form-horizontal' } do |f|
+    = f.input :name, :hint => "Find the official onomatology of the ethnicity" 
+    = f.button :submit
+    = link_to 'Cancel', @ethnicity, class: 'btn btn-warning'

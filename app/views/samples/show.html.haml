@@ -44,15 +44,15 @@
         -if @sample.race
             %tr
                 %th Race
-                %td=@sample.race
+                %td=link_to @sample.race_name, url_for(@sample.race)
         -if @sample.ethnicity
             %tr
                 %th Ethnicity
-                %td=@sample.ethnicity
+                %td=link_to @sample.ethnicity_name, url_for(@sample.ethnicity)
         -if @sample.genotype
             %tr
                 %th Genotype
-                %td=@sample.try(:genotype)
+                %td=@sample.genotype
         -if @sample.sex.try(:name)
             %tr
                 %th Sex
@@ -68,7 +68,11 @@
         -if @sample.treatments
             %tr
                 %th Treatments
-                %td=@sample.try(:treatments) 
+                %td=@sample.treatments
+        -if @sample.protocols
+            %tr
+                %th Protocols
+                %td=@sample.protocols
         -if @sample.replicate
             %tr
                 %th Replicate

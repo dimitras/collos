@@ -26,6 +26,12 @@
       %tr
         %th Retired
         %td=sample.retired? ? "yes" : "no"
+      %tr
+        %th Race
+        %td=sample.race
+      %tr
+        %th Age
+        %td=@sample.try(:age)
 
   /=f.association :container, collection: Container.order('containers.container_type_id, name').all, hint: link_to("Create a new container", new_container_url), label_method: :to_s
   /=f.input :container_x, :label => "x-coordinate", hint: "eg. for 96 well plate choose between 1-12 on the x-axis"
@@ -34,6 +40,12 @@
   %br
   %h6 Retire the selected samples
   =f.select :retired, [["yes", true],["no", false]], :include_blank => true
+
+  / =f.input :age
+  / =f.input :time_point
+  /=f.association :tissue_type, collection: Sample.where(retired: false).tissue_type_terms.order('name')
+  /=f.association :material_type, collection: Sample.where(retired: false).material_type_terms.order('name')
+  /=f.association :race, include_blank: true
 
   /TODO: it changes the value of the field, so it loses the previous multi selection
   / %br

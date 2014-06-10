@@ -26,6 +26,15 @@
 #  age                     :integer
 #  time_point              :string(255)
 #  age_id                  :integer
+#  strain_id               :integer
+#  tissue_type_id          :integer
+#  primary_cell_id         :integer
+#  treatments              :string(255)
+#  genotype                :string(255)
+#  replicate               :string(255)
+#  protocols               :string(255)
+#  race_id                 :integer
+#  ethnicity_id            :integer
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

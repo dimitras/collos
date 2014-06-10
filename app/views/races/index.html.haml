@@ -1,0 +1,18 @@
+%h3 Races
+%table.table.table-striped.table-condensed.table-bordered
+    %thead
+        %tr
+            %th Name
+            %th &nbsp;
+    %tbody
+        -for race in @races
+            %tr
+                %td=race.name
+                %td
+                    =link_to "Show", race_path(race), class: 'btn'
+                    - if can?(:edit, race)
+                        =link_to "Edit", edit_race_path(race), class: 'btn btn-success'
+                    -if can?(:destroy, race)
+                        = link_to "Delete", race_path(race), method: 'delete', class: 'btn btn-danger'
+=will_paginate(@races)
+= link_to "Create new race", new_race_path, class: 'btn btn-primary btn-large'

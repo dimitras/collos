@@ -11,11 +11,11 @@
         =f.input :external_identifier, hint: "Identifiers assigned outside of CollOS"
         =f.input :source_name, :label => "Subject (source)", hint: "eg. mouse123, mlims_id, or study_id_&_subject_id for clinical studies"
         =f.association :taxon, label_method: :scientific_name, hint: link_to("Create a new taxon", new_taxon_url, :target => "_blank")
-        /TODO
-        /=f.association :material_types, :multiple => true, hint: link_to("Create a new material type", new_material_type_url, :target => "_blank")
         =f.association :sex, collection: Sample.where(retired: false).gender_type_terms.order('name'), hint: link_to("Create a new biological sex/mating type", new_ontology_term_url, :target => "_blank")
         =f.input :genotype, hint: "Specify the genetic alterations using the official gene symbol, eg. Ptgs1 knock-out"
         =f.association :strain, collection: Sample.where(retired: false).strain_type_terms.order('name'), hint: link_to("Add a new strain", new_ontology_term_url, :target => "_blank")
+        =f.association :race, include_blank: true, hint: link_to("Create a new race", new_race_url, :target => "_blank")
+        =f.association :ethnicity, hint: link_to("Create a new ethnicity", new_ethnicity_url, :target => "_blank")
         =f.input :treatments, hint: "Specify treatments the samples received"
         =f.input :replicate, hint: "Specify replicate, eg. brep1 for biological replicate 1"
         =f.association :timeunit, collection: Sample.where(retired: false).time_type_terms.order('name'), hint: link_to("Create a new time unit type", new_ontology_term_url, :target => "_blank"), :label => "Age time unit"

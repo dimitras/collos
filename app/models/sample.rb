@@ -26,6 +26,15 @@
 #  age                     :integer
 #  time_point              :string(255)
 #  age_id                  :integer
+#  strain_id               :integer
+#  tissue_type_id          :integer
+#  primary_cell_id         :integer
+#  treatments              :string(255)
+#  genotype                :string(255)
+#  replicate               :string(255)
+#  protocols               :string(255)
+#  race_id                 :integer
+#  ethnicity_id            :integer
 #
 
 class Sample < ActiveRecord::Base
@@ -35,14 +44,14 @@ class Sample < ActiveRecord::Base
     :protocol_application, :protocol_application_id,
     :notes, :retired, :tags,
     :ancestry, :parent_id, :parent,
-    # :material_type_ids, :material_type_id,
-    :study_titles, :studies, :study_id,
+    :study_titles, :studies, :study_id, :study_ids,
+    #TOFIX: study ids?!?!?!
     :time_point, :genotype, :treatments, :replicate, :source_name,
     :material_type, :material_type_id, :tissue_type, :tissue_type_id, :primary_cell, :primary_cell_id,
-    :strain, :strain_id, :timeunit, :age, :sex, :sex_id, :race, :race_id, :ethnicity, :ethnicity_id,
+    :strain, :strain_id, :timeunit, :age, :age_id, :sex, :sex_id, :race, :race_id, :ethnicity, :ethnicity_id,
     :protocols
 
-  validates :age, :inclusion => 0..1000
+  validates :age, :inclusion => 0..1000, :allow_nil => true
 
   # Needed to parse out comma delimited tags from forms into a strict Array
   # def tags=(tgs)
@@ -70,8 +79,8 @@ class Sample < ActiveRecord::Base
   belongs_to :taxon
   belongs_to :sex, class_name: "OntologyTerm", foreign_key: "sex_id"
   belongs_to :strain, class_name: "OntologyTerm", foreign_key: "strain_id"
-  belongs_to :race, class_name: "OntologyTerm", foreign_key: "race_id"
-  belongs_to :ethnicity, class_name: "OntologyTerm", foreign_key: "ethnicity_id"
+  belongs_to :race
+  belongs_to :ethnicity
   belongs_to :material_type, class_name: "OntologyTerm", foreign_key: "material_type_id"
   belongs_to :tissue_type, class_name: "OntologyTerm", foreign_key: "tissue_type_id"
   belongs_to :primary_cell, class_name: "OntologyTerm", foreign_key: "primary_cell_id"
@@ -107,6 +116,14 @@ class Sample < ActiveRecord::Base
     if tx = Taxon.find_by_scientific_name(sn)
       self.taxon = tx
     end
+  end
+
+  def race_name
+    race.try(:name)
+  end
+
+  def ethnicity_name
+    ethnicity.try(:name)
   end
 
   def study_titles
@@ -165,28 +182,14 @@ class Sample < ActiveRecord::Base
   def self.strain_type_terms
     OntologyTerm.where(
       name: "strain",
-      accession: "EFO_000"
-    ).first.children()
-  end
-
-  def self.race_type_terms
-    OntologyTerm.where(
-      name: "race",
-      accession: "OBO:race"
-    ).first.children()
-  end
-
-  def self.ethnicity_type_terms
-    OntologyTerm.where(
-      name: "ethnicity",
-      accession: "OBO:ethnicity"
+      accession: "EFO_0005135"
     ).first.children()
   end
 
   def self.material_type_terms
     OntologyTerm.where(
       name: "material type",
-      accession: "BTO:000"
+      accession: "EFO_0001434"
     ).first.children()
   end
 
@@ -200,13 +203,13 @@ class Sample < ActiveRecord::Base
   def self.primary_cell_type_terms
     OntologyTerm.where(
       name: "primary cell / cell line / tissue type",
-      accession: "BTO"
+      accession: "EFO_primary_cell_line"
     ).first.children()
   end
 
   # Full text search of samples
   include PgSearch
-  multisearchable against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier, :age, :time_point, :sex, :timeunit, :material_type, :treatments, :tissue_type, :primary_cell, :strain, :genotype, :race, :ethnicity, :protocols],
+  multisearchable against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier, :age, :time_point, :sex, :timeunit, :material_type, :treatments, :tissue_type, :primary_cell, :strain, :genotype, :protocols],
     using: {
       tsearch: {
         dictionary: "english",
@@ -216,7 +219,7 @@ class Sample < ActiveRecord::Base
       }
     }
 
-  pg_search_scope :search, against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier, :age, :time_point, :sex, :timeunit, :material_type, :treatments, :tissue_type, :primary_cell, :strain, :genotype, :race, :ethnicity, :protocols],
+  pg_search_scope :search, against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier, :age, :time_point, :sex, :timeunit, :material_type, :treatments, :tissue_type, :primary_cell, :strain, :genotype, :protocols],
     using: {
       tsearch: {
         dictionary: "english",

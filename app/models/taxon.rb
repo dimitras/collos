@@ -13,7 +13,7 @@ class Taxon < ActiveRecord::Base
   attr_accessible :ncbi_id, :scientific_name, :common_name
   has_many :samples
 
-  # Full text search of samples
+  # Full text search of organisms
   include PgSearch
   multisearchable against: [:scientific_name, :common_name],
   using: {

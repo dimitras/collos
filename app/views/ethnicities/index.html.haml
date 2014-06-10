@@ -1,0 +1,18 @@
+%h3 Ethnicities
+%table.table.table-striped.table-condensed.table-bordered
+    %thead
+        %tr
+            %th Name
+            %th &nbsp;
+    %tbody
+        -for ethnicity in @ethnicities
+            %tr
+                %td=ethnicity.name
+                %td
+                    =link_to "Show", ethnicity_path(ethnicity), class: 'btn'
+                    - if can?(:edit, ethnicity)
+                        =link_to "Edit", edit_ethnicity_path(ethnicity), class: 'btn btn-success'
+                    -if can?(:destroy, ethnicity)
+                        = link_to "Delete", ethnicity_path(ethnicity), method: 'delete', class: 'btn btn-danger'
+=will_paginate(@ethnicities)
+= link_to "Create new ethnicity", new_ethnicity_path, class: 'btn btn-primary btn-large'
