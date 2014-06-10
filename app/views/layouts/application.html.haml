@@ -17,6 +17,8 @@
           = render 'layouts/messages'
       #content.row
         .span12= yield
-      %footer.row
+      %footer.row{:align => "right", :style => "color: grey"}
+        %br
+        %em.span12 Copyright ITMAT@Pentacon,2014
     .js
       = yield :js
