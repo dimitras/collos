@@ -205,10 +205,10 @@ namespace :db do
 						ontology_term = OntologyTerm.find_by_name("freezer")
 						puts "#FREEZER TERM\n#{freezer_type} | #{ontology_term}\n "
 						container_type = ContainerType.create(
-							:name              => freezer_type, 
-							:type              => ontology_term, 
-							:can_have_children => true, 
-							:retired           => false, 
+							:name              => freezer_type,
+							:type              => ontology_term,
+							:can_have_children => true,
+							:retired           => false,
 							:shipable          => false
 						)
 					end

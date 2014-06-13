@@ -3,32 +3,50 @@
     =render "sessions/form"
 -else
     %br
+    %h5 Browse
+    %table.table.table-bordered
+        %tr
+            %td
+                %ul
+                    =link_to 'Investigations',investigations_url
+                    %br
+                    =link_to 'Studies',studies_url
+                    %br
+                    =link_to 'Samples',samples_url
+                    %br
+                    =link_to 'Containers',containers_url
+                    %br
+                    =link_to 'Shipments', shipments_url
+
+    %h5 Search
+    %table.table.table-bordered
+        %tr
+            %td
+                = form_tag(search_path, method: 'get', class: 'form-inline form-search') do
+                    .fieldset
+                        =text_field_tag :query, nil,class: 'span4', placeholder: 'ex. PBF78E5 | IL-1-beta | box | zebrafish | blood'
+                        =submit_tag "Search", class:'btn btn-primary'
+                        %br
+                        %br
+                        %em=label_tag "search by sample, container, barcode, organism, tissue, shipment tracking number, investigator etc"
+
+    %h5 Advanced search
+    %table.table.table-bordered
+        %tr
+            %td
+                /=submit_tag "Advanced Search", class:'btn'
+    
     %table
         %tr
             %td
-                %h5 Browse
-                %table.table.table-bordered
-                    %tr
-                        %td
-                            %ul
-                                =link_to 'Investigations',investigations_url
-                                %br
-                                =link_to 'Studies',studies_url
-                                %br
-                                =link_to 'Samples',samples_url
-                                %br
-                                =link_to 'Containers',containers_url
-                                %br
-                                =link_to 'Shipments', shipments_url
-            %td
-                %h5 Enter
+                %h5 Enter individually (check the #{link_to "steps",help_path()}) 
                 %table.table.table-bordered
                     %tr
                         %td
                             %ul
                                 =link_to 'Investigation',new_investigation_path
                                 %br
-                                =link_to 'Studie',new_study_path
+                                =link_to 'Study',new_study_path
                                 %br
                                 =link_to 'Sample',new_sample_path
                                 %br
@@ -46,37 +64,9 @@
                                 =link_to 'Ethnicity',new_container_path
                                 %br
                                 =link_to 'Ontology term',new_shipment_path
-    %table
-        %tr
-            %td
-                %h5 Search
-                %table.table.table-bordered
-                    %tr
-                        %td
-                            = form_tag(search_path, method: 'get', class: 'form-inline form-search') do
-                                .fieldset
-                                    =text_field_tag :query, nil,class: 'span4', placeholder: 'ex. PBF78E5 | IL-1-beta | box | zebrafish | blood'
-                                    =submit_tag "Search", class:'btn btn-primary'
-                                    %em=label_tag "search by sample, container, barcode, organism, tissue, shipment tracking number, investigator etc"
-        %tr
-            %td
-                %h5 Advanced search
-                %table.table.table-bordered
-                    %tr
-                        %td
-                            /=submit_tag "Advanced Search", class:'btn'
-    %table
-        %tr
-            %td
-                %h5 Enter sample 
-                %table.table.table-bordered
-                    %tr
-                        %td
-                            %ul
-                                =link_to "Create a sample", new_sample_path
-                                %br
-                                %br
                                 
+            %td
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             %td
                 %h5 Bulk upload (check the #{link_to "file format",help_path()}) 
                 %table.table.table-bordered
@@ -88,6 +78,10 @@
                                 =link_to "Spreadsheet files", new_sample_path
                                 %br
                                 =link_to "ISA-Tab files", new_sample_path
+                                %br
+                                %br
+                                %br
+                                %br
                                 
     
                 
