@@ -5,7 +5,6 @@ import pprint
 
 # print isatab.__file__
 
-
 # Get directory from the command arguments and parse the files
 study_directory = str(sys.argv[1]) # data/ER-metab-v1_latest/
 temp_file = str(sys.argv[2])

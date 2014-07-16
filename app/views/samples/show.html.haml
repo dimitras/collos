@@ -24,6 +24,8 @@
             %th Sample Barcode
             %td
                 =@sample.barcode.barcode
+                %br
+                =image_tag(@sample.barcode.create_img)
                 / =link_to("Barcode set #{@sample.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @sample.barcode.barcode_set))
         -if @sample.external_identifier
             %tr

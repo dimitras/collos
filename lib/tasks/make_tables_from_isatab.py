@@ -6,6 +6,9 @@ Convert an ISAtab directory to csv tables that can easily be imported in rails d
 
 # USAGE: python lib/tasks/make_tables_from_isatab.py isatab_directory output_for_studies.csv output_for_contacts.csv output_for_investigation.csv output_for_samples.csv 
 
+# python lib/tasks/make_tables_from_isatab.py workspace/data/ER_validation_study1/ investigation.csv studies.csv contacts.csv samples.csv 
+
+
 from bcbio import isatab
 import sys
 import csv
@@ -147,9 +150,11 @@ class Sample:
 		self.attributes.setdefault(atr_name, []).append(atr_value)
 	
 	def attribute(self, atr_name):
+		print self.attributes[atr_name]
 		return self.attributes[atr_name]
 	
 	def attribute_string(self, atr_name, delimiter="|"):
+		# print self.attribute(atr_name)
 		return delimiter.join(self.attribute(atr_name))
 	
 	def _build_from_isatab_node(self):
@@ -186,7 +191,7 @@ def write_investigation_to_csv(investigation, filename):
 	'''
 	with open(filename, 'w') as fp:
 		a = csv.writer(fp, delimiter=',')
-		fields = ['Investigation Identifier','Investigation Title','Investigation Description','Investigation Submission Date','Investigation Public Release Date','Comment [Created with configuration]']
+		fields = ['Investigation Identifier','Investigation Title','Investigation Description']
 		a.writerow(fields)
 		a.writerow([investigation.attribute(field) for field in fields])
 
@@ -194,7 +199,7 @@ def write_investigation_studies_to_csv(investigation, filename):
 	'''
 	Write studies list to a csv file.
 	'''
-	fields = ['Study Identifier', 'Study Title', 'Study Public Release Date', 'Study Description', 'Study Submission Date']
+	fields = ['Study Identifier', 'Study Title', 'Study Description', 'Study Design Type']
 	
 	with open(filename, 'w') as fp:
 		a = csv.writer(fp, delimiter=',')
@@ -219,8 +224,8 @@ def write_investigation_studies_samples_to_csv(investigation, filename):
 	'''
 	Write samples table to csv file
 	'''
-	fields = ['Sample_Name', 'parent', 'Source_Name', 'Material_Type', 'organism', 'Protocol_REF', 'freezer_type', 'freezer_label', 'box_type', 'box_label', 'box_external_identifier', 'container_type', 'container_external_identifier', 'shipped', 'receiver', 'collOS', 'sex']
-	
+	fields = ['Sample_Name', 'parent', 'Source_Name', 'Material_Type', 'organism', 'Protocol_REF', 'freezer_type', 'freezer_label', 'box_type', 'box_label', 'box_external_identifier', 'container_type', 'sample_external_identifier', 'shipped', 'receiver', 'collOS', 'sex', 'strain', 'genetic_alteration', 'age', 'organism_part', 'NSAID', 'stimulus', 'dose', 'additive', 'dose1', 'collection_time']
+
 	with open(filename, 'w') as fp:
 		a = csv.writer(fp, delimiter=',')
 		a.writerow(['Sample Identifier'] + fields + ['Study Identifier'])
@@ -234,9 +239,9 @@ def write_investigation_studies_samples_to_csv(investigation, filename):
 def main():
 	# get directory from the command arguments and parse the files
 	study_directory = str(sys.argv[1]) # data/ER-metab-v1_latest/
-	studies_file = str(sys.argv[2])
-	contacts_file = str(sys.argv[3])
-	investigation_file = str(sys.argv[4])
+	investigation_file = str(sys.argv[2])
+	studies_file = str(sys.argv[3])
+	contacts_file = str(sys.argv[4])
 	samples_file = str(sys.argv[5])
 	
 	# parse the isatab directory with isatools parser and get the record

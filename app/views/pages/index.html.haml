@@ -24,7 +24,7 @@
             %td
                 = form_tag(search_path, method: 'get', class: 'form-inline form-search') do
                     .fieldset
-                        =text_field_tag :query, nil,class: 'span4', placeholder: 'ex. PBF78E5 | IL-1-beta | box | zebrafish | blood'
+                        =text_field_tag :query, nil, class: 'span4', placeholder: 'ex. PBF78E5 | IL-1-beta | box | zebrafish | blood'
                         =submit_tag "Search", class:'btn btn-primary'
                         %br
                         %br
@@ -83,7 +83,11 @@
                                 %br
                                 %br
                                 
-    
+    %table
+        %tr
+            %td
+                %h5 Pregenerate barcoded labels (TODO: be able to print the labels)
+                = render partial: "barcodes/generate_barcodes"
                 
                 /EXTRAs:
 

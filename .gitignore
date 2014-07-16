@@ -74,3 +74,6 @@ config/database.ymlscratch.txt
 
 # Personal files
 /workspace/
+
+# data
+/app/assets/images/qr_codes/
