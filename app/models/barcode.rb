@@ -64,7 +64,7 @@ class Barcode < ActiveRecord::Base
 	def create_img
 		require 'zint'
 		# qrcode = Zint::Barcode.new(self.barcode, Zint::BARCODE_QRCODE) 
-		qrcode = Zint::Barcode.new(self.barcode, Zint::BARCODE_MICROQR, :text=self.barcode, :option_2=1)
+		qrcode = Zint::Barcode.new(self.barcode, Zint::BARCODE_MICROQR) # :text=self.barcode, :option_2=1, :vers=1
 		png_path = "qr_codes/" + self.barcode + ".png"
 		qrcode.path = "app/assets/images/" + png_path
 		qrcode.print!

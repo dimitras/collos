@@ -153,6 +153,10 @@ class Sample < ActiveRecord::Base
     barcode.barcode
   end
 
+  def label_fields
+    return [barcode_string, study_id, source_name, treatments, time_point]
+  end
+
   # Sample hierarchy is represented (loosely) as a directed acyclic graph.
   # This is not strictly correct, but serves better for our purposes than a
   # strict tree hiearchy.

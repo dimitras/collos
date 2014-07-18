@@ -48,6 +48,11 @@
     /             -@study.people.each do |person|
     /                 =link_to person.firstname + person.lastname, url_for(person)
     /                 %br
+    %tr
+        %th Print labels
+        %td
+            -labels()
+            =link_to "#{@study.id}.pdf", url_for("#{@study.id}.pdf")
 
 -if @study.versions.count > 0
     %h5 Audit Trail (History)

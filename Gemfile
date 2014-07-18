@@ -33,6 +33,7 @@ gem 'simple_form'
 # For pdf generation
 gem 'wkhtmltopdf-binary'
 gem 'wicked_pdf'
+gem 'prawn'
 
 # May need this gem if the set of countries can grow big
 # gem 'country_select'
