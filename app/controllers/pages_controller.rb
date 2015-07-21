@@ -8,14 +8,14 @@ class PagesController < ApplicationController
     def about; end
     def contact; end
 
-    # TOFIX
-    def upload_isatab
-		path = File.join("public/isatabs", upload["datafile"].original_filename)
-		File.open(path, "wb") { |f| f.write(upload["datafile"].read) }
-	end
+ #    # TOFIX
+ #    def upload_isatab
+	# 	path = File.join("public/isatabs", upload["datafile"].original_filename)
+	# 	File.open(path, "wb") { |f| f.write(upload["datafile"].read) }
+	# end
 
-	def upload_csv
-		path = File.join("public/csvs", upload["datafile"].original_filename)
-		File.open(path, "wb") { |f| f.write(upload["datafile"].read) }
-	end
+	# def upload_csv
+	# 	path = File.join("public/csvs", upload["datafile"].original_filename)
+	# 	File.open(path, "wb") { |f| f.write(upload["datafile"].read) }
+	# end
 end

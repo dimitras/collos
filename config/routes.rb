@@ -29,6 +29,7 @@ Collos::Application.routes.draw do
 
   resources :investigations do
     collection do
+      post 'import'
       get 'search'
     end
   end

@@ -19,8 +19,30 @@ class StudiesController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @study }
-      format.pdf { render :layout => false }
+      format.pdf { render :layout => true }
     end
+
+    # TODO
+
+    # # create a unique PDF filename
+    # pdf_uuid = UUIDTools::UUID.timestamp_create().to_s
+    # pdf_uuid_filename = Rails.root.join('app/assets/images/labels', "#{pdf_uuid}.pdf").to_s
+
+    # # create a pdf but don't display it
+    # pdf_file = render_to_string :pdf => pdf_uuid_filename, 
+    #                             :template  => 'plans/show.pdf.erb' ,
+    #                             :layout    => 'pdf',
+    #                             :save_only => true
+    # # save to a file
+    # File.open(pdf_uuid_filename, 'wb') do |file|
+    #   file << pdf_file
+    # end
+    # # create full URL path to created file  
+    # @plan.url = request.url[0, request.url.index("plans")] +  'pdf/' + CGI::escape("#{pdf_uuid}.pdf")
+    # @plan.save!
+    # # render the page again with the link being displayed
+    # redirect_to :back
+
   end
 
   # GET /studies/new

@@ -3,17 +3,20 @@ namespace :db do
 	require 'rubygems'
 	require 'csv'
 
-	# USAGE: rake db:load_human_spreadsheet --trace
-	desc "import human spreadsheet"
-	task :load_human_spreadsheet  => :environment do
-		# isatab_directory = "workspace/data/TG_Pentacon39/"
-		isatab_directory = "workspace/data/ER_hasmc_trial/"
+	# USAGE: rake db:load_mouse_isatab --trace
+	desc "import mouse isatab"
+	task :load_mouse_isatab  => :environment do
+		isatab_directory = "workspace/data/ER_validation_study1/"
 		investigations = {}
 		investigation_file = "#{isatab_directory}investigation.csv"
+		pubmed_id = ''
+		design_type = ''
 		CSV.foreach(investigation_file, {:headers=>:first_row}) do |row|
 			investigation_identifier = row[0]
 			investigation_title = row[1]
 			investigation_description = row[2]
+			design_type = row[3]
+			pubmed_id = row[4]
 
 			puts "#INVESTIGATIONS \n#{investigation_identifier} | #{investigation_title} | #{investigation_description} \n "
 			investigation = Investigation.create(
@@ -32,12 +35,13 @@ namespace :db do
 			study_description = row[2]
 			investigation_identifier = row[3]
 
-			puts "#STUDIES \n#{study_title} | #{study_identifier} | #{study_description} | #{investigation_identifier} \n "
+			puts "#STUDIES \n#{study_title} | #{study_identifier} | #{study_description} | #{investigation_identifier} | {pubmed_id} \n "
 			study = Study.create(
 				:title         => study_title,
 				:identifier    => study_identifier,
 				:description   => study_description,
-				:investigation => investigations[investigation_identifier]
+				:investigation => investigations[investigation_identifier],
+				:pubmed_id     => pubmed_id
 			)
 			studies[study_identifier] = study
 		end
@@ -115,6 +119,8 @@ namespace :db do
 			end
 		end
 		
+### Sample_Name', 'parent', 'Source_Name', 'Material_Type', 'organism', 'organism part', 'Protocol_REF', 'freezer_type', 'freezer_label', 'box_type', 'box_label', 'box_external_identifier', 'container_type', 'sample_external_identifier', 'shipped', 'receiver', 'collOS', 'sex', 'strain', 'genetic_alteration', 'age', 'organism_part', 'NSAID', 'stimulus', 'dose', 'additive', 'dose1', 'collection_time', 'sample_barcode', 'container_barcode', 'box barcode
+
 		# TODO: fix parent for sample, if the samples.csv is not sorted, the parents are not assigned
 		samples_file = "#{isatab_directory}samples.csv"
 		CSV.foreach(samples_file, {:headers=>:first_row}) do |row|
@@ -123,9 +129,16 @@ namespace :db do
 			parent = row[1]
 			source_name = row[2]
 			organism = row[3]
-			ethnicity = row[4]
-			race = row[5]
+			organism_part = row[4]
+			protocols = row[16]
+			
+			#### FIXING!!!!! #####
+
+			#ethnicity = row[4]
+			#race = row[5]
 			genotype = row[6]
+
+			strain = row[]
 			sex = row[7]
 			collection_time = row[8]
 			treatments = row[9]
@@ -135,9 +148,11 @@ namespace :db do
 			material_type = row[13]
 			age = row[14]
 			age_unit = row[15]
-			protocols = row[16]
+			
 			notes = row[17]
 			tags = row[18]
+
+			# :tags => design_type,
 			sample_external_identifier = row[19]
 			if !row[20].nil?
 				(container_tube_type, container_tube_dimensions) = row[20].split('|')

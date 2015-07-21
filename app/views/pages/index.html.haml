@@ -64,7 +64,8 @@
                                 =link_to 'Ethnicity',new_container_path
                                 %br
                                 =link_to 'Ontology term',new_shipment_path
-                                
+                                %br
+                                %br
             %td
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             %td
@@ -82,7 +83,20 @@
                                 %br
                                 %br
                                 %br
-                                
+                                %br
+            %td
+                %h5 Import Samples (check the #{link_to "file format",help_path()})
+                %table.table.table-bordered
+                    %tr
+                        %td
+                            =form_tag import_investigations_path, multipart: true do
+                                =file_field_tag :file
+                                =submit_tag "Import spreadsheet"
+                    %tr
+                        %td
+                            =form_tag import_investigations_path, multipart: true do
+                                =file_field_tag :file
+                                =submit_tag "Import ISA-Tab"
     %table
         %tr
             %td

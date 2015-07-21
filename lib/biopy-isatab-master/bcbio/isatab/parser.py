@@ -160,15 +160,15 @@ class StudyAssayParser:
     def __init__(self, base_file):
         self._dir = os.path.dirname(base_file)
         self._col_quals = ("Performer", "Date", "Unit",
-                           "Term Accession Number", "Term Source REF")
+                           "Term Accession Number", "Term Source REF", "Parameter Value")
         self._col_types = {"attribute": ("Characteristics", "Factor Type",
-                                         "Comment", "Label", "Material Type"),
+                                         "Comment", "Label", "Material Type", "Parameter Value"),
                            "node" : ("Sample Name", "Source Name", "Image File",
                                      "Raw Data File", "Derived Data File"),
                            "node_assay" : ("Extract Name", "Labeled Extract Name",
                                            "Assay Name", "Data Transformation Name",
                                            "Normalization Name"),
-                           "processing": ("Protocol REF",)}
+                           "processing": ("Protocol REF", "Parameter Value")}
         self._synonyms = {"Array Data File" : "Raw Data File",
                           "Derived Array Data File" : "Derived Data File",
                           "Hybridization Assay Name": "Assay Name",
@@ -228,6 +228,7 @@ class StudyAssayParser:
                 attrs = self._line_keyvals(line, header, hgroups, htypes,
                                            node.metadata)
                 nodes[name].metadata = attrs
+        print "*******HERE*****"
         return dict([(k, self._finalize_metadata(v)) for k, v in nodes.items()])
 
     def _finalize_metadata(self, node):
@@ -318,31 +319,28 @@ class StudyAssayParser:
         return [self._synonyms.get(h, h) for h in header]
 
 _record_str = \
-"""* ISATab Record
- metadata: {md}
- studies:
-{studies}
+""" * ISATab Record
+    metadata: {md}
+    studies : {studies}
 """
 
 _study_str = \
-"""  * Study
-   metadata: {md}
-   nodes:
-{nodes}
-   assays:
-{assays}
+""" * Study
+    metadata: {md}
+    nodes   : {nodes}
+    assays  : {assays}
 """
 
 _assay_str = \
-"""    * Assay
-     metadata: {md}
-     nodes:
-{nodes}
+""" * Assay
+    metadata: {md}
+    nodes   : {nodes}
 """
 
 _node_str = \
-"""       * Node {name} {type}
-         metadata: {md}"""
+""" * Node {name} {type}
+    metadata: {md}
+"""
 
 class ISATabRecord:
     """Represent ISA-Tab metadata in structured format.

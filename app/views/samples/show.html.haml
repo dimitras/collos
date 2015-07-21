@@ -165,18 +165,8 @@
 %br
 
 /TODO: show/hide the history
-/ %script{:type => "text/javascript"}
-/     //<!--[CDATA[
-/     function show(id){
-/     document.getElementById(id).style.visibility = 'visible';
-/     }
-/     //]]-->
-
-/ %a{:href => "#", :onclick => "show('show_history'); return false;"} Show Audit Trail(History)
-
-/ %div{:id => "show_history"}
+%h5== Audit Trail/History
 -if @sample.versions.count > 0
-    %h5 Audit Trail (History)
     -@sample.versions.each do |version|
         ==Event: #{version.event}
         %br
@@ -187,3 +177,4 @@
         ==Fields: #{version.object}
         %br
         %br
+

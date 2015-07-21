@@ -2,6 +2,8 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 require "configulations"
+require 'csv'
+require 'iconv'
 
 CONFIG = Configulations.new
 
