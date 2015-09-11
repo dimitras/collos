@@ -49,10 +49,11 @@
     /                 =link_to person.firstname + person.lastname, url_for(person)
     /                 %br
     %tr
-        %th Print labels
+        %th Samplesheet
         %td
             -labels()
-            =link_to "#{@study.id}.pdf", url_for("#{@study.id}.pdf")
+            /=link_to "#{@study.id}.pdf", url_for("#{@study.id}.pdf")
+            =link_to "Download #{@study.identifier}_samples.csv", study_path(:format=> :csv)
 
 -if @study.versions.count > 0
     %h5 Audit Trail (History)

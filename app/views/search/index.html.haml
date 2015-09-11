@@ -12,7 +12,13 @@
             -for result in @results
                 - o = result.searchable
                 %tr
-                    %td= result.content
+                    -if result.searchable_type=="Investigation" || result.searchable_type=="Study"
+                        %td= result.content.split(/\r/)[0]
+                        %td
+                        /%td= result.content.identifier
+                    -elsif result.searchable_type=="Sample" || result.searchable_type=="Container"
+                        %td= result.content.split(" ")[0]
+                        %td= result.content.split(" ")[1]
                     %td= result.searchable_type
 
                     / -if o.has_attribute?("barcode_string") || o.has_attribute?("barcode")
@@ -33,7 +39,7 @@
                     /     %td NA
     =will_paginate(@results, params: params, method: 'post')
     =link_to "Download CSV", search_path(results: @results, format: "csv"), class:'btn'
-    / =link_to "Download CSV", search_path(params.merge(format: 'csv')), class:'btn'
+    =link_to "Download CSV", search_path(params.merge(format: 'csv')), class:'btn'
 -else
     %i==#{@results.count} entries found
 %br
