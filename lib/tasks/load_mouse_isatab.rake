@@ -4,8 +4,8 @@ namespace :db do
 	require 'csv'
 
 	# USAGE: rake db:load_human_spreadsheet --trace
-	desc "import human spreadsheet"
-	task :load_human_spreadsheet  => :environment do
+	desc "import ema spreadsheet"
+	task :load_ema_spreadsheet  => :environment do
 		# isatab_directory = "workspace/data/TG_Pentacon39/"
 		isatab_directory = "workspace/data/ER_hasmc_trial/"
 		investigations = {}
