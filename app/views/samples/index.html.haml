@@ -15,6 +15,7 @@
         %thead
             %tr
                 %th.span1
+                %th.span1 id
                 %th.span1 Barcode
                 %th.span2 Name
                 %th.span2 Taxon
@@ -28,6 +29,7 @@
             -for sample in @samples
                 %tr
                     %td=check_box_tag "sample_ids[]", sample.id
+                    %td=sample.id
                     %td=sample.barcode.barcode
                     %td=link_to(sample.name, sample)
                     %td=link_to(sample.taxon.try(:scientific_name), sample.taxon)

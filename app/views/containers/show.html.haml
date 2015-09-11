@@ -18,7 +18,9 @@
         %th Barcode
         %td
             =@container.barcode.barcode
-            /=link_to("Barcode set #{@container.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @container.barcode.barcode_set))
+            %br
+                =image_tag(@container.barcode.create_img)
+                /=link_to("Barcode set #{@container.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @container.barcode.barcode_set))
     -if @container.external_identifier
         %tr
             %th External identifier
@@ -34,13 +36,13 @@
             %td None
     -if @container.children.count > 0
         %tr
-            %th Contained Containers
+            %th="Contained Containers (#{@container.children.count})"
             %td
                 -@container.children.each do |container|
                     =link_to container.name_for_selects, url_for(container)
                     %br
     %tr
-        %th Contained Samples
+        %th="Contained Samples (#{@container.descendants.count})"
         %td
             -if @container.descendants.count > 0
                 -@container.descendants.each do |container|

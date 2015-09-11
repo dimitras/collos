@@ -25,7 +25,7 @@
         %th Investigation
         %td=link_to(@study.investigation_title, @study.investigation) if @study.investigation
     %tr
-        %th Samples
+        %th="Samples (#{@study.samples.count})" 
         %td
             -if @study.samples
                 -@study.samples.each do |sample|
