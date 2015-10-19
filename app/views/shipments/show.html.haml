@@ -13,10 +13,10 @@
 		%td=@shipment.tracking_number
 	%tr
 		%th.span1 Shipper
-		%td=@shipment.shipper.name
+		%td=@shipment.shipper.identifier
 	%tr
 		%th.span1 Receiver
-		%td=@shipment.receiver.name
+		%td=@shipment.receiver.identifier
 	%tr
 		%th.span2 Ship date
 		%td=@shipment.created_at

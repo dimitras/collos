@@ -11,7 +11,7 @@
             %tr
                 %td=ontology.name
                 %td=ontology.prefix
-                %td=ontology.uri
+                %td=link_to ontology.uri, url_for(ontology.uri), target: "_blank"
                 %td
                     =link_to "Show", ontology_path(ontology), class: 'btn'
                     - if can?(:edit, ontology)

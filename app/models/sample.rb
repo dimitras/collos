@@ -52,7 +52,12 @@ class Sample < ActiveRecord::Base
     :protocols
 
   validates :age, :inclusion => 0..1000, :allow_nil => true
-
+  #validates :tissue_type, length: { maximum: 25 }
+  #validates :material_type, length: { maximum: 25 }
+  #validates :primary_cell, length: { maximum: 25 }
+  #validates :treatments, length: { maximum: 25 }
+  #validates :name, length: { maximum: 25 }
+  
   # Needed to parse out comma delimited tags from forms into a strict Array
   # def tags=(tgs)
   #   if tgs.kind_of? String
@@ -126,11 +131,20 @@ class Sample < ActiveRecord::Base
     ethnicity.try(:name)
   end
 
+  def material_type_name
+    material_type.try(:name)
+  end
+
+  def tissue_type_name
+    tissue_type.try(:name)
+  end
+
   def study_titles
     titles=[]
     studies.each do |study|
       titles << study.try(:title)
     end
+    return titles
   end
 
   # def container_name
@@ -154,7 +168,7 @@ class Sample < ActiveRecord::Base
   end
 
   def label_fields
-    return [barcode_string, study_id, source_name, treatments, time_point]
+    return [name, barcode_string, study_id, source_name, treatments, time_point]
   end
 
   # Sample hierarchy is represented (loosely) as a directed acyclic graph.

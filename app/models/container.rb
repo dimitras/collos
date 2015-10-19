@@ -30,12 +30,13 @@ class Container < ActiveRecord::Base
     has_many :samples
     has_one :barcode, as: :barcodeable
     has_and_belongs_to_many :shipments
+    has_many :people
 
     # parent-child-sibling relationships
     has_ancestry :orphan_strategy => :rootify, :cache_depth => true
 
     validates_presence_of :container_type
-    
+    #validates :name, length: { maximum: 25 } 
     # some handy methods
     alias_method :container, :parent
     
@@ -69,8 +70,7 @@ class Container < ActiveRecord::Base
         end
     end
 
-
-	def container_type_name
+    def container_type_name
         container_type.name
     end
 
@@ -82,26 +82,26 @@ class Container < ActiveRecord::Base
         container_type.x_dimension * container_type.y_dimension > 1
     end
 
-	def self.arrange_as_array(options={}, hash=nil)
+    def self.arrange_as_array(options={}, hash=nil)
         hash ||= arrange(options)
 
-		arr = []
-		hash.each do |node, children|
-			arr << node
-			arr += arrange_as_array(options, children) unless children.nil?
-		end
-		arr
+	arr = []
+	hash.each do |node, children|
+		arr << node
+		arr += arrange_as_array(options, children) unless children.nil?
 	end
+	arr
+    end
 
-	def name_for_selects
-		# "#{'-' * depth} #{name}"
+    def name_for_selects
+	# "#{'-' * depth} #{name}"
         "[#{barcode}] #{name} (#{container_type_name})"
-	end
+    end
 
-	def possible_parents
-		parents = Container.arrange_as_array(:order => 'name')
-		return new_record? ? parents : parents - subtree
-	end
+    def possible_parents
+	parents = Container.arrange_as_array(:order => 'name')
+	return new_record? ? parents : parents - subtree
+    end
 	
     # Collects the associated samples or child containers into a
     # 2D Array sparse matrix

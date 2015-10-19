@@ -19,11 +19,15 @@
 #
 
 class Person < ActiveRecord::Base
-	attr_accessible :identifier, :firstname, :lastname, :type, :email, :phone, :laboratory, :institution, :user_id, :study_id
+	attr_accessible :identifier, :firstname, :lastname, :type, :email, :phone, :laboratory, :institution, :user_id, :study_id, :container, :container_id
 
 	has_and_belongs_to_many :studies
 	has_and_belongs_to_many :investigations
 	has_one :user
+	belongs_to :container
+	
+	has_many :shipments, class_name: "Shipment", foreign_key: "shipper_id"
+	has_many :packages, class_name: "Shipment", foreign_key: "receiver_id"
 
 	# Full text search of samples
 	include PgSearch

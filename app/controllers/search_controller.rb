@@ -14,7 +14,8 @@ class SearchController < ApplicationController
 
 		respond_to do |format|
 			format.html
-			format.csv { render file: 'search/fetch.csv.haml', content_type: "text/csv", filename: "#{params[:query]}.csv"}
+			format.csv {send_data @results.to_csv, :filename => "#{params[:query]}.csv"}
+			#format.csv { render file: 'search/fetch.csv.haml', content_type: "text/csv", filename: "#{params[:query]}.csv"}
 		end
 	end
 end

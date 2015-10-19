@@ -7,6 +7,7 @@
       %th.span1 Title
       %th.span1 Identifier
       %th.span1 Investigation
+      %th.span2 Investigators
       %th.span2 &nbsp;
   %tbody
     -@studies.each do |study|
@@ -19,6 +20,11 @@
             =link_to(study.investigation_title, study)
           -else
             %nbsp
+        %td
+          -if study.people
+            -study.people.each do |investigator|
+              ="#{investigator.firstname} #{investigator.lastname}"
+              %br 
         %td
           =link_to "Show", study_path(study), class: 'btn'
           -if can?(:edit, study)

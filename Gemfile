@@ -34,7 +34,7 @@ gem 'simple_form'
 gem 'wkhtmltopdf-binary'
 gem 'wicked_pdf'
 gem 'prawn'
-gem 'to_csv-rails'
+#gem 'to_csv-rails'
 
 # May need this gem if the set of countries can grow big
 # gem 'country_select'

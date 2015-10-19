@@ -25,6 +25,14 @@
         %th Investigation
         %td=link_to(@study.investigation_title, @study.investigation) if @study.investigation
     %tr
+        %th Investigators
+        %td
+            -if @study.people
+                -@study.people.each do |investigator|
+                    ="#{investigator.firstname} #{investigator.lastname} (#{investigator.laboratory} at #{investigator.institution})"
+                    /="#{investigator.firstname} #{investigator.lastname} (#{investigator.container.name} at #{investigator.container.parent.name})"
+                    %br
+    %tr
         %th="Samples (#{@study.samples.count})" 
         %td
             -if @study.samples
@@ -53,6 +61,14 @@
         %td
             -labels()
             /=link_to "#{@study.id}.pdf", url_for("#{@study.id}.pdf")
+            /== SAMPLES 
+            /%br
+            /== #{@study.samples}
+            /%br
+            /== SAMPLES FOR CSV
+            /%br
+            /== #{@study.samples_for_csv} 
+            /%br
             =link_to "Download #{@study.identifier}_samples.csv", study_path(:format=> :csv)
 
 -if @study.versions.count > 0

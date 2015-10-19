@@ -25,6 +25,16 @@ class Study < ActiveRecord::Base
 		investigation.try(:title)
 	end
 
+	def samples_for_csv
+		label_attrs = ["id", "name", "barcode", "species", "source", "study_id", "tissue type", "material type", "time point", "treatment", "replicate"]
+		CSV.generate do |csv|
+			csv<< label_attrs
+			samples.each do |sample|
+				csv << [sample.id, sample.name, sample.barcode_string, sample.scientific_name, sample.source_name, identifier, sample.tissue_type_name, sample.material_type_name, sample.time_point, sample.treatments, sample.replicate]
+			end
+		end
+	end
+	
 	# Full text search of samples
 	include PgSearch
 	multisearchable against: [:title, :identifier, :description],

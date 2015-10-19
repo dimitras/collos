@@ -38,8 +38,9 @@
                     / -else
                     /     %td NA
     =will_paginate(@results, params: params, method: 'post')
+    =link_to "Download results", search_path(:format => :csv)
+    =link_to "Download results", search_path(:format => :csv), class:'btn'
     =link_to "Download CSV", search_path(results: @results, format: "csv"), class:'btn'
-    =link_to "Download CSV", search_path(params.merge(format: 'csv')), class:'btn'
 -else
     %i==#{@results.count} entries found
 %br

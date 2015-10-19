@@ -23,8 +23,8 @@
         -for shipment in @shipments
             %tr
                 %td=link_to(shipment.tracking_number, shipment)
-                %td=shipment.shipper.name
-                %td=shipment.receiver.name
+                %td=shipment.shipper.identifier
+                %td=shipment.receiver.identifier
                 %td=shipment.created_at#ship_date
                 /%td=shipment.recieve_date
                 %td=shipment.past_container

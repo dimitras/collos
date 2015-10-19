@@ -586,7 +586,8 @@ CREATE TABLE people (
     study_id integer,
     tsv_content tsvector,
     laboratory character varying(255),
-    identifier character varying(255)
+    identifier character varying(255),
+    container_id integer
 );
 
 
@@ -2315,3 +2316,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140605183754');
 INSERT INTO schema_migrations (version) VALUES ('20140605190459');
 
 INSERT INTO schema_migrations (version) VALUES ('20140606201614');
+
+INSERT INTO schema_migrations (version) VALUES ('20151008195752');

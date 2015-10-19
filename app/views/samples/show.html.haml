@@ -82,11 +82,11 @@
         -if @sample.tissue_type.try(:name)
             %tr
                 %th Tissue type
-                %td=@sample.tissue_type.try(:name)
+                %td=link_to @sample.tissue_type.name, url_for(@sample.tissue_type)
         -if @sample.material_type.try(:name)
             %tr
                 %th Material type
-                %td=@sample.material_type.try(:name)
+                %td=link_to @sample.material_type.name, url_for(@sample.material_type)
         -if @sample.primary_cell.try(:name)
             %tr
                 %th Primary cell/Cell line
