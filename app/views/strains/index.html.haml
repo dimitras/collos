@@ -1,0 +1,18 @@
+%h3 Strains
+%table.table.table-striped.table-condensed.table-bordered
+    %thead
+        %tr
+            %th Name
+            %th &nbsp;
+    %tbody
+        -for strain in @strains
+            %tr
+                %td=strain.name
+                %td
+                    =link_to "Show", strain_path(strain), class: 'btn'
+                    - if can?(:edit, strain)
+                        =link_to "Edit", edit_strain_path(strain), class: 'btn btn-success'
+                    -if can?(:destroy, strain)
+                        = link_to "Delete", strain_path(strain), method: 'delete', class: 'btn btn-danger'
+=will_paginate(@strains)
+= link_to "Create new strain", new_strain_path, class: 'btn btn-primary btn-large'

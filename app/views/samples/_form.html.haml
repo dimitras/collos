@@ -3,6 +3,7 @@
 
 =simple_form_for @sample, html: {class: 'form-horizontal'} do |f|
     =field_set_tag "Basic Information" do
+        =f.input :confirmed, hint: "Enable for confirmation that the sample exists."
         =f.input :name, hint: "Should be descriptive, eg. (investigator_)sample_tissue_condition_replicate(_aliquotX)"
         - if @sample.barcode
             =f.input :barcode, disabled: true, hint: "Barcodes are permanent. If you really want to change it, then contact the site admin."
@@ -24,6 +25,7 @@
         =f.association :tissue_type, collection: Sample.where(retired: false).tissue_type_terms.order('name'), hint: link_to("Add a new tissue type", new_ontology_term_url, :target => "_blank")
         =f.association :material_type, collection: Sample.where(retired: false).material_type_terms.order('name'), hint: link_to("Add a new material type", new_ontology_term_url, :target => "_blank")
         =f.association :primary_cell, collection: Sample.where(retired: false).primary_cell_type_terms.order('name'), hint: link_to("Add a new primary cell type", new_ontology_term_url, :target => "_blank")
+        =f.input :quantity, hint: "Specify the quantity of the sample"
         =f.label :parent
         =f.collection_select :parent_id, Sample.all, :id, :name, :include_blank => true
         %span.hint If this is a child (aliquot, extract, split) of another sample, then you can define here the parent sample

@@ -15,6 +15,12 @@ Collos::Application.routes.draw do
     end
   end
 
+  resources :strains do
+	collection do
+		get 'search'
+	end
+  end
+
   resources :material_types do
     collection do
       get 'search'

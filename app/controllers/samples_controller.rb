@@ -16,7 +16,7 @@ class SamplesController < ApplicationController
     end
 
     def show
-        # @sample = @sample.find(params[:id])
+		# @sample = @sample.find(params[:id])
         # @children = @sample.children
     end
 

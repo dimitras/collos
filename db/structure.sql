@@ -309,6 +309,38 @@ ALTER SEQUENCE external_links_id_seq OWNED BY external_links.id;
 
 
 --
+-- Name: friendly_id_slugs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE friendly_id_slugs (
+    id integer NOT NULL,
+    slug character varying(255) NOT NULL,
+    sluggable_id integer NOT NULL,
+    sluggable_type character varying(40),
+    created_at timestamp without time zone
+);
+
+
+--
+-- Name: friendly_id_slugs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE friendly_id_slugs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: friendly_id_slugs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE friendly_id_slugs_id_seq OWNED BY friendly_id_slugs.id;
+
+
+--
 -- Name: investigations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -892,7 +924,9 @@ CREATE TABLE samples (
     replicate character varying(255),
     protocols character varying(255),
     race_id integer,
-    ethnicity_id integer
+    ethnicity_id integer,
+    confirmed boolean,
+    quantity character varying(255)
 );
 
 
@@ -973,6 +1007,37 @@ CREATE SEQUENCE shipments_id_seq
 --
 
 ALTER SEQUENCE shipments_id_seq OWNED BY shipments.id;
+
+
+--
+-- Name: strains; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE strains (
+    id integer NOT NULL,
+    name character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: strains_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE strains_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: strains_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE strains_id_seq OWNED BY strains.id;
 
 
 --
@@ -1166,6 +1231,13 @@ ALTER TABLE ONLY external_links ALTER COLUMN id SET DEFAULT nextval('external_li
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY friendly_id_slugs ALTER COLUMN id SET DEFAULT nextval('friendly_id_slugs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY investigations ALTER COLUMN id SET DEFAULT nextval('investigations_id_seq'::regclass);
 
 
@@ -1285,6 +1357,13 @@ ALTER TABLE ONLY shipments ALTER COLUMN id SET DEFAULT nextval('shipments_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY strains ALTER COLUMN id SET DEFAULT nextval('strains_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY studies ALTER COLUMN id SET DEFAULT nextval('studies_id_seq'::regclass);
 
 
@@ -1371,6 +1450,14 @@ ALTER TABLE ONLY investigations
 
 ALTER TABLE ONLY external_links
     ADD CONSTRAINT external_links_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: friendly_id_slugs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY friendly_id_slugs
+    ADD CONSTRAINT friendly_id_slugs_pkey PRIMARY KEY (id);
 
 
 --
@@ -1499,6 +1586,14 @@ ALTER TABLE ONLY samples
 
 ALTER TABLE ONLY shipments
     ADD CONSTRAINT shipments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: strains_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY strains
+    ADD CONSTRAINT strains_pkey PRIMARY KEY (id);
 
 
 --
@@ -1636,6 +1731,27 @@ CREATE INDEX index_containers_shipments_on_container_id ON containers_shipments 
 --
 
 CREATE INDEX index_containers_shipments_on_shipment_id ON containers_shipments USING btree (shipment_id);
+
+
+--
+-- Name: index_friendly_id_slugs_on_slug_and_sluggable_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_friendly_id_slugs_on_slug_and_sluggable_type ON friendly_id_slugs USING btree (slug, sluggable_type);
+
+
+--
+-- Name: index_friendly_id_slugs_on_sluggable_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_friendly_id_slugs_on_sluggable_id ON friendly_id_slugs USING btree (sluggable_id);
+
+
+--
+-- Name: index_friendly_id_slugs_on_sluggable_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_friendly_id_slugs_on_sluggable_type ON friendly_id_slugs USING btree (sluggable_type);
 
 
 --
@@ -2318,3 +2434,11 @@ INSERT INTO schema_migrations (version) VALUES ('20140605190459');
 INSERT INTO schema_migrations (version) VALUES ('20140606201614');
 
 INSERT INTO schema_migrations (version) VALUES ('20151008195752');
+
+INSERT INTO schema_migrations (version) VALUES ('20151113181658');
+
+INSERT INTO schema_migrations (version) VALUES ('20151113214644');
+
+INSERT INTO schema_migrations (version) VALUES ('20151118211239');
+
+INSERT INTO schema_migrations (version) VALUES ('20160125180840');

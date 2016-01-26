@@ -31,7 +31,6 @@ class Container < ActiveRecord::Base
     has_one :barcode, as: :barcodeable
     has_and_belongs_to_many :shipments
     has_many :people
-
     # parent-child-sibling relationships
     has_ancestry :orphan_strategy => :rootify, :cache_depth => true
 
@@ -60,6 +59,7 @@ class Container < ActiveRecord::Base
     # scope :empty, where(samples => nil)
     scope :tube_in_use, joins(:container_type).where(container_types: {type: "test tube"})
 
+    
     # TODO
     def container_type_type
         container_type.type

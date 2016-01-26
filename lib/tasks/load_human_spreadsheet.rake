@@ -1,12 +1,11 @@
-namespace :db do
-	
+namespace :db do	
 	require 'rubygems'
 	require 'csv'
 
-	# USAGE: rake db:load_emanuela_spreadsheet --trace
-	desc "import emanuela spreadsheet"
-	task :load_emanuela_spreadsheet  => :environment do
-		isatab_directory = "workspace/data/Emanuela_samples/"
+	# USAGE: rake db:load_spreadsheet --trace
+	desc "import spreadsheet"
+	task :load_spreadsheet  => :environment do
+		isatab_directory = "workspace/data/CS_FORW2a/"
 		investigations = {}
 		investigation_file = "#{isatab_directory}investigation.csv"
 		CSV.foreach(investigation_file, {:headers=>:first_row}) do |row|
@@ -102,23 +101,23 @@ namespace :db do
 						puts "#NEW LAB #{container_laboratory.inspect} added\n"
 					end
 					if store_container.to_i == 1
-                               			store_laboratory = container_laboratory
+						store_laboratory = container_laboratory
 					end			
 				end
 
 				# TODO: :type => role, > rename type
-                                person = Person.create(
-                                        :identifier   => identifier,
+				person = Person.create(
+										:identifier   => identifier,
                                         :firstname    => firstname,
                                         :lastname     => lastname,
                                         :email        => email,
                                         :phone        => phone,
                                         :container_id => container_laboratory.id,
-					:laboratory   => container_laboratory.name,
+										:laboratory   => container_laboratory.name,
                                         :institution  => container_laboratory.parent.name
-                                )
+				)
 				puts "#NEW INVESTIGATOR #{person.inspect} added at study #{study_identifier}\n "
-                                person.studies << studies[study_identifier]
+				person.studies << studies[study_identifier]
 
 				if !line_1.nil?
 					address_line1 = Address.find_by_line_1(line_1)
@@ -178,34 +177,36 @@ namespace :db do
 			organism = row[3]
 			ethnicity = row[4]
 			race = row[5]
-			genotype = row[6]
-			sex = row[7]
-			collection_time = row[8]
-			treatments = row[9]
-			replicate = row[10]
-			tissue_type = row[11]
-			primary_cell = row[12]
-			material_type = row[13]
-			age = row[14]
-			age_unit = row[15]
-			protocols = row[16]
-			notes = row[17]
-			tags = row[18]
-			sample_external_identifier = row[19]
-			container_tube_type = row[20]
-			box_external_identifier = row[21]
-			box_label = row[22]
-			box_type = row[23]
-			freezer_label = row[24]
-			freezer_type = row[25]
+			strain = row[6]
+			genotype = row[7]
+			sex = row[8]
+			collection_time = row[9]
+			treatments = row[10]
+			replicate = row[11]
+			tissue_type = row[12]
+			primary_cell = row[13]
+			material_type = row[14]
+			quantity = row[15]
+			age = row[16]
+			age_unit = row[17]
+			protocols = row[18]
+			notes = row[19]
+			tags = row[20]
+			sample_external_identifier = row[21]
+			container_tube_type = row[22]
+			box_external_identifier = row[23]
+			box_label = row[24]
+			box_type = row[25]
+			freezer_label = row[26]
+			freezer_type = row[27]
 			shipped = false
-			if row[26] == "yes"
+			if row[28] == "yes"
 				shipped = true
 			end
-			shipper = row[27]
-			receiver = row[28]
-			collOS = row[29]
-			study_identifier = row[30]
+			shipper = row[29]
+			receiver = row[30]
+			collOS = row[31]
+			study_identifier = row[32]
 
 			# check for field length?
 			#puts "# #{treatments} has #{treatments.length} chars"
@@ -224,25 +225,40 @@ namespace :db do
 				taxon = Taxon.find_by_scientific_name(organism)
 				puts "#TAXON #{taxon.scientific_name} found in the db" if taxon
 				if !taxon
-  					taxon = Taxon.create(:scientific_name => organism)
+					taxon = Taxon.create(:scientific_name => organism)
 					puts "#TAXON #{taxon.scientific_name} added"
 				end
-				
-				race_nm = Race.find_by_name(race)
-				puts "#RACE #{race_nm.name} found in the db" if race_nm
-                                if !race_nm && race
-                                        race_nm = Race.create(:name => race)
-                                        puts "#RACE #{race_nm.inspect} added"
-                                end
+			
+				race_identifier = nil
+				if race	
+					race_nm = Race.find_by_name(race)
+					puts "#RACE #{race_nm.name} found in the db" if race_nm
+					if !race_nm
+                        race_nm = Race.create(:name => race)
+						puts "#RACE #{race_nm.inspect} added"
+					end
+					race_identifier = race_nm.id
+				end
+
+				strain_identifier = nil
+				if strain
+					strain_nm = Strain.find_by_name(strain)
+					puts "#STRAIN #{strain_nm.name} found in the db" if strain_nm
+					if !strain_nm
+						strain_nm = Strain.create(:name => strain)
+						puts "#STRAIN #{strain_nm.inspect} added"
+					end
+					strain_identifier = strain_nm.id
+				end
 
 				ethnicity_identifier = nil
 				if ethnicity
 					ethnicity_nm = Ethnicity.find_by_name(ethnicity)
 					ethnicity_identifier = ethnicity_nm.id if ethnicity_nm
 					puts "#ETHNICITY #{ethnicity_nm.name} found in the db" if ethnicity_nm
-                                	if !ethnicity_nm 
-                                	        ethnicity_nm = Ethnicity.create(:name => ethnicity)
-                                        	ethnicity_identifier = ethnicity_nm.id
+					if !ethnicity_nm 
+						ethnicity_nm = Ethnicity.create(:name => ethnicity)
+                        ethnicity_identifier = ethnicity_nm.id
 						puts "#ETHNICITY #{ethnicity_nm.inspect} added"
 					end
 				end
@@ -258,34 +274,34 @@ namespace :db do
 							puts "#NEW ONTOLOGY #{ontology.prefix} added"
 						end
 						ontology_id = ontology.id
-                                                term_accession = terms_list[age_unit][1]
-                                        	ageunit = OntologyTerm.create(:name => age_unit, :ancestry => '15', :ontology_id => ontology_id, :accession => term_accession )
+                        term_accession = terms_list[age_unit][1]
+                        ageunit = OntologyTerm.create(:name => age_unit, :ancestry => '15', :ontology_id => ontology_id, :accession => term_accession )
 						puts "#NEW AGE UNIT #{ageunit.name} added under #{ageunit.parent.name}"
 					else
-                                                puts "WARNING: missing #{age_unit} in ontology terms"
-                                                break
-                                        end
-                                end
+                        puts "WARNING: missing #{age_unit} in ontology terms"
+                        break
+					end
+				end
 
 				bio_sex = OntologyTerm.find_by_name(sex)
 				puts "#SEX #{bio_sex.name} found in the db" if bio_sex
 				if !bio_sex && sex
-                                        if terms_list.has_key?(sex)
+					if terms_list.has_key?(sex)
 						ontology = Ontology.find_by_name(terms_list[sex][0])
-                                                puts "#ONTOLOGY #{ontology.name} found in the db" if ontology
-                                                if !ontology
-                                                        ontology = Ontology.create(:name => terms_list[sex][0], :uri => terms_list[sex][2], :prefix => terms_list[sex][3])
-                                                        puts "#NEW ONTOLOGY #{ontology.prefix} added"
-                                                end
-                                                ontology_id = Ontology.find_by_name(terms_list[sex][0]).id
-                                                term_accession = terms_list[sex][1]
-                                                bio_sex = OntologyTerm.create(:name => sex, :ancestry => '7', :ontology_id => ontology_id, :accession => term_accession)
-                                                puts "#SEX #{bio_sex.name} added under #{bio_sex.parent.name}"
-                                        else
-                                                puts "WARNING: missing #{tissue_type} in ontology terms"
-                                                break
-                                        end
-                                end
+                        puts "#ONTOLOGY #{ontology.name} found in the db" if ontology
+                        if !ontology
+							ontology = Ontology.create(:name => terms_list[sex][0], :uri => terms_list[sex][2], :prefix => terms_list[sex][3])
+                            puts "#NEW ONTOLOGY #{ontology.prefix} added"
+                        end
+                        ontology_id = Ontology.find_by_name(terms_list[sex][0]).id
+                        term_accession = terms_list[sex][1]
+                        bio_sex = OntologyTerm.create(:name => sex, :ancestry => '7', :ontology_id => ontology_id, :accession => term_accession)
+                        puts "#SEX #{bio_sex.name} added under #{bio_sex.parent.name}"
+                    else
+						puts "WARNING: missing #{tissue_type} in ontology terms"
+                        break
+					end
+				end
 				
 				tissue = OntologyTerm.find_by_name(tissue_type)
 				puts "#TISSUE #{tissue.name} found in the db" if tissue
@@ -362,7 +378,8 @@ namespace :db do
 						:sex           => bio_sex,
 						:timeunit      => ageunit,
 						:ethnicity_id  => ethnicity_identifier,
-						:race_id       => race_nm.id,
+						:race_id       => race_identifier,
+						:strain_id     => strain_identifier,
 						:genotype      => genotype,
 						:time_point    => collection_time,
 						:treatments    => treatments,
@@ -370,6 +387,7 @@ namespace :db do
 						:tissue_type   => tissue,
 						:primary_cell  => primary,
 						:material_type => material,
+						:quantity      => quantity,
 						:protocols     => protocols,
 						:notes         => notes,
 						:tags          => tags
@@ -437,8 +455,8 @@ namespace :db do
 					puts "#NEW BOX #{container_box.inspect} added"
 				end
 				if shipped == true
-                                	past_container = container_box
-                                end
+                    past_container = container_box
+				end
 			
 				# create the tube container	
 				container_tube = Container.find_by_name("#{sample_name}_container")
@@ -473,44 +491,46 @@ namespace :db do
 					:name				=> sample_name, 
 					:barcode			=> Barcode.generate(), 
 					:taxon_id			=> taxon.id,  
-					:container_id		 	=> container_tube.id, 
+					:container_id		=> container_tube.id, 
 					:parent				=> Sample.find_by_name(parent), 
-					:source_name		 	=> source_name, 
-					:external_identifier 		=> sample_external_identifier, 
+					:source_name		=> source_name, 
+					:external_identifier=> sample_external_identifier, 
 					:age 				=> age, 
-					:ethnicity_id       		=> ethnicity_identifier,
-					:race_id			=> race_nm.id, 
+					:ethnicity_id       => ethnicity_identifier,
+					:race_id			=> race_identifier, 
+					:strain_id          => strain_identifier,
 					:genotype 			=> genotype, 
 					:time_point			=> collection_time, 
 					:treatments			=> treatments, 
 					:replicate			=> replicate, 
-					:sex           			=> bio_sex,
-					:timeunit      			=> ageunit,
-					:tissue_type   			=> tissue,
-					:primary_cell  			=> primary,
-					:material_type 			=> material,
-					:protocols           		=> protocols,
-					:notes               		=> notes,
-					:tags               		=> tags
+					:sex           		=> bio_sex,
+					:timeunit      		=> ageunit,
+					:tissue_type   		=> tissue,
+					:primary_cell  		=> primary,
+					:material_type 		=> material,
+					:quantity           => quantity,
+					:protocols          => protocols,
+					:notes              => notes,
+					:tags               => tags
 				)
 				sample.studies << studies[study_identifier]	
 				puts "#NEW SAMPLE #{sample.inspect} added"
 
 				#create shipment
 				if shipped == true && !containers_shipped.has_key?(past_container)
-                                	ishipper = Person.find_by_identifier(shipper)
-                                	ireceiver = Person.find_by_identifier(receiver)
+                    ishipper = Person.find_by_identifier(shipper)
+                    ireceiver = Person.find_by_identifier(receiver)
 					puts "#SHIPPER #{ishipper.identifier} found in the db" if ishipper
 					puts "#RECEIVER #{ireceiver.identifier} found in the db" if ireceiver
 					if ishipper && ireceiver
-                                		shipment = Shipment.create(:shipper_id => ishipper.id, :receiver_id => ireceiver.id, :past_container => past_container, :tracking_number => "#{ishipper.firstname}_to_#{ireceiver.firstname}")
+						shipment = Shipment.create(:shipper_id => ishipper.id, :receiver_id => ireceiver.id, :past_container => past_container, :tracking_number => "#{ishipper.firstname}_to_#{ireceiver.firstname}")
 						containers_shipped[past_container] = 1
 						puts "#NEW SHIPMENT #{shipment.inspect} added"
 					else
 						puts "WARNING: Shipper-Receiver are not defined"
 						break
 					end
-                        	end
+				end
 			end
 		end
 	end

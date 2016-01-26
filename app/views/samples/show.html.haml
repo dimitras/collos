@@ -18,6 +18,10 @@
 #annotation
     %table.table.table-bordered
         %tr
+            %th Confirmed
+            %td=@sample.confirmed? ? "Yes" : "No"
+      
+        %tr
             %th.span3 Name
             %td=@sample.name
         %tr
@@ -39,10 +43,10 @@
             %tr
                 %th Species
                 %td=link_to @sample.scientific_name, url_for(@sample.taxon)
-        -if @sample.strain
+        -if @sample.strain_name
             %tr
                 %th Strain
-                %td=@sample.strain.try(:name)
+                %td=link_to @sample.strain_name, url_for(@sample.strain)
         -if @sample.race
             %tr
                 %th Race
@@ -91,6 +95,10 @@
             %tr
                 %th Primary cell/Cell line
                 %td=@sample.primary_cell.try(:name)
+        -if @sample.quantity
+            %tr
+                %th Quantity
+                %td=@sample.quantity
         / -if @sample.material_types.count>0
         /     %tr
         /         %th Material types
@@ -119,6 +127,7 @@
         %tr
             %th Retired
             %td=@sample.retired? ? "Yes" : "No"
+
         -if !@sample.container.nil?
             %tr
                 %th Shipped

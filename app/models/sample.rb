@@ -42,14 +42,17 @@ class Sample < ActiveRecord::Base
     :taxon, :taxon_id, :scientific_name, :common_name,
     :container, :container_id, :container_x, :container_y,
     :protocol_application, :protocol_application_id,
-    :notes, :retired, :tags,
+    :notes, :retired, :tags, :confirmed,
     :ancestry, :parent_id, :parent,
     :study_titles, :studies, :study_id, :study_ids,
     #TOFIX: study ids?!?!?!
     :time_point, :genotype, :treatments, :replicate, :source_name,
     :material_type, :material_type_id, :tissue_type, :tissue_type_id, :primary_cell, :primary_cell_id,
     :strain, :strain_id, :timeunit, :age, :age_id, :sex, :sex_id, :race, :race_id, :ethnicity, :ethnicity_id,
-    :protocols
+    :protocols, :quantity
+
+ # extend FriendlyId
+ # friendly_id :barcode, use: :slugged
 
   validates :age, :inclusion => 0..1000, :allow_nil => true
   #validates :tissue_type, length: { maximum: 25 }
@@ -83,7 +86,7 @@ class Sample < ActiveRecord::Base
   belongs_to :container
   belongs_to :taxon
   belongs_to :sex, class_name: "OntologyTerm", foreign_key: "sex_id"
-  belongs_to :strain, class_name: "OntologyTerm", foreign_key: "strain_id"
+  belongs_to :strain#, class_name: "OntologyTerm", foreign_key: "strain_id"
   belongs_to :race
   belongs_to :ethnicity
   belongs_to :material_type, class_name: "OntologyTerm", foreign_key: "material_type_id"
@@ -115,6 +118,10 @@ class Sample < ActiveRecord::Base
 
   def common_name
     taxon.try(:common_name)
+  end
+
+  def strain_name
+	strain.try(:name)
   end
 
   def scientific_name=(sn)

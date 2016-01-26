@@ -29,6 +29,7 @@ gem "sass-twitter-bootstrap", "~> 2.3.0"
 gem "will_paginate"
 gem 'will_paginate_twitter_bootstrap'
 gem 'simple_form'
+gem 'friendly_id' , '~> 4.0.10' 
 
 # For pdf generation
 gem 'wkhtmltopdf-binary'
