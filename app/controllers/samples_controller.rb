@@ -3,8 +3,10 @@ class SamplesController < ApplicationController
 
     def index
         @samples = @samples.includes([:barcode, :container ])
-        unless params[:show_all]
-            @samples = @samples.where(retired: false)
+        if params[:show_all]
+            @samples = @samples.where(retired: true)
+		else
+			@samples = @samples.where(retired: false)
         end
 
         # TODO: for the number of children to be created
@@ -16,7 +18,7 @@ class SamplesController < ApplicationController
     end
 
     def show
-		# @sample = @sample.find(params[:id])
+		#@sample = @sample.find(params[:retired=>false])
         # @children = @sample.children
     end
 

@@ -235,21 +235,21 @@ class Sample < ActiveRecord::Base
   # Full text search of samples
   include PgSearch
   multisearchable against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier, :age, :time_point, :sex, :timeunit, :material_type, :treatments, :tissue_type, :primary_cell, :strain, :genotype, :protocols],
-    using: {
+	#:if => :retired == false,
+	using: {
       tsearch: {
-        dictionary: "english",
-        any_word: true,
-        prefix: true,
+        dictionary: "simple",
         tsvector_column: 'tsv_content'
       }
     }
 
   pg_search_scope :search, against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier, :age, :time_point, :sex, :timeunit, :material_type, :treatments, :tissue_type, :primary_cell, :strain, :genotype, :protocols],
-    using: {
+   # :if => :retired == false,
+	using: {
       tsearch: {
-        dictionary: "english",
-        any_word: true,
-        prefix: true,
+        dictionary: "simple",
+        #any_word: true,
+        #prefix: true,
         tsvector_column: 'tsv_content'
       }
     }
