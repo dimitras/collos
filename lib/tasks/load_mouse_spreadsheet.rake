@@ -1,3 +1,4 @@
+=begin
 namespace :db do
 
 	# USAGE: rake db:update_taxon_in_samples --trace
@@ -345,3 +346,4 @@ namespace :db do
 	end
 
 end
+=end

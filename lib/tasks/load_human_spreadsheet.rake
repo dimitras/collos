@@ -2,10 +2,11 @@ namespace :db do
 	require 'rubygems'
 	require 'csv'
 
-	# USAGE: rake db:load_spreadsheet --trace
+	# USAGE: rake db:loadspreadsheet --trace
 	desc "import spreadsheet"
-	task :load_spreadsheet  => :environment do
-		isatab_directory = "workspace/data/CS_FORW2a/"
+	task :loadspreadsheet  => :environment do
+		isatab_directory = "workspace/data/KT_820715/"
+		#isatab_directory = "workspace/data/CS_FORW/"
 		investigations = {}
 		investigation_file = "#{isatab_directory}investigation.csv"
 		CSV.foreach(investigation_file, {:headers=>:first_row}) do |row|
@@ -486,7 +487,8 @@ namespace :db do
 					puts "NEW TUBE #{container_tube.inspect} added"
 				end
 
-				# create samples	
+				# create samples
+				
 				sample = Sample.create(
 					:name				=> sample_name, 
 					:barcode			=> Barcode.generate(), 

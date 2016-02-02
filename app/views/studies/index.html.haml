@@ -4,22 +4,16 @@
   %thead
     %tr
       %th.span1 ID
-      %th.span1 Title
+      %th.span3 Title
       %th.span1 Identifier
-      %th.span1 Investigation
       %th.span2 Investigators
-      %th.span2 &nbsp;
+      %th.span3 &nbsp;
   %tbody
     -@studies.each do |study|
       %tr
         %td= study.id
         %td= link_to(study.title, study)
         %td= study.identifier
-        %td
-          -if study.investigation_title
-            =link_to(study.investigation_title, study)
-          -else
-            %nbsp
         %td
           -if study.people
             -study.people.each do |investigator|

@@ -28,7 +28,7 @@
                         =submit_tag "Search", class:'btn btn-primary'
                         %br
                         %br
-                        %em=label_tag "search by sample, container, barcode, organism, tissue, shipment tracking number, investigator etc"
+                        %em=label_tag "enter any keyword like sample, container, barcode, organism, tissue, shipment tracking number, investigator etc"
 
     %h5 Advanced search
     %table.table.table-bordered
@@ -88,8 +88,10 @@
     %table
         %tr
             %td
-                %h5 Pregenerate barcoded labels (TODO: be able to print the labels)
+                %h5 Pregenerate barcodes
                 = render partial: "barcodes/generate_barcodes"
+
+                = render partial: "barcodes/fetch_barcodes"
                 
                 /EXTRAs:
 

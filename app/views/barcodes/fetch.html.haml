@@ -17,26 +17,35 @@
       %th.span1 Connections
   %tbody
     -for bc in @barcodes
-      -if bc.barcodeable_type == 'Container'
-        -if !bc.barcodeable.samples.empty?
-          -bc.barcodeable.samples.each do |sample|
-            %tr
-              %td=bc.barcode
-              %td
-                -if bc.barcodeable
-                  == #{bc.barcodeable_type}:#{bc.barcodeable_id}
-                -else
-                  %i --
-              %td=sample.barcode_string
-      -elsif bc.barcodeable_type == 'Sample'
-        %tr
-          %td=bc.barcode
-          %td
-            -if bc.barcodeable
-              == #{bc.barcodeable_type}:#{bc.barcodeable_id}
-            -else
-              %i --
-          %td=bc.barcodeable.container.barcode
+      %tr
+        %td=bc.barcode
+        %td
+          -if bc.barcodeable_type
+            ==#{bc.barcodeable_type}
+          -else
+            %i --
+            
+/      -if bc.barcodeable_type == 'Container'
+/        -if !bc.barcodeable.samples.empty?
+/          -bc.barcodeable.samples.each do |sample|
+/            %tr
+/              %td=bc.barcode
+/              %td
+/                -if bc.barcodeable
+/                  == #{bc.barcodeable_type}:#{bc.barcodeable_id}
+/                -else
+/                  %i -
+/              %td=sample.barcode_string
+/      -elsif bc.barcodeable_type == 'Sample'
+/        %tr
+/          %td=bc.barcode
+/          %td
+/            -if bc.barcodeable
+/              == #{bc.barcodeable_type}:#{bc.barcodeable_id}
+/            -else
+/              %i -
+/          %td=bc.barcodeable.container.barcode
+          
 .pagination
   =will_paginate(@barcodes, params: params)
 
