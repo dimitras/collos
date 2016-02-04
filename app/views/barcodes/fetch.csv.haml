@@ -1,8 +1,10 @@
 =="Barcode Set","Entity","Barcode","Connections"
 -for bc in @barcodes
-	-if bc.barcodeable_type == 'Container'
-		-if !bc.barcodeable.samples.empty?
-			-bc.barcodeable.samples.each do |sample|
-				=="#{bc.barcode_set}","#{bc.barcodeable_type}","#{bc.barcode}","#{sample.barcode_string}"
-	-elsif bc.barcodeable_type == 'Sample'
-		=="#{bc.barcode_set}","#{bc.barcodeable_type}","#{bc.barcode}","#{bc.barcodeable.container.barcode}"
+    -if bc.barcodeable_type == 'Container'
+        -if !bc.barcodeable.samples.empty?
+            -bc.barcodeable.samples.each do |sample|
+                =="#{bc.barcode_set}","#{bc.barcodeable_type}","#{bc.barcode}","#{sample.barcode_string}"
+    -elsif bc.barcodeable_type == 'Sample'
+        =="#{bc.barcode_set}","#{bc.barcodeable_type}","#{bc.barcode}","#{bc.barcodeable.container.barcode}"
+    -else
+        =="#{bc.barcode_set}","#{bc.barcodeable_type}","#{bc.barcode}"
