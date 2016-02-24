@@ -6,7 +6,7 @@ namespace :db do
 	desc "import spreadsheet"
 	task :loadspreadsheet  => :environment do
 		isatab_directory = "workspace/data/KT_820715/"
-		#isatab_directory = "workspace/data/CS_FORW/"
+		#isatab_directory = "workspace/data/CS_FORW2a/"
 		investigations = {}
 		investigation_file = "#{isatab_directory}investigation.csv"
 		CSV.foreach(investigation_file, {:headers=>:first_row}) do |row|
@@ -46,6 +46,7 @@ namespace :db do
 			else
 				puts "NOTICE: #{study_identifier} exists in the database. Samples will be added to the existing study."
 				studies[study_identifier] = Study.find_by_identifier(study_identifier)
+				p "#{studies[study_identifier].identifier} is the study identifier that is stored."
 			end
 		end
 		
@@ -517,6 +518,7 @@ namespace :db do
 				)
 				sample.studies << studies[study_identifier]	
 				puts "#NEW SAMPLE #{sample.inspect} added"
+				p "Assigned in study #{sample.studies}"
 
 				#create shipment
 				if shipped == true && !containers_shipped.has_key?(past_container)
