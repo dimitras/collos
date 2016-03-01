@@ -1,12 +1,29 @@
 namespace :db do	
 	require 'rubygems'
 	require 'csv'
+	require 'roo'
 
+	
 	# USAGE: rake db:loadspreadsheet --trace
 	desc "import spreadsheet"
 	task :loadspreadsheet  => :environment do
-		isatab_directory = "workspace/data/KT_820715/"
-		#isatab_directory = "workspace/data/CS_FORW2a/"
+
+		# split xlsx input file to separate csvs
+		ifile = "workspace/data/KT_820715/820715.xlsx"
+		fname = ifile.split(".")[0]
+		xlsx = Roo::Spreadsheet.open(ifile)
+		Dir.mkdir("#{fname}") unless File.exists?("#{fname}")
+
+		xlsx.sheets.each do |sheet|
+			if sheet !~ /[Settings,CV,Restrictions]/
+				p sheet
+				xlsx.default_sheet = sheet
+				xlsx.to_csv("#{fname}/#{sheet}.csv")
+			end
+		end
+		p "#########################################"
+
+		isatab_directory = fname
 		investigations = {}
 		investigation_file = "#{isatab_directory}investigation.csv"
 		CSV.foreach(investigation_file, {:headers=>:first_row}) do |row|
@@ -52,7 +69,7 @@ namespace :db do
 		
 		# TODO: connect to user_id
 		container_laboratory = nil
-		contacts_file = "#{isatab_directory}contacts.csv"
+		contacts_file = "#{isatab_directory}investigators.csv"
 		investigators = {}
 		store_laboratory = ""
 		CSV.foreach(contacts_file, {:headers=>:first_row}) do |row|
