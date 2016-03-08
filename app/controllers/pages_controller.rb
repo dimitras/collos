@@ -32,9 +32,13 @@ class PagesController < ApplicationController
 	def upload 
 		uploaded_io = params[:file]
 		File.open(Rails.root.join('workspace', 'uploads',uploaded_io.original_filename), 'wb') do |file|
-			file.write(uploaded_io.read)
-			respond_to do |format|
-				format.html { redirect_to(root_url, :notice => 'File was uploaded.') }
+			respond_to do |format|	
+				if uploaded_io.original_filename.downcase.end_with?('.xlsx','.xls')
+					file.write(uploaded_io.read)
+					format.html { redirect_to(root_url, :notice => "#{uploaded_io.original_filename} is submitted for import.") }
+				else
+					format.html {redirect_to(root_url, :notice => "Inappropriate file format (#{uploaded_io.original_filename}). Use .xlsx, .xls formats.")}
+				end
 			end
 		end
 	end

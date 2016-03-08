@@ -70,28 +70,22 @@
             %td
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             %td
-                %h5 Upload file (check the #{link_to "file format",help_path()}) 
+                %h5 Import data in bulk (check the #{link_to "file format",help_path()}) 
                 %table.table.table-bordered
                     %tr
                         %td
                             =form_tag({action: :upload}, multipart: true) do
                                 = file_field_tag 'file'
-                                = submit_tag 'Upload'
+                                = submit_tag 'Import', class:'btn btn-primary'
                             /=form_tag import_investigations_path, multipart: true do
                             /    = file_field_tag :file
                             /    = submit_tag "Import"
 
                             / == #{link_to "Spreadsheet files", new_sample_path, class: 'btn'} #{link_to "ISA-Tab files", new_sample_path, class: 'btn'}
                             / %em==(check the file format in #{link_to "help section",help_path()})
-                            %ul
-                                =link_to "Spreadsheet files", new_sample_path
-                                %br
-                                =link_to "ISA-Tab files", new_sample_path
-                                %br
-                                %br
-                                %br
-                                %br
-                                
+                            %br
+                            %br
+                            %br
     %table
         %tr
             %td
