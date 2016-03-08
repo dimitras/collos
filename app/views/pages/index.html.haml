@@ -70,10 +70,17 @@
             %td
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             %td
-                %h5 Bulk upload (check the #{link_to "file format",help_path()}) 
+                %h5 Upload file (check the #{link_to "file format",help_path()}) 
                 %table.table.table-bordered
                     %tr
                         %td
+                            =form_tag({action: :upload}, multipart: true) do
+                                = file_field_tag 'file'
+                                = submit_tag 'Upload'
+                            /=form_tag import_investigations_path, multipart: true do
+                            /    = file_field_tag :file
+                            /    = submit_tag "Import"
+
                             / == #{link_to "Spreadsheet files", new_sample_path, class: 'btn'} #{link_to "ISA-Tab files", new_sample_path, class: 'btn'}
                             / %em==(check the file format in #{link_to "help section",help_path()})
                             %ul
@@ -119,6 +126,11 @@
                 / =submit_tag "CSV files", class:'btn'
 
 
-                / = form_for :file_upload, :html => {:multipart => true} do |f| %
-                /     = f.file_field :my_file
-                /     = f.submit "Upload"
+                /=form_for :file_upload do |f|
+                /    = f.file_field :my_file
+                /    = f.submit "Upload"
+
+
+                /=form_tag({action: :upload}, multipart: true) do
+                /    = file_field_tag 'file'
+                /    = submit_tag 'Upload'

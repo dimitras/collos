@@ -36,6 +36,7 @@ Collos::Application.routes.draw do
   resources :investigations do
     collection do
       get 'search'
+      post 'import'
     end
   end
 
@@ -148,5 +149,8 @@ Collos::Application.routes.draw do
   # Any path that is not found get re-directed to the root path
   # match ':not_found' => redirect(), :constraints => { :not_found => /.*/ }
   root :to => "pages#index"
+  resources :pages do
+	collection {post :upload}
+  end
 
 end
