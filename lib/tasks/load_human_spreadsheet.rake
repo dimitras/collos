@@ -7,25 +7,29 @@ namespace :db do
 	# USAGE: rake db:loadspreadsheet --trace
 	desc "import spreadsheet"
 	task :loadspreadsheet  => :environment do
-
+=begin
 		# split xlsx input file to separate csvs
+		start = Time.now
 		ifile = "workspace/data/KT_820715/820715.xlsx"
 		fname = ifile.split(".")[0]
 		xlsx = Roo::Spreadsheet.open(ifile)
 		Dir.mkdir("#{fname}") unless File.exists?("#{fname}")
 
 		xlsx.sheets.each do |sheet|
-			if sheet !~ /[Settings,CV,Restrictions]/
+			if sheet !~ /(Settings|CV|Restrictions)/
 				p sheet
 				xlsx.default_sheet = sheet
 				xlsx.to_csv("#{fname}/#{sheet}.csv")
 			end
 		end
+		p (Time.now - start).to_i
 		p "#########################################"
-
+		
 		isatab_directory = fname
+=end
+		isatab_directory = "workspace/data/KT_820715"
 		investigations = {}
-		investigation_file = "#{isatab_directory}investigation.csv"
+		investigation_file = "#{isatab_directory}/investigation.csv"
 		CSV.foreach(investigation_file, {:headers=>:first_row}) do |row|
 			investigation_identifier = row[0]
 			investigation_title = row[1]
@@ -45,7 +49,7 @@ namespace :db do
 		end
 	
 		studies = {}
-		studies_file = "#{isatab_directory}studies.csv"
+		studies_file = "#{isatab_directory}/studies.csv"
 		CSV.foreach(studies_file, {:headers=>:first_row}) do |row|
 			study_identifier = row[0]
 			study_title = row[1]
@@ -69,7 +73,7 @@ namespace :db do
 		
 		# TODO: connect to user_id
 		container_laboratory = nil
-		contacts_file = "#{isatab_directory}investigators.csv"
+		contacts_file = "#{isatab_directory}/investigators.csv"
 		investigators = {}
 		store_laboratory = ""
 		CSV.foreach(contacts_file, {:headers=>:first_row}) do |row|
@@ -170,7 +174,7 @@ namespace :db do
 
 
 		# parse ontology terms file
-		oterms_file = "#{isatab_directory}oterms.csv"
+		oterms_file = "#{isatab_directory}/oterms.csv"
 		terms_list = Hash.new {|h,k| h[k] = []} 
 		CSV.foreach(oterms_file, {:headers=>:first_row}) do |row|
 			term_name = row[0]
@@ -187,7 +191,7 @@ namespace :db do
 		# TODO: fix parent for sample, if the samples.csv is not sorted, the parents are not assigned
 		past_container = ""
 		containers_shipped = {}
-		samples_file = "#{isatab_directory}samples.csv"
+		samples_file = "#{isatab_directory}/samples.csv"
 		CSV.foreach(samples_file, {:headers=>:first_row}) do |row|
 			identifier = row[0]
 			sample_name = row[0]
