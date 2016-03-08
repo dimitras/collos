@@ -51,7 +51,7 @@
         / =f.collection_select :container_id, :container, @containers, :id, :name, :input_html => {:rel => "/containers/child_containers_by_depth"}
         / =f.collection_select :container_id, :child_container, @child_containers, :id, :name
 
-        =f.association :container, collection: Container.shipable, hint: link_to("Create a new container", new_container_url, :target => "_blank"), label_method: :to_s
+        =f.association :container, collection: Container.shipable.empty_tube.without_children, hint: link_to("Create a new container", new_container_url, :target => "_blank"), label_method: :to_s
         /=f.association :container_type, collection: ContainerType.order('container_type.type_id, name').all, hint: link_to("Create a new container type", new_container_type_url, :target => "_blank")
         /=f.association :container, collection: Container.empty_non_tube.order('containers.container_type_id, name').all, hint: link_to("Create a new container", new_container_url, :target => "_blank"), label_method: :to_s
         ==Choose the position of the sample in the plate. The origin is at the top left corner, starts with zero. 

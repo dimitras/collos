@@ -17,10 +17,10 @@
 %br
 #annotation
     %table.table.table-bordered
-        %tr
-            %th Confirmed
-            %td=@sample.confirmed? ? "Yes" : "No"
-      
+        -if @sample.confirmed? == true
+            %tr
+                %th Confirmed
+                %td=@sample.confirmed? ? "Yes" : "No"
         %tr
             %th.span3 Name
             %td=@sample.name

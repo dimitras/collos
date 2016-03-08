@@ -39,31 +39,51 @@ class Container < ActiveRecord::Base
     # some handy methods
     alias_method :container, :parent
     
-    scope :non_retired, where(:retired => false)
+    scope :is_not_retired, where(:retired => false)
+    scope :is_retired, where(:retired => true)
     scope :with_children, ->() {
         joins(:container_type).where(container_types: {can_have_children: true})
     }
+
+	scope :without_children, ->() {
+		joins(:container_type).where(container_types: {can_have_children: false})
+	}
+
+	scope :universities, where(ancestry_depth: 0)
+	scope :labs, where(ancestry_depth: 1)
+	#scope :freezers, where(ancestry_depth: 2)
+	#scope :boxes, where(ancestry_depth: 3)
+
+	scope :boxes, ->() {
+		joins(:container_type).where(container_types: {type_id: 5})
+	}
+
+	scope :freezers, ->() {
+		joins(:container_type).where(container_types: {type_id: 4})
+	}
+
     scope :shipable, ->() {
         joins(:container_type).where(container_types: {shipable: true})
     }
+
+    scope :tube_in_use, joins(:container_type).where(container_types: {type: "test tube"})
+
+	def self.empty_tube
+		Container.includes(:samples).where(:samples => {:container_id => nil})
+	end
 
     # TODO!!!
     # scope :non_tube, ->() {
     #     # joins(:container_type).where(container_types: {type: "test tube"})
     #     joins(:container_type).where(container_types: {name: "1.5 mL tube"})
     # }
-    # scope :empty, includes(:samples).where("samples=?", nil)
-    # scope :empty, ->() {
-    #     joins(:samples).where(samples: {container_id: nil})
-    # }
-    # scope :empty, where(samples => nil)
-    scope :tube_in_use, joins(:container_type).where(container_types: {type: "test tube"})
+   
+	
 
-    
-    # TODO
     def container_type_type
         container_type.type
     end
+
     def empty_non_tube
         if container_type_type != "test tube" && samples.nil?
             container_type_type

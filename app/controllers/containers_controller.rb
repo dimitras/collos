@@ -2,9 +2,21 @@ class ContainersController < ApplicationController
     load_and_authorize_resource includes: [:barcode,:container_type]
 	
     def index
-        @containers = @containers.includes([:barcode,:container_type]).order(:created_at)
-        unless params[:show_all]
-            @containers = @containers.where(retired: false)
+    	@containers = @containers.includes([:barcode,:container_type]).order(:created_at)
+        if params[:is_retired]
+			@containers = Container.is_retired.with_children
+		elsif params[:is_not_retired]
+			@containers = Container.is_not_retired.with_children
+		elsif params[:universities]
+			@containers = Container.universities.is_not_retired
+		elsif params[:labs]
+			@containers = Container.labs.is_not_retired
+		elsif params[:freezers]
+			@containers = Container.freezers.is_not_retired
+		elsif params[:boxes]
+			@containers = Container.boxes.with_children.is_not_retired
+		else
+			@containers = Container.with_children
         end
         @containers = @containers.page(params[:page])
     end
@@ -12,7 +24,7 @@ class ContainersController < ApplicationController
     def show; end
     def new
         @container = Container.new
-        @containers = Container.all  
+        @containers = Container.all
     end
     def create
         # @container.parent = nil

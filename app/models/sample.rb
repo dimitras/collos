@@ -80,6 +80,7 @@ class Sample < ActiveRecord::Base
   # end
 
   # default_scope where(retired: false)
+  scope :is_retired, where(retired: true)
 
   # validates :name, presence: true
   has_one :barcode, as: :barcodeable
@@ -110,7 +111,7 @@ class Sample < ActiveRecord::Base
   #     :conditions => ["COUNT(sample.children.count) == ?", count]
   #   }
   # }
-  # accepts_nested_attributes_for :children, :reject_if => lambda { |a| a[:content].blank? }, :allow_destroy => true
+  #accepts_nested_attributes_for :children, :reject_if => lambda { |a| a[:content].blank? }, :allow_destroy => true
 
   def scientific_name
     taxon.try(:scientific_name)

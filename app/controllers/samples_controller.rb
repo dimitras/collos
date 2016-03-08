@@ -29,6 +29,8 @@ class SamplesController < ApplicationController
         # @sample.taxon = Taxon.find_by_scientific_name(scientific_name)
         @studies = Study.all
         @material_types = MaterialType.all
+        @study = Study.new
+        @container = @sample.container.build
         if @sample.save
             redirect_to @sample, success: "Sample created successfully"
         else

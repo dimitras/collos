@@ -18,6 +18,8 @@ class Investigation < ActiveRecord::Base
 	has_many :samples
 	has_and_belongs_to_many :people
 
+    accepts_nested_attributes_for :studies, :reject_if => lambda{|a| a[:identifier].blank?}, :allow_destroy => true
+
 	# Full text search of samples
 	include PgSearch
 	multisearchable against: [:title, :identifier, :description],

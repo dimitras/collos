@@ -82,4 +82,10 @@ class InvestigationsController < ApplicationController
     #   format.json { head :no_content }
     # end
   end
+
+  def import
+	Investigation.import(params[:file])
+	redirect_to root_url, notice: "Investigation imported."
+  end
+
 end

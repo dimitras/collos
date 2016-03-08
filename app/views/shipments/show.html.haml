@@ -15,8 +15,8 @@
 		%th.span1 Shipper
 		%td=@shipment.shipper.identifier
 	%tr
-		%th.span1 Receiver
-		%td=@shipment.receiver.identifier
+	    %th.span1 Receiver
+        %td=@shipment.receiver.identifier
 	%tr
 		%th.span2 Ship date
 		%td=@shipment.created_at
@@ -56,5 +56,3 @@
 		==Date: #{version.created_at}
 		%br
 		==Fields: #{version.object}
-		%br
-		%br

@@ -19,6 +19,8 @@ class Study < ActiveRecord::Base
 	has_and_belongs_to_many :samples#, foreign_key: "id"
 	has_and_belongs_to_many :people
 
+	#accepts_nested_attributes_for :samples, :reject_if => lambda{|a| a[:name].blank?}, :allow_destroy => true 
+
 	validates_presence_of :investigation
 
 	def investigation_title
@@ -26,16 +28,18 @@ class Study < ActiveRecord::Base
 	end
 
 	def samples_for_csv
-		label_attrs = ["sample_collos_id", "sample_identifier", "id_barcode", "id_subject", "id_study", "sample_type", "collection-time-point", "treatment", "sample_name", "species","material_type", "container_type", "box_label", "box_barcode", "freezer_label", "freezer_type", "type"]
+		label_attrs = ["sample_collos_id", "sample_identifier", "id_barcode", "id_subject", "id_study", "sample_type", "collection-time-point", "treatment", "sample_name", "species","material_type", "quantity", "box_label", "box_barcode", "freezer_label", "freezer_type", "type"]
 		CSV.generate do |csv|
 			csv<< label_attrs
 			containers = []
 			samples.each do |sample|
-				csv << [sample.id, sample.name, sample.barcode_string, sample.source_name, identifier, sample.tissue_type_name, sample.time_point, sample.treatments, sample.replicate, sample.scientific_name, sample.material_type_name, sample.container.container_type_name, sample.container.parent.name, sample.container.parent.barcode_string, sample.container.parent.parent.name, sample.container.parent.parent.container_type_name, "sample"]
-				containers << sample.container.parent
+				if !sample.retired
+					csv << [sample.id, sample.name, sample.barcode_string, sample.source_name, identifier, sample.tissue_type_name, sample.time_point, sample.treatments, sample.replicate, sample.scientific_name, sample.material_type_name, sample.quantity, sample.container.parent.name, sample.container.parent.barcode_string, sample.container.parent.parent.name, sample.container.parent.parent.container_type_name, "sample"]
+					containers << sample.container.parent
+				end
 			end
 			containers.uniq.each do |container|
-				csv << [container.id, container.name, container.barcode, "", identifier, container.container_type_name, "","","", "", "", "","","","", "container"]
+				csv << [container.id, container.name, container.barcode, "", identifier, container.container_type_name, "","","", "", "", "","","", "container"]
 			end
 		end
 	end
