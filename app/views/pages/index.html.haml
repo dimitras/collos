@@ -77,6 +77,14 @@
                             =form_tag({action: :upload}, multipart: true) do
                                 = file_field_tag 'file'
                                 = submit_tag 'Import', class:'btn btn-primary'
+                            =form_tag({action: :finished}, multipart: true) do
+                                = submit_tag 'Check status', class:'btn'
+                            -if flash[:notice]
+                                %em==Status: #{flash[:notice]}
+                            -if flash[:success]
+                                %em==Status: #{flash[:success]}
+                            -if flash[:alert]
+                                %em==Status: #{flash[:alert]}
                             /=form_tag import_investigations_path, multipart: true do
                             /    = file_field_tag :file
                             /    = submit_tag "Import"

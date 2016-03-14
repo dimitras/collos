@@ -150,7 +150,10 @@ Collos::Application.routes.draw do
   # match ':not_found' => redirect(), :constraints => { :not_found => /.*/ }
   root :to => "pages#index"
   resources :pages do
-	collection {post :upload}
+	collection do
+		post :upload
+		post :finished
+	end
   end
 
 end

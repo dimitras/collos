@@ -4,13 +4,16 @@ namespace :db do
 	require 'roo'
 
 	
-	# USAGE: rake db:loadspreadsheet --trace
+	# USAGE: rake db:import_data --trace
 	desc "import spreadsheet"
-	task :loadspreadsheet  => :environment do
-=begin
-		# split xlsx input file to separate csvs
+	task :import_data  => :environment do
 		start = Time.now
-		ifile = "workspace/data/KT_820715/820715.xlsx"
+		p "########################################"
+		p "### Data import starting... #{start.strftime("%d/%m/%Y %H:%M")} ###"
+		# split xlsx input file to separate csvs
+		#ifile = "workspace/data/KT_820715/820715.xlsx"
+		ifile = ENV["UPFILE"]
+		p "File: #{ifile}"
 		fname = ifile.split(".")[0]
 		xlsx = Roo::Spreadsheet.open(ifile)
 		Dir.mkdir("#{fname}") unless File.exists?("#{fname}")
@@ -22,12 +25,11 @@ namespace :db do
 				xlsx.to_csv("#{fname}/#{sheet}.csv")
 			end
 		end
-		p (Time.now - start).to_i
+		p "Timestamp >> #{(Time.now - start).to_i}"
 		p "#########################################"
 		
 		isatab_directory = fname
-=end
-		isatab_directory = "workspace/data/KT_820715"
+		#isatab_directory = "workspace/data/KT_820715"
 		investigations = {}
 		investigation_file = "#{isatab_directory}/investigation.csv"
 		CSV.foreach(investigation_file, {:headers=>:first_row}) do |row|
@@ -558,5 +560,7 @@ namespace :db do
 				end
 			end
 		end
+		p "Timestamp >> #{(Time.now - start).to_i}"
+		p "### Data import finished. ###"
 	end
 end

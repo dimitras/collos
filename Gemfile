@@ -83,6 +83,7 @@ gem 'rabl'
 gem 'sidekiq'
 gem 'sinatra', :require =>  false
 gem 'slim'
+gem 'sidekiq-status'
 
 # YamlDb is a database-independent format for dumping and restoring data. It complements the the database-independent schema format found in db/schema.rb. The data is saved into db/data.yml
 gem 'yaml_db'

@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'thread'
 
 class PagesController < ApplicationController
     skip_before_filter :require_login
@@ -14,7 +15,7 @@ class PagesController < ApplicationController
     def upload_isatab
 		path = File.join("public/isatabs", upload["datafile"].original_filename)
 		File.open(path, "wb") { |f| f.write(upload["datafile"].read) }
-	end
+    end
 
 	def upload_csv
 		path = File.join("public/csvs", upload["datafile"].original_filename)
@@ -31,15 +32,54 @@ class PagesController < ApplicationController
 
 	def upload 
 		uploaded_io = params[:file]
-		File.open(Rails.root.join('workspace', 'uploads',uploaded_io.original_filename), 'wb') do |file|
-			respond_to do |format|	
-				if uploaded_io.original_filename.downcase.end_with?('.xlsx','.xls')
+		redirect_to(root_url)
+		if uploaded_io
+			fname = uploaded_io.original_filename
+			pname = "#{Rails.root}/workspace/uploads/#{fname}"
+			File.open(Rails.root.join('workspace', 'uploads', fname), 'wb') do |file|
+				if fname.downcase.end_with?('.xlsx','.xls')
 					file.write(uploaded_io.read)
-					format.html { redirect_to(root_url, :notice => "#{uploaded_io.original_filename} is submitted for import.") }
+					#flash[:notice] = "#{fname} is submitted for import."
+					#redirect_to(root_url, :notice => "#{fname} is submitted for import.")
+					job_id = PagesWorker.perform_async(pname)
+					flash[:notice] = "#{fname} is submitted for import."
+					finished(job_id, 1)
+=begin
+					while Sidekiq::Status::complete? job_id == false
+						header['Refresh'] = "5"
+						flash[:notice] = Sidekiq::Status::complete? job_id
+					end
+					
+					Thread.new do 
+						sleep(5)
+						flash[:notice] = Sidekiq::Status::complete? job_id
+						#finished = Sidekiq::Status::complete? job_id
+						#case finished
+						#when TRUE
+						#	flash[:success] = "Data imported successfully!"
+						#when FALSE
+						#	flash[:notice] = "Almost done..."
+						#end
+					end
+=end
+					#system "rake db:import_data UPFILE=#{Rails.root}/workspace/uploads/#{uploaded_io.original_filename} --trace >> #{Rails.root}/workspace/uploads/#{uploaded_io.original_filename}.log &"
 				else
-					format.html {redirect_to(root_url, :notice => "Inappropriate file format (#{uploaded_io.original_filename}). Use .xlsx, .xls formats.")}
+					flash[:alert] = "Inappropriate format (#{fname}). Use .xlsx, .xls formats."
+					#redirect_to(root_url, :notice => "Inappropriate file format (#{fname}). Use .xlsx, .xls formats.")
 				end
 			end
+		else
+			flash[:notice] = "Choose your data file first."
+			#redirect_to(root_url, :notice => "Choose your data file first.")
+		end
+	end
+
+	def finished(job_id, delay)
+		sleep(delay)
+		if Sidekiq::Status::complete? job_id == true
+			flash[:success] = "Data imported successfully!"
+		elsif Sidekiq::Status::complete? job_id == false
+			flash[:notice] = "Almost done..."
 		end
 	end
 
