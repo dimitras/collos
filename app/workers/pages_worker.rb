@@ -7,12 +7,12 @@ class PagesWorker
 	
 	def perform(upfile)
 		system "rake db:import_data UPFILE=#{upfile} --trace >> #{upfile}.log &"
-
+=begin
 		total 100
 		at 5, "Almost done"
-		#store vino: 'veritas'
-
-		#vino = retrieve :vino
+		store vino: 'veritas'
+		vino = retrieve :vino
+=end
 	end
 
 end

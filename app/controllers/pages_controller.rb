@@ -39,17 +39,32 @@ class PagesController < ApplicationController
 			File.open(Rails.root.join('workspace', 'uploads', fname), 'wb') do |file|
 				if fname.downcase.end_with?('.xlsx','.xls')
 					file.write(uploaded_io.read)
-					#flash[:notice] = "#{fname} is submitted for import."
 					#redirect_to(root_url, :notice => "#{fname} is submitted for import.")
 					job_id = PagesWorker.perform_async(pname)
-					flash[:notice] = "#{fname} is submitted for import."
-					finished(job_id, 1)
-=begin
-					while Sidekiq::Status::complete? job_id == false
-						header['Refresh'] = "5"
-						flash[:notice] = Sidekiq::Status::complete? job_id
+					flash[:notice] = "#{job_id} is being processed..."
+=begin	
+					que = Sidekiq::Queue.new("high")
+					while que.size != 0
+						flash[:notice] = "#{job_id} is being processed..."
+						break if que.size == 0
 					end
-					
+					flash[:notice] = "#{job_id} finished."
+
+=begin
+					status = Sidekiq::Status::status(job_id)
+					while status
+						flash[:notice] = "#{job_id} is being processed..."
+						status = Sidekiq::Status::status(job_id)
+						break if status.nil?
+					end
+					flash[:notice] = "#{job_id} finished."
+=begin
+					loop do
+						job_status = Sidekiq::Status::complete? job_id
+						break if job_status == true
+					end
+					flash[:success] = "Data imported successfully!"
+=begin					
 					Thread.new do 
 						sleep(5)
 						flash[:notice] = Sidekiq::Status::complete? job_id
@@ -74,11 +89,25 @@ class PagesController < ApplicationController
 		end
 	end
 
-	def finished(job_id, delay)
-		sleep(delay)
-		if Sidekiq::Status::complete? job_id == true
+=begin
+	def sidekiq_stats()
+		summary = Hash.new
+		stats = Sidekiq::Stats.new
+		summary = { processed: stats.processed, failed: stats.failed, enqueued: stats.enqueued, queues: stats.queues}
+	end
+
+	def queue_stats(queue)
+		summary = Hash.new
+		queue = Sidekiq::Queue.new(queue)
+		summary = { size: queue.size, latency: queue.latency}
+	end
+=end
+	def finished#(job_id)
+		redirect_to(root_url)
+		queue = Sidekiq::Queue.new('high')
+		if queue.size == 0 #|| (Sidekiq::Status::complete? job_id == true)
 			flash[:success] = "Data imported successfully!"
-		elsif Sidekiq::Status::complete? job_id == false
+		elsif queue.size >  0 #|| (Sidekiq::Status::complete? job_id == false)
 			flash[:notice] = "Almost done..."
 		end
 	end

@@ -77,10 +77,11 @@
                             =form_tag({action: :upload}, multipart: true) do
                                 = file_field_tag 'file'
                                 = submit_tag 'Import', class:'btn btn-primary'
-                            =form_tag({action: :finished}, multipart: true) do
-                                = submit_tag 'Check status', class:'btn'
                             -if flash[:notice]
                                 %em==Status: #{flash[:notice]}
+                                -job_id = flash[:notice].split(" ")[0]
+                                =button_to "Check status", action: "finished" #(job_id)"
+                                /=link_to_if(Sidekiq::Queue.new("high").size >= 0 ,"Check status", {controller: "pages", action: "finished"})
                             -if flash[:success]
                                 %em==Status: #{flash[:success]}
                             -if flash[:alert]

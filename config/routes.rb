@@ -36,7 +36,7 @@ Collos::Application.routes.draw do
   resources :investigations do
     collection do
       get 'search'
-      post 'import'
+      #post 'import'
     end
   end
 
@@ -151,8 +151,8 @@ Collos::Application.routes.draw do
   root :to => "pages#index"
   resources :pages do
 	collection do
-		post :upload
-		post :finished
+		post 'upload'
+		post 'finished' #/:id
 	end
   end
 
