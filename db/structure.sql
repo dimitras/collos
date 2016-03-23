@@ -351,7 +351,8 @@ CREATE TABLE investigations (
     updated_at timestamp without time zone NOT NULL,
     identifier character varying(255),
     tsv_content tsvector,
-    description text
+    description text,
+    imported boolean
 );
 
 
@@ -2442,3 +2443,5 @@ INSERT INTO schema_migrations (version) VALUES ('20151113214644');
 INSERT INTO schema_migrations (version) VALUES ('20151118211239');
 
 INSERT INTO schema_migrations (version) VALUES ('20160125180840');
+
+INSERT INTO schema_migrations (version) VALUES ('20160321193312');

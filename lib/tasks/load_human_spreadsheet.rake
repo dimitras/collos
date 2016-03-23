@@ -30,6 +30,7 @@ namespace :db do
 		
 		isatab_directory = fname
 		#isatab_directory = "workspace/data/KT_820715"
+		investigation = nil
 		investigations = {}
 		investigation_file = "#{isatab_directory}/investigation.csv"
 		CSV.foreach(investigation_file, {:headers=>:first_row}) do |row|
@@ -46,6 +47,8 @@ namespace :db do
 				puts "#NEW INVESTIGATION #{investigation.inspect} added"
 			else
 				puts "NOTICE: #{investigation_identifier} exists in the database. Samples will be added to the existing investigation."
+				investigation = Investigation.find_by_identifier(investigation_identifier)
+				investigation_update = Investigation.update(investigation.id, {:imported => nil})
 				investigations[investigation_identifier] = Investigation.find_by_identifier(investigation_identifier)
 			end
 		end
@@ -250,8 +253,10 @@ namespace :db do
 				taxon = Taxon.find_by_scientific_name(organism)
 				puts "#TAXON #{taxon.scientific_name} found in the db" if taxon
 				if !taxon
-					taxon = Taxon.create(:scientific_name => organism)
-					puts "#TAXON #{taxon.scientific_name} added"
+					if organism
+						taxon = Taxon.create(:scientific_name => organism)
+						puts "#TAXON #{taxon.scientific_name} added"
+					end
 				end
 			
 				race_identifier = nil
@@ -427,7 +432,7 @@ namespace :db do
 				puts "#FREEZER #{container_freezer.name} found in the db" if container_freezer
 				if !container_freezer
 					container_type = ContainerType.find_by_name(freezer_type)
-					puts "#FREEZER TYPE #{container_type.name} found in the db"
+					puts "#FREEZER TYPE #{container_type.name} found in the db" if container_type
 					if !container_type
 						ontology_term = OntologyTerm.find_by_name("freezer")
 						container_type = ContainerType.create(
@@ -560,6 +565,9 @@ namespace :db do
 				end
 			end
 		end
+
+		investigation_update2 = Investigation.update(investigation.id, {:imported => true})
+		p "Investigation #{investigation_update2.identifier} is imported (#{investigation_update2.imported}) in the db."
 		p "Timestamp >> #{(Time.now - start).to_i}"
 		p "### Data import finished. ###"
 	end

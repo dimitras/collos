@@ -152,7 +152,7 @@ Collos::Application.routes.draw do
   resources :pages do
 	collection do
 		post 'upload'
-		post 'finished' #/:id
+		post 'finished'
 	end
   end
 

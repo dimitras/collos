@@ -12,7 +12,7 @@
 #
 
 class Investigation < ActiveRecord::Base
-	attr_accessible :title, :identifier, :description, :study_ids
+	attr_accessible :title, :identifier, :description, :study_ids, :imported
 
   	has_many :studies, :inverse_of => :investigation
 	has_many :samples

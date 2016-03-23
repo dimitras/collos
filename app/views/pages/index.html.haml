@@ -80,18 +80,14 @@
                             -if flash[:notice]
                                 %em==Status: #{flash[:notice]}
                                 -job_id = flash[:notice].split(" ")[0]
-                                =button_to "Check status", action: "finished" #(job_id)"
-                                /=link_to_if(Sidekiq::Queue.new("high").size >= 0 ,"Check status", {controller: "pages", action: "finished"})
+                                =form_tag({action: :finished}) do 
+                                    = hidden_field_tag 'job_id', job_id
+                                    = submit_tag 'Check status'
+                                /=button_to "Check status", action: "finished"
                             -if flash[:success]
                                 %em==Status: #{flash[:success]}
                             -if flash[:alert]
                                 %em==Status: #{flash[:alert]}
-                            /=form_tag import_investigations_path, multipart: true do
-                            /    = file_field_tag :file
-                            /    = submit_tag "Import"
-
-                            / == #{link_to "Spreadsheet files", new_sample_path, class: 'btn'} #{link_to "ISA-Tab files", new_sample_path, class: 'btn'}
-                            / %em==(check the file format in #{link_to "help section",help_path()})
                             %br
                             %br
                             %br
@@ -117,23 +113,3 @@
                 /         =file_field_tag :annotation_file,  class: 'file-field span4'
                 /         =submit_tag "Upload Annotations", class:'btn btn-primary'
 
-
-                / %br
-                / %h4 Bulk upload
-                / %em==Enter the samples in the system (file format #{link_to "help",help_path()}).
-                / %br
-                / %br
-                / / = form_tag(uploader_path, method: 'get') do
-                / /     .fieldset
-                / =submit_tag "ISA-Tab files", class:'btn'
-                / =submit_tag "CSV files", class:'btn'
-
-
-                /=form_for :file_upload do |f|
-                /    = f.file_field :my_file
-                /    = f.submit "Upload"
-
-
-                /=form_tag({action: :upload}, multipart: true) do
-                /    = file_field_tag 'file'
-                /    = submit_tag 'Upload'
