@@ -77,3 +77,5 @@ We use a few rails plugins in this app
 
 ## Ancestry
 
+## License
+Under MIT License
