@@ -26,15 +26,10 @@
                     .fieldset
                         =text_field_tag :query, nil, class: 'span4', placeholder: 'ex. PBF78E5 | IL-1-beta | box | zebrafish | blood'
                         =submit_tag "Search", class:'btn btn-primary'
+                        =link_to "Advanced Search", adsearch_path, class:'btn'
                         %br
                         %br
                         %em=label_tag "enter any keyword like sample, container, barcode, organism, tissue, shipment tracking number, investigator etc"
-
-    %h5 Advanced search
-    %table.table.table-bordered
-        %tr
-            %td
-                /=submit_tag "Advanced Search", class:'btn'
     
     %table
         %tr

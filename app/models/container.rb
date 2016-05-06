@@ -119,8 +119,8 @@ class Container < ActiveRecord::Base
     end
 
     def possible_parents
-	parents = Container.arrange_as_array(:order => 'name')
-	return new_record? ? parents : parents - subtree
+		parents = Container.arrange_as_array(:order => 'name')
+		return new_record? ? parents : parents - subtree
     end
 	
     # Collects the associated samples or child containers into a

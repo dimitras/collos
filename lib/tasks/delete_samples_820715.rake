@@ -5,8 +5,8 @@ namespace :db do
 	# USAGE: rake db:delete_samples --trace
 	desc "delete samples"
 	task :delete_samples  => :environment do
-		samples_file = "workspace/data/KT_820715/41_delete_samples.csv"
-		source_name = "41"
+		samples_file = "workspace/data/KT_820715/50_delete_samples.csv"
+		source_name = "50"
 		
 		CSV.foreach(samples_file) do |row|
 			sample = Sample.find_by_name(row[0])

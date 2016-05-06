@@ -42,6 +42,11 @@ class Investigation < ActiveRecord::Base
 		}
 	}
 
+	def self.rebuild_pg_search_documents
+		#PgSearch::Document.delete_all(:searchable_type => self)
+		find_each {|record| record.update_pg_search_document}
+	end
+
 	# versioned records
     has_paper_trail
 end

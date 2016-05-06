@@ -147,6 +147,10 @@ class Sample < ActiveRecord::Base
     tissue_type.try(:name)
   end
 
+  def sex_name
+	sex.try(:name)
+  end
+
   def study_titles
     titles=[]
     studies.each do |study|
@@ -154,22 +158,6 @@ class Sample < ActiveRecord::Base
     end
     return titles
   end
-
-  # def container_name
-  #   Container.find_by_id(:container_id).name
-  # end
-  # def tubes
-  #   tubes = []
-  #   if container.container_type_id == 3
-  #     tubes.push(container_name)
-  #   end
-  # end
-  # def boxes
-  #   boxes = []
-  #   if container.container_type_id == 5
-  #     boxes.push(container_name)
-  #   end
-  # end
 
   def barcode_string
     barcode.barcode
@@ -236,7 +224,6 @@ class Sample < ActiveRecord::Base
   # Full text search of samples
   include PgSearch
   multisearchable against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier, :age, :time_point, :sex, :timeunit, :material_type, :treatments, :tissue_type, :primary_cell, :strain, :genotype, :protocols],
-	#:if => :retired == false,
 	using: {
       tsearch: {
         dictionary: "simple",
@@ -244,8 +231,20 @@ class Sample < ActiveRecord::Base
       }
     }
 
-  pg_search_scope :search, against: [:name, :barcode_string, :tags, :notes, :source_name, :external_identifier, :age, :time_point, :sex, :timeunit, :material_type, :treatments, :tissue_type, :primary_cell, :strain, :genotype, :protocols],
-   # :if => :retired == false,
+=begin
+  pg_search_scope :search, lambda do |query, *args|
+	return{
+		:against => args,
+	    :query => query
+	}
+  end
+
+  def self.searchadv(query, name, barcode_string, source_name, time_point, sex, material_type, treatments, tissue_type, primary_cell, protocols)
+	search(query, :name => name, :barcode_string => barcode_string, :source_name => source_name, :time_point => time_point, :sex => sex, :material_type => material_type, :treatments => treatments, :tissue_type => tissue_type, :primary_cell => primary_cell, :protocols => protocols)
+  end
+=end
+
+  pg_search_scope :search, against: [:name, :barcode_string, :source_name, :external_identifier, :age, :time_point, :sex, :timeunit, :material_type, :treatments, :tissue_type, :primary_cell, :strain, :genotype, :protocols],
 	using: {
       tsearch: {
         dictionary: "simple",
@@ -254,6 +253,12 @@ class Sample < ActiveRecord::Base
         tsvector_column: 'tsv_content'
       }
     }
+
+=begin
+  def self.rebuild_pg_search_documents
+	find_each {|record| record.update_pg_search_document}
+  end
+=end
 
   # versioned records
   has_paper_trail

@@ -59,10 +59,10 @@
             %tr
                 %th Genotype
                 %td=@sample.genotype
-        -if @sample.sex.try(:name)
+        -if @sample.sex_name
             %tr
                 %th Sex
-                %td=@sample.sex.try(:name)
+                %td=@sample.sex_name
         -if @sample.time_point
             %tr
                 %th Collection time point

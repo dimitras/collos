@@ -6,11 +6,12 @@ class PagesController < ApplicationController
 
     #include Sidekiq::Status::Worker
 
-    caches_page :index,:help,:about,:contact
+    caches_page :index,:help,:about,:contact, :adsearch
     def index; end
     def help; end
     def about; end
     def contact; end
+	def adsearch; end
 
 	def upload 
 		uploaded_io = params[:file]

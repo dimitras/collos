@@ -131,6 +131,7 @@ Collos::Application.routes.draw do
   match "/help", to: "pages#help", as: 'help', format: "html"
   match "/about", to: "pages#about", as: 'about', format: "html"
   match "/contact", to: "pages#contact", as: 'contact', format: "html"
+  match "/adsearch", to: "pages#adsearch", as: 'adsearch', format: "html"
 
   # omniauth
   match "/auth/:provider/callback" => "sessions#create"
@@ -141,6 +142,7 @@ Collos::Application.routes.draw do
 
   # search page
   match "/search", to: "search#index", as: :search
+  match "/search/fetch", to: "search#fetch", as: :search
 
   # Sidekiq background work processor
   require "sidekiq_auth"

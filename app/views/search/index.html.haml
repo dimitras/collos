@@ -1,46 +1,45 @@
 %br
 -if @results.count > 0
-    %h4==#{@results.count} entries found
     %table.table.table-striped.table-condensed.table-bordered
-        / %thead
-        /     %tr
-        /         %th.span1 Type
-        /         %th.span1 Barcode
-        /         %th.span1 Name/Title
-        /         %th.span1 Retired?
+        %thead
+            %tr
+                %th.span1 #{@results.count} entries found
+                %th.span1 Identifier
+                %th.span1 Type
         %tbody
             -for result in @results
                 - o = result.searchable
                 %tr
-                    -if result.searchable_type=="Investigation" || result.searchable_type=="Study"
-                        %td= result.content.split(/\r/)[0]
-                        %td
-                        /%td= result.content.identifier
-                    -elsif result.searchable_type=="Sample" || result.searchable_type=="Container"
-                        %td= result.content.split(" ")[0]
-                        %td= result.content.split(" ")[1]
+                    -if result.searchable_type == "Investigation" || result.searchable_type == "Study"
+                        %td= link_to o.title, o
+                        %td= o.identifier
+                    -elsif result.searchable_type == "Sample" || result.searchable_type == "Container"
+                        %td= link_to o.name, o
+                        %td= o.barcode
+                        /%td= o.source_name
+                        /%td= o.scientific_name
+                        /%td= o.time_point
+                        /%td= o.treatments
+                        /%td= o.tissue_type_name
+                        /%td= o.replicate
                     %td= result.searchable_type
+                    
 
-                    / -if o.has_attribute?("barcode_string") || o.has_attribute?("barcode")
-                    /     %td= o.barcode
-                    / -else
-                    /     %td NA
+                    -#-if o.has_attribute?("name")
+                        %td= link_to(o.name, o)
+                    -#-elsif o.has_attribute?("title")
+                        %td= link_to(o.title, o)
+                    -#-if o.has_attribute?("barcode_string") || o.has_attribute?("barcode")
+                        %td= o.barcode
+                    -#-elsif o.has_attribute?("identifier")
+                        %td= o.identifier
+                    /%td= result.searchable_type
 
-                    / -if o.has_attribute?("name")
-                    /     %td= link_to(o.name, o)
-                    / -elsif o.has_attribute?("title")
-                    /     %td= link_to(o.title, o)
-                    / -else
-                    /     %td NA
-
-                    / -if o.has_attribute?("retired")
-                    /     %td= o.retired? ? "yes" : "no"
-                    / -else
-                    /     %td NA
     =will_paginate(@results, params: params, method: 'post')
-    /=link_to "Download results", search_path(:format => :csv)
-    =link_to "Download results", search_path(:format => :csv), class:'btn'
-    =link_to "Download CSV", search_path(:results => @results, :format => :csv), class:'btn'
+    /=link_to "Download results", search_path(:format => :csv), class:'btn'
+    /=link_to "Download results", search_path(format: "csv", :results => @results), class:'btn'
+    =link_to "Download results", search_path(params.merge(format: "csv")), class:'btn'
+    /=link_to "Download results", search_path(format: 'csv', @results), class:'btn'
 -else
     %i==#{@results.count} entries found
 %br
