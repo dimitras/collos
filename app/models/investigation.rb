@@ -49,4 +49,68 @@ class Investigation < ActiveRecord::Base
 
 	# versioned records
     has_paper_trail
+
+# require 'rake'
+# require 'rake/rdoctask'
+# require 'rake/testtask'
+# require 'tasks/rails'
+
+# def capture_stdout
+#   s = StringIO.new
+#   oldstdout = $stdout
+#   $stdout = s
+#   yield
+#   s.string
+# ensure
+#   $stdout = oldstdout
+# end
+
+# Rake.application.rake_require '../../lib/tasks/metric_fetcher'
+# results = capture_stdout {Rake.application['metric_fetcher'].invoke}
+
+    def self.import(file)
+
+    	# http://railscasts.com/episodes/396-importing-csv-and-excel
+    	# how to upload all info?
+			# if isatab
+			# 	run parser
+			# 	run create tables
+			# 	run rake
+			# if csv or xls
+			#   read all sheets
+			# 	run rake
+
+		# file type?
+
+		# *****************************************
+		# just run the rake file to load everything
+		# make sure I have the correct format
+
+		# parse
+		spreadsheet = open_spreadsheet(file)
+
+		header = spreadsheet.row(1)
+		(2..spreadsheet.last_row).each do |i|
+
+			row = Hash[[header, spreadsheet.row(i)].transpose]
+			investigation = find_by_id(row["identifier"]) || new
+			investigation.attributes = row.to_hash.slice(*accessible_attributes)
+			investigation.save!
+		end
+	end
+
+	def self.open_spreadsheet(file)
+
+		# Roo::Excelx.new("*.xlsx")
+		# Roo::Spreadsheet.open('*.xls')
+		# Roo::CSV.new("*.csv")
+
+		case File.extname(file.original_filename)
+		when ".csv" then Csv.new(file.path, nil, :ignore)
+		when ".xls" then Excel.new(file.path, nil, :ignore)
+		when ".xlsx" then Excelx.new(file.path, nil, :ignore)
+		else raise "Unknown file type: #{file.original_filename}"
+		end
+	end
+
 end

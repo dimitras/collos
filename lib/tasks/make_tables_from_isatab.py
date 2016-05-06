@@ -4,14 +4,18 @@ Convert an ISAtab directory to csv tables that can easily be imported in rails d
 
 """
 
-# USAGE: python lib/tasks/make_tables_from_isatab.py isatab_directory output_for_studies.csv output_for_contacts.csv output_for_investigation.csv output_for_samples.csv 
+# NEW USAGE FOR SPREADSHEET: python lib/tasks/make_tables_from_isatab.py isatab_directory output_for_spreadsheet.xlsx
+# ex: python lib/tasks/make_tables_from_isatab.py workspace/data/ER_validation_study1/ ER_validation_study1_data.xlsx
 
-# python lib/tasks/make_tables_from_isatab.py workspace/data/ER_validation_study1/ investigation.csv studies.csv contacts.csv samples.csv 
+# USAGE FOR CSVs: python lib/tasks/make_tables_from_isatab.py isatab_directory output_for_investigation.csv output_for_studies.csv output_for_contacts.csv output_for_samples.csv 
+# ex: python lib/tasks/make_tables_from_isatab.py workspace/data/ER_validation_study1/ investigation.csv studies.csv contacts.csv samples.csv 
+
 
 
 from bcbio import isatab
 import sys
 import csv
+import xlsxwriter
 
 class Record:
 	'''
@@ -35,6 +39,8 @@ class Record:
 				self.investigation.store_attribute('Investigation Identifier', study.attribute('Study Identifier'))
 				self.investigation.store_attribute('Investigation Title', study.attribute('Study Title'))
 				self.investigation.store_attribute('Investigation Description', study.attribute('Study Description'))
+				self.investigation.store_attribute('Study Design Type', study.attribute('Study Design Type'))
+				self.investigation.store_attribute('Study PubMed ID', study.attribute('Study PubMed ID'))
 		else:
 			identifier = self._metadata()['Investigation Identifier']
 			self.investigation = Investigation(identifier)
@@ -54,7 +60,7 @@ class Record:
 
 class Investigation:
 	'''
-	An investigation is a group of one or more studies. 
+	An investigation is a group of one or more studies.
 	Matches an ISAtab investigation from the record metadata section in the investigation file.
 	Could be empty if there is only one study involved.
 	'''
@@ -185,13 +191,55 @@ class Sample:
 ########################################################
 ####################### FUNCTIONS ######################
 ########################################################
+
+# Write isatab to xlsx file
+def write_isatab_to_xlsx(investigation, filename):
+	'''	
+	Write isatab data to an xlsx file with multiple worksheets
+	'''
+	workbook = xlsxwriter.Workbook(filename)
+	
+	# Investigation
+	investigation_worksheet = workbook.add_worksheet()
+	investigation_fields = ['Investigation Identifier','Investigation Title','Investigation Description', 'Study Design Type', 'Study PubMed ID']
+	investigation_worksheet.write(investigation_fields)
+	investigation_worksheet.write([investigation.attribute(field) for field in investigation_fields])
+	
+	# Studies
+	studies_worksheet = workbook.add_worksheet()
+	studies_fields = ['Study Identifier', 'Study Title', 'Study Description', 'Study Design Type']
+	studies_worksheet.write(studies_fields + ['Investigation Identifier'])
+	for study in investigation.studies:
+		studies_worksheet.write([study.attribute(field) for field in studies_fields] + [investigation.identifier])
+	
+	# Contacts
+	contacts_worksheet = workbook.add_worksheet()
+	contacts_fields = ['Comment[Lab]','Study Person Last Name','Study Person Mid Initials','Study Person Roles','Study Person Phone','Study Person Affiliation','Study Person First Name','Study Person Fax','Study Person Address','Study Person Email']
+	contacts_worksheet.write(['Contact Identifier'] + contacts_fields + ['Study Identifier'])
+	for study in investigation.studies:
+		for contact in study.contacts:
+			contacts_worksheet.write([contact.identifier] + [contact.attribute(field) for field in contacts_fields] + [study.identifier])
+	
+	# Samples
+	samples_worksheet = workbook.add_worksheet()
+	samples_fields = ['Sample_Name', 'parent', 'Source_Name', 'Material_Type', 'organism', 'Protocol_REF', 'freezer_type', 'freezer_label', 'box_type', 'box_label', 'box_external_identifier', 'container_type', 'sample_external_identifier', 'shipped', 'receiver', 'collOS', 'sex', 'strain', 'genetic_alteration', 'age', 'organism_part', 'sample_barcode', 'container_barcode', 'box_barcode', 'NSAID', 'stimulus', 'dose', 'additive', 'dose1', 'collection_time']
+
+	samples_worksheet.write(['Sample Identifier'] + samples_fields + ['Study Identifier'])
+	for study in investigation.studies:
+		for sample in study.samples:
+			samples_worksheet.writerow([sample.identifier] + [sample.attribute_string(field) for field in samples_fields] + [study.identifier])
+
+	workbook.close()
+
+
+# Write isatab to CSV files
 def write_investigation_to_csv(investigation, filename):
 	'''
 	Write investigation table to csv file
 	'''
 	with open(filename, 'w') as fp:
 		a = csv.writer(fp, delimiter=',')
-		fields = ['Investigation Identifier','Investigation Title','Investigation Description']
+		fields = ['Investigation Identifier','Investigation Title','Investigation Description', 'Study Design Type', 'Study PubMed ID']
 		a.writerow(fields)
 		a.writerow([investigation.attribute(field) for field in fields])
 
@@ -224,7 +272,7 @@ def write_investigation_studies_samples_to_csv(investigation, filename):
 	'''
 	Write samples table to csv file
 	'''
-	fields = ['Sample_Name', 'parent', 'Source_Name', 'Material_Type', 'organism', 'Protocol_REF', 'freezer_type', 'freezer_label', 'box_type', 'box_label', 'box_external_identifier', 'container_type', 'sample_external_identifier', 'shipped', 'receiver', 'collOS', 'sex', 'strain', 'genetic_alteration', 'age', 'organism_part', 'NSAID', 'stimulus', 'dose', 'additive', 'dose1', 'collection_time']
+	fields = ['Sample_Name', 'parent', 'Source_Name', 'Material_Type', 'organism', 'Protocol_REF', 'freezer_type', 'freezer_label', 'box_type', 'box_label', 'box_external_identifier', 'container_type', 'sample_external_identifier', 'shipped', 'receiver', 'collOS', 'sex', 'strain', 'genetic_alteration', 'age', 'organism_part', 'sample_barcode', 'container_barcode', 'box_barcode', 'NSAID', 'stimulus', 'dose', 'additive', 'dose1', 'collection_time']
 
 	with open(filename, 'w') as fp:
 		a = csv.writer(fp, delimiter=',')
@@ -239,26 +287,31 @@ def write_investigation_studies_samples_to_csv(investigation, filename):
 def main():
 	# get directory from the command arguments and parse the files
 	study_directory = str(sys.argv[1]) # data/ER-metab-v1_latest/
-	investigation_file = str(sys.argv[2])
-	studies_file = str(sys.argv[3])
-	contacts_file = str(sys.argv[4])
-	samples_file = str(sys.argv[5])
+	spreadsheet_file = str(sys.argv[2]) # ER-metab-v1_latest.xlsx
 	
 	# parse the isatab directory with isatools parser and get the record
 	record = Record(isatab.parse(study_directory))
 	investigation = record.investigation
 	
-	# write investigation details to csv
-	write_investigation_to_csv(investigation, investigation_file)
+	write_isatab_to_xlsx(investigation, spreadsheet_file)
+
+	# # Create csv tables from isatab
+	# investigation_file = str(sys.argv[2])
+	# studies_file = str(sys.argv[3])
+	# contacts_file = str(sys.argv[4])
+	# samples_file = str(sys.argv[5])
+
+	# # write investigation details to csv
+	# write_investigation_to_csv(investigation, investigation_file)
 	
-	# write investigation studies to csv
-	write_investigation_studies_to_csv(investigation, studies_file)
+	# # write investigation studies to csv
+	# write_investigation_studies_to_csv(investigation, studies_file)
 	
-	# write investigation studies contacts to csv
-	write_investigation_studies_contacts_to_csv(investigation, contacts_file)
+	# # write investigation studies contacts to csv
+	# write_investigation_studies_contacts_to_csv(investigation, contacts_file)
 	
-	# write investigation studies samples to csv
-	write_investigation_studies_samples_to_csv(investigation, samples_file)
+	# # write investigation studies samples to csv
+	# write_investigation_studies_samples_to_csv(investigation, samples_file)
 
 if __name__ == "__main__":
 	main()

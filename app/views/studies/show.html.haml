@@ -39,7 +39,6 @@
                 -@study.samples.each do |sample|
                     =link_to "#{sample.barcode.barcode},#{sample.name}", url_for(sample)
                     %br
-                    
                     / show only the samples to be shipped
                     / -if !sample.container.nil? && sample.container.shipped == true
                     /     =link_to "#{sample.barcode.barcode},#{sample.name}", url_for(sample)
@@ -49,13 +48,14 @@
                     / -if !sample.container.nil? && sample.container.shipped == false
                     /     =link_to "#{sample.barcode.barcode},#{sample.name}", url_for(sample)
                     /     %br
-    / -if @study.people.count > 0
-    /     %tr
-    /         %th Contacts
-    /         %td 
-    /             -@study.people.each do |person|
-    /                 =link_to person.firstname + person.lastname, url_for(person)
-    /                 %br
+    -if @study.people.count > 0
+        %tr
+            %th Contacts
+            %td 
+                -@study.people.each do |person|
+                    =person.firstname + " " + person.lastname
+                    /=link_to person.firstname + " " + person.lastname, url_for(person)
+                    %br
     %tr
         %th Samplesheet
         %td
