@@ -1,0 +1,15 @@
+%h3= @race.name
+
+=link_to "Edit race", edit_race_path(@race), method: 'get', class: 'btn btn-success'
+- if can? :destroy , @race
+    =link_to "Delete race", race_path(@race), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
+=link_to "See all races", races_path, method: 'get', class: 'btn'
+
+%br 
+%br
+
+%table.table.table-bordered
+    %tr
+        %th.span3 Name
+        %td=@race.name
+

@@ -2,12 +2,14 @@
 #
 # Table name: studies
 #
-#  id          :integer          not null, primary key
-#  title       :text
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  identifier  :string(255)
-#  description :text
+#  id               :integer          not null, primary key
+#  title            :text
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  identifier       :string(255)
+#  description      :text
+#  investigation_id :integer
+#  tsv_content      :tsvector
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

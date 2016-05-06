@@ -1,21 +1,70 @@
+-if @sample.barcode.nil?
+    %em{:style => "color: red;" } Tip: If this is a child (ex. aliquot, extract) sample of an existing sample, locate the existing one and create child(ren) from that level.
+
 =simple_form_for @sample, html: {class: 'form-horizontal'} do |f|
     =field_set_tag "Basic Information" do
-        =f.input :name
+        =f.input :confirmed, hint: "Enable for confirmation that the sample exists."
+        =f.input :name, hint: "Should be descriptive, eg. (investigator_)sample_tissue_condition_replicate(_aliquotX)"
         - if @sample.barcode
             =f.input :barcode, disabled: true, hint: "Barcodes are permanent. If you really want to change it, then contact the site admin."
         - else
             =f.input :barcode, disabled: true, hint: "Barcodes are automatically generated"
-        =f.association :taxon, label_method: :scientific_name
-        / =f.association :type, collection: @sample.gender_type_terms # add the migration first
-        =f.input :retired
+        =f.input :external_identifier, hint: "Identifiers assigned outside of CollOS"
+        =f.input :source_name, :label => "Subject (source)", hint: "eg. mouse123, mlims_id, or study_id_&_subject_id for clinical studies"
+        =f.association :taxon, label_method: :scientific_name, hint: link_to("Create a new taxon", new_taxon_url, :target => "_blank")
+        =f.association :sex, collection: Sample.where(retired: false).gender_type_terms.order('name'), hint: link_to("Create a new biological sex/mating type", new_ontology_term_url, :target => "_blank")
+        =f.input :genotype, hint: "Specify the genetic alterations using the official gene symbol, eg. Ptgs1 knock-out"
+        =f.association :strain, collection: Sample.where(retired: false).strain_type_terms.order('name'), hint: link_to("Add a new strain", new_ontology_term_url, :target => "_blank")
+        =f.association :race, include_blank: true, hint: link_to("Create a new race", new_race_url, :target => "_blank")
+        =f.association :ethnicity, hint: link_to("Create a new ethnicity", new_ethnicity_url, :target => "_blank")
+        =f.input :treatments, hint: "Specify treatments the samples received"
+        =f.input :replicate, hint: "Specify replicate, eg. brep1 for biological replicate 1"
+        =f.association :timeunit, collection: Sample.where(retired: false).time_type_terms.order('name'), hint: link_to("Create a new time unit type", new_ontology_term_url, :target => "_blank"), :label => "Age time unit"
+        =f.input :age, hint: "Enter the age at collection time"
+        =f.input :time_point, hint: "Enter the collection time of the sample"
+        =f.association :tissue_type, collection: Sample.where(retired: false).tissue_type_terms.order('name'), hint: link_to("Add a new tissue type", new_ontology_term_url, :target => "_blank")
+        =f.association :material_type, collection: Sample.where(retired: false).material_type_terms.order('name'), hint: link_to("Add a new material type", new_ontology_term_url, :target => "_blank")
+        =f.association :primary_cell, collection: Sample.where(retired: false).primary_cell_type_terms.order('name'), hint: link_to("Add a new primary cell type", new_ontology_term_url, :target => "_blank")
+        =f.input :quantity, hint: "Specify the quantity of the sample"
+        =f.label :parent
+        =f.collection_select :parent_id, Sample.all, :id, :name, :include_blank => true
+        %span.hint If this is a child (aliquot, extract, split) of another sample, then you can define here the parent sample
+        %br
+        %br
+        =f.association :studies, :multiple => true, hint: link_to("Create a new study", new_study_url, :target => "_blank")
+        =f.input :retired, hint: "Enable if the sample is to be retired, eg. the sample is used or split"
 
     =field_set_tag "Container for sample" do
-        =f.association :container, collection: Container.where(retired: false).order('containers.container_type_id, name').all,  hint: link_to("Create a new container", new_container_url), label_method: :to_s
-        =f.input :container_y, hint: "The origin is at the top left corner, starts with zero. Tubes only have one position (0,0)."
-        =f.input :container_x, hint: 'You can choose this at a later time using the container\'s view.'
+        /TODO
+        / http://www.petermac.com/rails-3-jquery-and-multi-select-dependencies/
+        / = f.input :container_id, collection: Container.non_retired.where(:ancestry_depth => 0).order(:name).all.collect{ |c| [c.name,c.id]}
+        / %div{:id=>"addressLaboratories"}
+        /     = render :partial => 'laboratories'
+        / %div{:id=>"addressFreezers"}
+        /     = render :partial => 'freezers'
+        / %div{:id=>"addressBoxes"}
+        /     = render :partial => 'boxes'
+        / %div{:id=>"addressTubes"}
+        /     = render :partial => 'tubes'
+
+        / http://www.samuelmullen.com/2011/02/dynamic-dropdowns-with-rails-jquery-and-ajax/
+        / =f.collection_select :container_id, :container, @containers, :id, :name, :input_html => {:rel => "/containers/child_containers_by_depth"}
+        / =f.collection_select :container_id, :child_container, @child_containers, :id, :name
+
+        =f.association :container, collection: Container.shipable.empty_tube.without_children, hint: link_to("Create a new container", new_container_url, :target => "_blank"), label_method: :to_s
+        /=f.association :container_type, collection: ContainerType.order('container_type.type_id, name').all, hint: link_to("Create a new container type", new_container_type_url, :target => "_blank")
+        /=f.association :container, collection: Container.empty_non_tube.order('containers.container_type_id, name').all, hint: link_to("Create a new container", new_container_url, :target => "_blank"), label_method: :to_s
+        ==Choose the position of the sample in the plate. The origin is at the top left corner, starts with zero. 
+        %br
+        Tubes only have one position (0,0).
+        %br
+        %br
+        =f.input :container_x, :label => "x-coordinate", hint: "eg. for 96 well plate choose between 1-12 on the x-axis"
+        =f.input :container_y, :label => "y-coordinate", hint: 'eg. for 96 well plate choose between A-H on the y-axis'
 
     =field_set_tag "Other Annotations" do
-
+        /TODO
+        /=f.input :external_links, :label => "External link" #,hint: link_to("Add an external link", new_external_link_url, :target => "_blank")
         =f.input :tags, hint: 'Press "Tab" key to enter a tag. Delete by clicking each tags "x"'
         =f.input :notes
     %fieldset
@@ -25,6 +74,5 @@
 = content_for :js do
     :javascript
         $("#sample_tags").tagsInput()
-
 
 

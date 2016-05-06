@@ -1,12 +1,48 @@
-%p#notice= notice
+%h3= @investigation.title
 
-%p
-  %b Name:
-  = @investigation.name
-%p
-  %b Person:
-  = @investigation.person_id
+=link_to "Edit Investigation", edit_investigation_path(@investigation), method: 'get', class: 'btn btn-success'
+- if can? :destroy , @investigation
+	=link_to "Delete investigation", investigation_path(@investigation), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
+=link_to "See all Investigations", investigations_path, method: 'get', class: 'btn'
 
-= link_to 'Edit', edit_investigation_path(@investigation)
-\|
-= link_to 'Back', investigations_path
+%br
+%br
+
+%table.table.table-bordered
+	%tr
+		%th Title
+		%td=@investigation.title
+	%tr
+		%th Identifier
+		%td=@investigation.identifier
+	-if @investigation.description
+		%tr
+			%th Description
+			%td=@investigation.description
+	-if @investigation.studies.count > 0
+		%tr
+			%th Studies
+			%td 
+				-@investigation.studies.each do |study|
+					=link_to study.title, url_for(study)
+					%br
+	/ -if @investigation.people.count > 0
+	/ 	%tr
+	/ 		%th Contacts
+	/ 		%td 
+	/ 			-@investigation.people.each do |person|
+	/ 				=link_to person.firstname + person.lastname, url_for(person)
+	/ 				%br
+
+-if @investigation.versions.count > 0
+	%h5 Audit Trail (History)
+	-@investigation.versions.each do |version|
+		==Event: #{version.event}
+		%br
+		==User: #{User.find_by_id(version.whodunnit).name if version.whodunnit}
+		%br
+		==Date: #{version.created_at}
+		%br
+		==Fields: #{version.object}
+		%br
+		%br

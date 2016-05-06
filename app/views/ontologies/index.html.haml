@@ -2,19 +2,21 @@
 %table.table.table-striped.table-condensed.table-bordered
     %thead
         %tr
-            %th Name
-            %th URI
-            %th &nbsp;
+            %th.span3 Name
+            %th.span1 Prefix
+            %th.span3 URI
+            %th.span3 &nbsp;
     %tbody
         -for ontology in @ontologies
             %tr
                 %td=ontology.name
-                %td=ontology.uri
+                %td=ontology.prefix
+                %td=link_to ontology.uri, url_for(ontology.uri), target: "_blank"
                 %td
                     =link_to "Show", ontology_path(ontology), class: 'btn'
                     - if can?(:edit, ontology)
                         =link_to "Edit", edit_ontology_path(ontology), class: 'btn btn-success'
                     -if can?(:destroy, ontology)
-                        = link_to "Destroy", ontology_path(ontology), method: 'delete', class: 'btn btn-danger'
+                        = link_to "Delete", ontology_path(ontology), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
 =will_paginate(@ontologies)
 = link_to "Create new ontology", new_ontology_path, class: 'btn btn-primary btn-large'

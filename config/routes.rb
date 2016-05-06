@@ -3,22 +3,54 @@ require 'api_constraints'
 
 Collos::Application.routes.draw do
 
-  resources :box_types
+  resources :ethnicities do
+    collection do
+      get 'search'
+    end
+  end
 
+  resources :races do
+    collection do
+      get 'search'
+    end
+  end
 
-  resources :freezer_types
+  resources :strains do
+	collection do
+		get 'search'
+	end
+  end
 
+  resources :material_types do
+    collection do
+      get 'search'
+    end
+  end
 
-  resources :people
+  resources :people do
+    collection do
+      get 'search'
+    end
+  end
 
+  resources :investigations do
+    collection do
+      post 'import'
+      get 'search'
+      #post 'import'
+    end
+  end
 
-  resources :investigations
-
-
-  resources :studies
-
+  resources :studies do
+    collection do
+      get 'search'
+    end
+  end
 
   resources :shipments do
+    collection do
+      get 'search'
+    end
     member do
       post 'receive'
       post 'ship'
@@ -53,7 +85,12 @@ Collos::Application.routes.draw do
     end
   end
 
-  resources :taxons
+  resources :taxons do
+    collection do
+      get 'search'
+    end
+  end
+
   resources :protocols
   # resources :protocol_parameters
   resources :protocol_applications
@@ -63,11 +100,17 @@ Collos::Application.routes.draw do
     collection do
       get 'search'
       post 'upload'
+      post :edit_multiple
+      put :update_multiple
+      put :create_multiple
+      # match 'containers/update_laboratory_select/:id', :controller=>'containers', :action => 'update_laboratory_select'
+      # match 'containers/update_freezer_select/:id', :controller=>'containers', :action => 'update_freezer_select'
+      # match 'containers/update_box_select/:id', :controller=>'containers', :action => 'update_box_select'
+      # match 'containers/update_tube_select/:id', :controller=>'containers', :action => 'update_tube_select'
     end
     member do
       post 'place' # place this object into a container
     end
-
   end
 
   resources :containers do
@@ -75,6 +118,8 @@ Collos::Application.routes.draw do
       get 'search'
       get 'collect_objects'
       post 'place_objects'
+      post :edit_multiple
+      put :update_multiple
     end
     member do
       post 'place' # place this object into a container
@@ -87,6 +132,7 @@ Collos::Application.routes.draw do
   match "/help", to: "pages#help", as: 'help', format: "html"
   match "/about", to: "pages#about", as: 'about', format: "html"
   match "/contact", to: "pages#contact", as: 'contact', format: "html"
+  match "/adsearch", to: "pages#adsearch", as: 'adsearch', format: "html"
 
   # omniauth
   match "/auth/:provider/callback" => "sessions#create"
@@ -97,6 +143,7 @@ Collos::Application.routes.draw do
 
   # search page
   match "/search", to: "search#index", as: :search
+  match "/search/fetch", to: "search#fetch", as: :search
 
   # Sidekiq background work processor
   require "sidekiq_auth"
@@ -105,6 +152,11 @@ Collos::Application.routes.draw do
   # Any path that is not found get re-directed to the root path
   # match ':not_found' => redirect(), :constraints => { :not_found => /.*/ }
   root :to => "pages#index"
-
+  resources :pages do
+	collection do
+		post 'upload'
+		post 'finished'
+	end
+  end
 
 end

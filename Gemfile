@@ -29,6 +29,13 @@ gem "sass-twitter-bootstrap", "~> 2.3.0"
 gem "will_paginate"
 gem 'will_paginate_twitter_bootstrap'
 gem 'simple_form'
+gem 'friendly_id' , '~> 4.0.10' 
+
+# For pdf generation
+gem 'wkhtmltopdf-binary'
+gem 'wicked_pdf'
+gem 'prawn'
+#gem 'to_csv-rails'
 
 # May need this gem if the set of countries can grow big
 # gem 'country_select'
@@ -60,7 +67,7 @@ gem 'enumify'
 gem 'cancan'
 
 # Audit trails
-gem 'paper_trail', '~> 2' # for audit trails
+gem 'paper_trail', '~> 2'
 
 #barcodes
 gem 'zint'
@@ -76,4 +83,8 @@ gem 'rabl'
 gem 'sidekiq'
 gem 'sinatra', :require =>  false
 gem 'slim'
+gem 'sidekiq-status'
+
+# YamlDb is a database-independent format for dumping and restoring data. It complements the the database-independent schema format found in db/schema.rb. The data is saved into db/data.yml
+gem 'yaml_db'
 

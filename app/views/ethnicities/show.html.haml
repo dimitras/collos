@@ -1,0 +1,15 @@
+%h3= @ethnicity.name
+
+=link_to "Edit ethnicity", edit_ethnicity_path(@ethnicity), method: 'get', class: 'btn btn-success'
+- if can? :destroy , @ethnicity
+    =link_to "Delete ethnicity", ethnicity_path(@ethnicity), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
+=link_to "See all ethnicities", ethnicities_path, method: 'get', class: 'btn'
+
+%br 
+%br
+
+%table.table.table-bordered
+    %tr
+        %th.span3 Name
+        %td=@ethnicity.name
+

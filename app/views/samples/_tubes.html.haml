@@ -1,0 +1,17 @@
+:javascript
+    $(function() {
+    $("#sample_container_id").change(function() {
+    var tube = $('select#sample_container_id :selected').val();
+    if(tube == "") tube="0";
+    jQuery.get('/samples/update_tube_select/' + tube, function(data){
+        $("#addressTubes").html(data);
+    })
+    return false;
+    });
+
+=simple_form_for @sample, html: {class: 'form-horizontal'} do |f|
+    -if !tubes.blank?
+        =f.input :container_id, :collection=>tubes.collect{ |s| [s.name,s.id]}
+    -else
+        =f.input :container_id, :collection=>[]  
+

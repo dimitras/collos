@@ -1,26 +1,21 @@
 %h3 User Information
 
 %table.table.table-bordered
-%thead
   %tr
     %th Name
-    %td=@user.name
+    %td{:colspan=>2}=@user.name
   %tr
     %th E-mail
-    %td=@user.email
+    %td{:colspan=>2}=@user.email
   %tr
     %th Status
+    %td=@user.status
     %td
-      = @user.status
       -if current_user and current_user.admin?
         -if @user.active?
-          |
-          =link_to("Deactivate", inactivate_user_path(@user), method: 'post')
-          |
+          =link_to("Deactivate", deactivate_user_path(@user), method: 'post', class: 'btn')
         -else
-          |
-          =link_to("Activate", activate_user_path(@user), method: 'post')
-          |
+          =link_to("Activate", activate_user_path(@user), method: 'post', class: 'btn')
 %p
 =button_to "See all users", users_path(), class: 'btn', method: 'get'
 

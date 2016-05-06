@@ -1,0 +1,58 @@
+%h3= @shipment.tracking_number
+
+=link_to "Edit shipment", edit_shipment_path(@shipment), method: 'get', class: 'btn btn-success'
+=link_to "See all shipments", shipments_path, method: 'get', class: 'btn'
+=link_to 'Get manifest', shipment_path(@shipment, :format => :pdf), method: 'get', class: 'btn btn-primary'
+
+%br
+%br
+
+%table.table.table-bordered
+	%tr
+		%th.span2 Tracking No
+		%td=@shipment.tracking_number
+	%tr
+		%th.span1 Shipper
+		%td=@shipment.shipper.identifier
+	%tr
+	    %th.span1 Receiver
+        %td=@shipment.receiver.identifier
+	%tr
+		%th.span2 Ship date
+		%td=@shipment.created_at
+	%tr
+		%th.span2 Receive date
+		%td=@shipment.recieve_date
+	%tr
+		%th.span2 Shipper address
+		%td=#
+	%tr
+		%th.span2 Receiver address
+		%td=#
+	%tr
+		%th.span3 Shipper container
+		%td=@shipment.past_container
+	%tr
+		%th.span3 Receiver container
+		%td=@shipment.new_container
+	%tr
+		%th.span1 Complete
+		%td=@shipment.complete? ? "yes" : "no"
+
+
+/ -wicked_pdf_stylesheet_link_tag "documents"
+/ %div{:class=>"document"}
+/ 	=render partial: 'edit'
+
+%br
+
+-if @shipment.versions.count > 0
+	%h5 Audit Trail (History)
+	-@shipment.versions.each do |version|
+		==Event: #{version.event}
+		%br
+		==User: #{User.find_by_id(version.whodunnit).name if version.whodunnit}
+		%br
+		==Date: #{version.created_at}
+		%br
+		==Fields: #{version.object}

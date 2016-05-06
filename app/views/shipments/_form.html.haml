@@ -1,0 +1,39 @@
+=simple_form_for @shipment, html: {class: 'form-horizontal'} do |f|
+	=field_set_tag "Shipment Information" do
+		=f.input :tracking_number
+		=f.association :shipper, collection: Person.all, label_method: :identifier
+		=f.association :receiver, collection: Person.all, label_method: :identifier
+		/=f.input :created_at, disabled: true, hint: "Date is automatically generated when you create the shipment.", label: "Ship date"
+		- if @shipment.created_at
+			=f.input :created_at, label: "Ship date"
+		- else
+			=f.input :created_at, disabled: true, hint: "The ship date is automatically generated", label: "Ship date"
+		/=f.input :ship_date, :as => :string, :input_html => {:class => 'datepicker col-span-3'}
+		
+		=f.input :recieve_date, :as => :string, :input_html => {:class => 'datepicker col-span-3'}, :label => "Receive date"
+		=f.label "Shipper address"
+		=f.collection_select :id, Address.all, :id, :name_for_selects, :include_blank => true
+		=link_to("Create a new address", new_address_url, :target => "_blank")
+		%br
+		%br
+		=f.label "Receiver address"
+		=f.collection_select :id, Address.all, :id, :name_for_selects, :include_blank => true
+		=link_to("Create a new address", new_address_url, :target => "_blank")
+		%br
+		%br
+		=f.input :complete, hint: "If you are the receiver, check as completed if you have received the shipped samples."
+	=field_set_tag "Package Information" do
+		/=f.association :past_container
+		=f.association :past_container, collection: Container.shipable.order('containers.container_type_id, name').all, label_method: :to_s, hint: "If you are the shipper, specify the container that is being shipped."
+		=f.association :new_container, collection: Container.shipable.order('containers.container_type_id, name').all, label_method: :to_s, hint: "If you are the receiver, specify the container you are storing the shipped samples."
+	%fieldset
+		=f.button :submit
+		=link_to 'Cancel', @shipment, class: 'btn btn-warning'
+		
+:javascript
+	$('.datepicker').datepicker({
+		format: "yyyy-mm-dd",
+		todayHighlight: true,
+		todayBtn: 'linked',
+		autoclose: true
+	}); ;

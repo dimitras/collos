@@ -1,0 +1,17 @@
+:javascript
+    $(function() {
+    $("#sample_container_id").change(function() {
+    var freezer = $('select#sample_container_id :selected').val();
+    if(freezer == "") freezer="0";
+    jQuery.get('/samples/update_box_select/' + freezer, function(data){
+        $("#addressBoxes").html(data);
+    })
+    return false;
+    });
+
+=simple_form_for @sample, html: {class: 'form-horizontal'} do |f|
+    -if !freezers.blank?
+        =f.input :container_id, :collection=>freezers.collect{ |s| [s.name,s.id]}
+    -else
+        =f.input :container_id, :collection=>[]  
+

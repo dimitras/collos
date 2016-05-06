@@ -1,0 +1,15 @@
+%h3= @strain.name
+
+=link_to "Edit strain", edit_strain_path(@strain), method: 'get', class: 'btn btn-success'
+- if can? :destroy , @strain
+    =link_to "Delete strain", strain_path(@strain), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
+=link_to "See all strains", strains_path, method: 'get', class: 'btn'
+
+%br 
+%br
+
+%table.table.table-bordered
+    %tr
+        %th.span3 Name
+        %td=@strain.name
+

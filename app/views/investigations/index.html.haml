@@ -1,21 +1,23 @@
-%h1 Listing investigations
+%h3 Investigations
 
-%table
-  %tr
-    %th Name
-    %th Person
-    %th
-    %th
-    %th
-
-  - @investigations.each do |investigation|
+%table.table.table-striped.table-condensed.table-bordered
+  %thead
     %tr
-      %td= investigation.name
-      %td= investigation.person_id
-      %td= link_to 'Show', investigation
-      %td= link_to 'Edit', edit_investigation_path(investigation)
-      %td= link_to 'Destroy', investigation, :method => :delete, :data => { :confirm => 'Are you sure?' }
+      %th.span2 Title
+      %th.span1 Identifier
+      %th.span3 &nbsp;
+  %tbody
+    - @investigations.each do |investigation|
+      %tr
+        %td= link_to(investigation.title, investigation)
+        %td= investigation.identifier
+        %td
+          =link_to "Show", investigation_path(investigation), class: 'btn'
+          -if can?(:edit, investigation)
+            =link_to "Edit", edit_investigation_path(investigation), class: 'btn btn-success'
+          -if can?(:destroy, investigation)
+            = link_to "Delete", investigation_path(investigation), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
 
 %br
 
-= link_to 'New investigation', new_investigation_path
+= link_to 'Create new Investigation', new_investigation_path, class: 'btn btn-primary btn-large'

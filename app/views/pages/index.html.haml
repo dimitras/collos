@@ -3,24 +3,109 @@
     =render "sessions/form"
 -else
     %br
-    %em (non-functional yet)
-    %h4 Search CollOS for Samples and Containers
-    = form_tag("/search",method: 'get', class: 'form-inline form-search') do
-        .fieldset
-            =text_field_tag :query, nil,class: 'span4', placeholder: '"PBF78E5" or "zfish123"'
-            =submit_tag "Search", class:'btn btn-primary'
+    %h5 Browse
+    %table.table.table-bordered
+        %tr
+            %td
+                %ul
+                    =link_to 'Investigations',investigations_url
+                    %br
+                    =link_to 'Studies',studies_url
+                    %br
+                    =link_to 'Samples',samples_url
+                    %br
+                    =link_to 'Containers',containers_url
+                    %br
+                    =link_to 'Shipments', shipments_url
+
+    %h5 Search
+    %table.table.table-bordered
+        %tr
+            %td
+                = form_tag(search_path, method: 'get', class: 'form-inline form-search') do
+                    .fieldset
+                        =text_field_tag :query, nil, class: 'span4', placeholder: 'ex. PBF78E5 | IL-1-beta | box | zebrafish | blood'
+                        =submit_tag "Search", class:'btn btn-primary'
+                        =link_to "Advanced Search", adsearch_path, class:'btn'
+                        %br
+                        %br
+                        %em=label_tag "enter any keyword like sample, container, barcode, organism, tissue, shipment tracking number, investigator etc"
     
-    %br
-    %br
+    %table
+        %tr
+            %td
+                %h5 Enter individually (check the #{link_to "steps",help_path()}) 
+                %table.table.table-bordered
+                    %tr
+                        %td
+                            %ul
+                                =link_to 'Investigation',new_investigation_path
+                                %br
+                                =link_to 'Study',new_study_path
+                                %br
+                                =link_to 'Sample',new_sample_path
+                                %br
+                                =link_to 'Container',new_container_path
+                                %br
+                                =link_to 'Shipment',new_shipment_path
+                        %td
+                            %ul
+                                =link_to 'Container type',new_investigation_path
+                                %br
+                                =link_to 'Taxon',new_study_path
+                                %br
+                                =link_to 'Race',new_sample_path
+                                %br
+                                =link_to 'Ethnicity',new_container_path
+                                %br
+                                =link_to 'Strain',new_strain_path
+                                %br
+                                =link_to 'Ontology term',new_shipment_path
+                                %br
+                                %br
+            %td
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            %td
+                %h5 Import data in bulk (check the #{link_to "file format",help_path()}) 
+                %table.table.table-bordered
+                    %tr
+                        %td
+                            =form_tag({action: :upload}, multipart: true) do
+                                = file_field_tag 'file'
+                                = submit_tag 'Import', class:'btn btn-primary'
+                            -if flash[:notice]
+                                %em==Status: #{flash[:notice]}
+                                -job_id = flash[:notice].split(" ")[0]
+                                =form_tag({action: :finished}) do 
+                                    = hidden_field_tag 'job_id', job_id
+                                    = submit_tag 'Check status'
+                                /=button_to "Check status", action: "finished"
+                            -if flash[:success]
+                                %em==Status: #{flash[:success]}
+                            -if flash[:alert]
+                                %em==Status: #{flash[:alert]}
+                            %br
+                            %br
+                            %br
+    %table
+        %tr
+            %td
+                %h5 Pregenerate barcodes
+                = render partial: "barcodes/generate_barcodes"
 
-    %h4 Generate barcodes
-    = render partial: "barcodes/generate_barcodes"
+                = render partial: "barcodes/fetch_barcodes"
+                
+                /EXTRAs:
 
-    %h4 Fetch a barcode set
-    = render partial: "barcodes/fetch_barcodes"
+                / %h4 Generate barcodes
+                / = render partial: "barcodes/generate_barcodes"
 
-    / %h4 Upload CSV of Annotations
-    / = form_tag(upload_samples_path,method: 'post', class: 'form-horizontal') do
-    /     .fieldset
-    /         =file_field_tag :annotation_file,  class: 'file-field span4'
-    /         =submit_tag "Upload Annotations", class:'btn btn-primary'
+                / %h4 Fetch a barcode set
+                / = render partial: "barcodes/fetch_barcodes"
+
+                / %h4 Upload CSV of Annotations
+                / = form_tag(upload_samples_path,method: 'post', class: 'form-horizontal') do
+                /     .fieldset
+                /         =file_field_tag :annotation_file,  class: 'file-field span4'
+                /         =submit_tag "Upload Annotations", class:'btn btn-primary'
+

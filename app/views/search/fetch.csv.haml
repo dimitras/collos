@@ -1,0 +1,12 @@
+=="Type","Name","Barcode","Tags","Notes"
+-for result in @results
+    -o = result.searchable
+    -if o.respond_to?(:name)
+        -oname = o.name
+    -elsif o.respond_to?(:title)
+        -oname = o.title
+    -if o.respond_to?(:barcode)
+        -obarcode = o.barcode
+        =="#{o}","#{o.name}","#{o.barcode}","#{link_to o.name url_for(result_path)}"
+        /"#{format_tags(o.tags)}","#{o.notes}"
+    ==link_to "Download results", search_path(:format => :csv)

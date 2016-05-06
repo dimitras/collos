@@ -5,7 +5,6 @@ import pprint
 
 # print isatab.__file__
 
-
 # Get directory from the command arguments and parse the files
 study_directory = str(sys.argv[1]) # data/ER-metab-v1_latest/
 temp_file = str(sys.argv[2])
@@ -16,6 +15,7 @@ def __init__(self, study_directory):
 
 def parse_files(self):
 	isatab_record = isatab.parse(study_directory)
+	print isatab_record
 	return isatab_record
 
 def write_to_temp(self):
@@ -43,6 +43,15 @@ def write_to_temp(self):
 				for fieldname,fieldvalue in value.metadata.items():
 					node.append([fieldname,fieldvalue])
 				a.writerow(node)
+
+			# a.writerow(["parameter_values"])
+			# for value in study.nodes.values():
+			# 	node = []
+			# 	attrs = ["Organism", "strain", "Organism Part"]
+			# 	for attr in attrs:
+			# 		for param_name, param_value in value.metadata[attr][0][0]:
+			# 			node.append([param_name,param_value])
+			# 		a.writerow(node)
 
 write_to_temp(temp_file)
 

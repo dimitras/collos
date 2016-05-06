@@ -17,6 +17,6 @@
                     - if can?(:edit, taxon)
                         =link_to "Edit", edit_taxon_path(taxon), class: 'btn btn-success'
                     -if can?(:destroy, taxon)
-                        = link_to "Destroy", taxon_path(taxon), method: 'delete', class: 'btn btn-danger'
+                        = link_to "Delete", taxon_path(taxon), method: 'delete', class: 'btn btn-danger'
 =will_paginate(@taxons)
 = link_to "Create new taxon", new_taxon_path, class: 'btn btn-primary btn-large'

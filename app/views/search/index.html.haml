@@ -1,33 +1,52 @@
-%h3 Search Results for Samples and Containers
+%br
 -if @results.count > 0
     %table.table.table-striped.table-condensed.table-bordered
         %thead
             %tr
+                %th.span1 #{@results.count} entries found
+                %th.span1 Identifier
                 %th.span1 Type
-                %th.span1 Barcode
-                %th.span1 Name
-                %th.span2 Tags
-                %th.span2 Notes
-                %th.span1 Retired?
         %tbody
             -for result in @results
                 - o = result.searchable
                 %tr
+                    -if result.searchable_type == "Investigation" || result.searchable_type == "Study"
+                        %td= link_to o.title, o
+                        %td= o.identifier
+                    -elsif result.searchable_type == "Sample" || result.searchable_type == "Container"
+                        %td= link_to o.name, o
+                        %td= o.barcode
+                        /%td= o.source_name
+                        /%td= o.scientific_name
+                        /%td= o.time_point
+                        /%td= o.treatments
+                        /%td= o.tissue_type_name
+                        /%td= o.replicate
                     %td= result.searchable_type
-                    %td= o.barcode
-                    %td= link_to(o.name, o)
-                    %td= format_tags(o.tags)
-                    %td= o.notes
-                    %td= o.retired? ? "yes" : "no"
+                    
+
+                    -#-if o.has_attribute?("name")
+                        %td= link_to(o.name, o)
+                    -#-elsif o.has_attribute?("title")
+                        %td= link_to(o.title, o)
+                    -#-if o.has_attribute?("barcode_string") || o.has_attribute?("barcode")
+                        %td= o.barcode
+                    -#-elsif o.has_attribute?("identifier")
+                        %td= o.identifier
+                    /%td= result.searchable_type
+
     =will_paginate(@results, params: params, method: 'post')
+    /=link_to "Download results", search_path(:format => :csv), class:'btn'
+    /=link_to "Download results", search_path(format: "csv", :results => @results), class:'btn'
+    =link_to "Download results", search_path(params.merge(format: "csv")), class:'btn'
+    /=link_to "Download results", search_path(format: 'csv', @results), class:'btn'
 -else
-    %i No results found
-
-
-
+    %i==#{@results.count} entries found
+%br
+%br
 %h4 Refine your search
-
-= form_tag("/search",method: 'get', class: 'form-inline form-search') do
+= form_tag(search_path, method: 'get', class: 'form-inline form-search') do
     .fieldset
         =text_field_tag :query, nil,class: 'span4', placeholder: '"PBF78E5" or "zfish123"', value: params[:query]
         =submit_tag "Search", class:'btn btn-primary'
+

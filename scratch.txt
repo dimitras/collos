@@ -20,3 +20,6 @@ rails g resource barcode barcode:string
 
 rails g resource taxon ncbi_id:integer parent_ncbi_id:integer rank:string ancestry:string ancestry_depth:integer
 rails g resource taxon_name taxon:references name:string uniq_name:string name_class:string
+
+rails g scaffold Shipment --migration=false --skip # to generate the views for an existing model/controller
+rails destroy scaffold Box # to delete a model

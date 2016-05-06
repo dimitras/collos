@@ -4,9 +4,6 @@
         %th.span3 Barcode
         %td=@barcode.barcode
     %tr
-        %th BarcodeSet
-        %td=link_to @barcode.barcode_set, fetch_barcodes_url(barcode_set: @barcode.barcode_set)
-    %tr
         %th Related Entity
         %td
             -if @barcode.barcodeable

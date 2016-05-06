@@ -7,22 +7,32 @@
       %li.dropdown
         =link_to(raw("Categories <b class=caret></b>"), '#', class: 'dropdown-toggle', "data-toggle" => 'dropdown')
         %ul.dropdown-menu
+          %li=link_to 'Investigations',investigations_url
+          %li=link_to 'Studies',studies_url
           %li=link_to 'Samples',samples_url
           %li=link_to 'Containers',containers_url
-          %li=link_to 'Container Types',container_types_url
-          %li=link_to 'Barcodes', barcodes_url
-          %li=link_to 'Shipments', shipments_url
           %li -----
+          /%li=link_to 'Investigators', people_url
+          %li=link_to 'Shipments', shipments_url
           %li=link_to 'Users', users_url
           %li=link_to 'Addresses', addresses_url
+          %li -----
+          %li=link_to 'Barcodes', barcodes_url
+          %li=link_to 'Container Types',container_types_url
           %li=link_to 'Taxonomies', taxons_url
+          %li=link_to 'Races', races_url
+          %li=link_to 'Ethnicities', ethnicities_url
+          %li=link_to 'Strains', strains_url
           %li=link_to 'Ontologies', ontologies_url
           %li=link_to 'Ontology Terms', ontology_terms_url
+          %li=link_to 'Material Types', material_types_url
       %li{ class: current_page?(help_path()) ? "active"  : ''}
         = link_to "Help", help_path
       %li{ class: current_page?(about_path()) ? "active"  : ''}
         = link_to "About", about_path
       %li
         =form_tag search_path, method: 'get', class: 'navbar-search' do
-          =text_field_tag :query, nil, class: 'search-query  span3', placeholder: "Search"
+          =text_field_tag :query, nil, class: 'search-query  span3', placeholder: "search"
+      %li{class: current_page?(adsearch_path()) ? "active" : ''}
+        = link_to "Advanced search", adsearch_path
       = render "shared/login"

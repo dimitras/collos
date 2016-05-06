@@ -1,0 +1,1 @@
+$("#widget_subcategory").html('&lt;%= options_for_select(@child_containers.map {|sc| [sc.name, sc.id]}).gsub(/n/, '') %&gt;');

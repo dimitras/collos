@@ -2,57 +2,188 @@
 
 #buttons
     =link_to "Edit sample", edit_sample_path(@sample), method: 'get', class: 'btn btn-success'
-    =link_to "Retire sample", edit_sample_path(@sample), method: 'get', class: 'btn btn-danger'
+    - if can? :destroy , @sample and !@sample.retired
+        =link_to "Retire sample", sample_path(@sample), method: 'delete', class: 'btn btn-danger'
     =link_to "See all samples", samples_path, method: 'get', class: 'btn'
+    %br
+    %br
+    -if @sample.children.count == 0 and !@sample.retired
+        / TODO: for the number of children to be created
+        / =simple_form_for @sample, html: {class: 'form-horizontal'} do |f|
+        /     =f.number_field :number_of_children, params[:number_of_children], :size => 3, :min => 1
+        /     =f.button :submit, :value => "Create children", class: 'btn btn-primary'
+        =link_to "Create child(ren)", create_multiple_samples_path, method: 'get', class: 'btn btn-primary'
+    
 %br
 #annotation
     %table.table.table-bordered
+        -if @sample.confirmed? == true
+            %tr
+                %th Confirmed
+                %td=@sample.confirmed? ? "Yes" : "No"
         %tr
-            %th Name
+            %th.span3 Name
             %td=@sample.name
         %tr
             %th Sample Barcode
             %td
                 =@sample.barcode.barcode
-                [
-                =link_to("Barcode set #{@sample.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @sample.barcode.barcode_set))
-                ]
+                %br
+                =image_tag(@sample.barcode.create_img)
+                / =link_to("Barcode set #{@sample.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @sample.barcode.barcode_set))
+        -if @sample.external_identifier
+            %tr
+                %th External identifier
+                %td=@sample.external_identifier
+        -if @sample.source_name
+            %tr
+                %th Subject (source)
+                %td=@sample.try(:source_name)
+        -if @sample.scientific_name
+            %tr
+                %th Species
+                %td=link_to @sample.scientific_name, url_for(@sample.taxon)
+        -if @sample.strain_name
+            %tr
+                %th Strain
+                %td=link_to @sample.strain_name, url_for(@sample.strain)
+        -if @sample.race
+            %tr
+                %th Race
+                %td=link_to @sample.race_name, url_for(@sample.race)
+        -if @sample.ethnicity
+            %tr
+                %th Ethnicity
+                %td=link_to @sample.ethnicity_name, url_for(@sample.ethnicity)
+        -if @sample.genotype
+            %tr
+                %th Genotype
+                %td=@sample.genotype
+        -if @sample.sex_name
+            %tr
+                %th Sex
+                %td=@sample.sex_name
+        -if @sample.time_point
+            %tr
+                %th Collection time point
+                %td=@sample.try(:time_point) 
+        -if @sample.age
+            %tr
+                %th Age (at collection time)
+                %td==#{@sample.try(:age)} #{@sample.timeunit.try(:name)}     
+        -if @sample.treatments
+            %tr
+                %th Treatments
+                %td=@sample.treatments
+        -if @sample.protocols
+            %tr
+                %th Protocols
+                %td=@sample.protocols
+        -if @sample.replicate
+            %tr
+                %th Replicate
+                %td=@sample.try(:replicate)
+        -if @sample.tissue_type.try(:name)
+            %tr
+                %th Tissue type
+                %td=link_to @sample.tissue_type.name, url_for(@sample.tissue_type)
+        -if @sample.material_type.try(:name)
+            %tr
+                %th Material type
+                %td=link_to @sample.material_type.name, url_for(@sample.material_type)
+        -if @sample.primary_cell.try(:name)
+            %tr
+                %th Primary cell/Cell line
+                %td=@sample.primary_cell.try(:name)
+        -if @sample.quantity
+            %tr
+                %th Quantity
+                %td=@sample.quantity
+        / -if @sample.material_types.count>0
+        /     %tr
+        /         %th Material types
+        /         %td
+        /             -@sample.material_types.each do |type|
+        /                 =link_to type.try(:name), url_for(type)
+        /                 %br
+        
+        /TODO
+        / -if @sample.external_links.count>0
+        /     %tr
+        /         %th External links
+        /         %td
+        /             -@sample.external_links.each do |elink|
+        /                 =link_to elink.try(:name), url_for(elink)
+        / 
+
+        -if !@sample.tags.nil?
+            %tr
+                %th Tags 
+                %td=format_tags(@sample.tags)
+        -if !@sample.notes.nil?
+            %tr
+                %th Notes
+                %td=@sample.notes
         %tr
-            %th.span3 Species
-            %td=@sample.taxon.try(:scientific_name)
+            %th Retired
+            %td=@sample.retired? ? "Yes" : "No"
+
+        -if !@sample.container.nil?
+            %tr
+                %th Shipped
+                %td=@sample.container.shipped? ? "Yes" : "No"
         %tr
-            %th Tags
-            %td=format_tags(@sample.tags)
-        %tr
-            %th Container
+            %th Containers
             %td
                 -if @sample.container
+                    -@sample.container.ancestors.each do |container|
+                        =link_to container.name_for_selects, url_for(container)
+                        %br  
+                -if @sample.container
                     - if @sample.container.show_location?
-                        = link_to("#{@sample.container} (#{@sample.container_x}, #{@sample.container_y})", @sample.container)
+                        =link_to("#{@sample.container} (#{@sample.container_x}, #{@sample.container_y})", @sample.container)
                     -else
-                        =link_to( @sample.container, @sample.container)
-        %tr
-            %th Notes
-            %td=@sample.notes
-#ancestry
-    %h4 Related Samples
-    %table.table.table-bordered
-        %tr
-            %th Parents
-        - if @sample.parents.count > 0
-            -for p in @sample.parents
-                %tr
-                    %td=link_to "#{p.barcode}] #{p.name}", sample_url(p)
-        -else
+                        =link_to(@sample.container, @sample.container)
+                -else
+                    None
+        / - if @sample.parent
+        /     %tr
+        /         %th Parent samples
+        /         %td=link_to "[#{@sample.parent.barcode}] #{@sample.parent.name}", sample_url(@sample.parent)
+        - if @sample.ancestors.count>0
             %tr
+                %th Child of
                 %td
-                    %i None
+                    -for a in @sample.ancestors
+                        =link_to "[#{a.barcode}] #{a.name}", sample_url(a)      
 
-        %tr
-            %th Children
-        -for c in @sample.children
+        - if @sample.children.count>0
             %tr
-                %td=link_to "#{c.barcode}] #{c.name}", sample_url(c)
+                %th Children
+                %td
+                    -for c in @sample.children
+                        =link_to "[#{c.barcode}] #{c.name}", sample_url(c)
+                        %br
+        -if @sample.studies.count>0
+            %tr
+                %th Studies
+                %td
+                    -@sample.studies.each do |study|
+                        =link_to study.try(:title), url_for(study)
+                        %br
+%br
 
-
+/TODO: show/hide the history
+%h5== Audit Trail/History
+-if @sample.versions.count > 0
+    -@sample.versions.each do |version|
+        ==Event: #{version.event}
+        %br
+        ==User: #{User.find_by_id(version.whodunnit).name if version.whodunnit}
+        %br
+        ==Date: #{version.created_at}
+        %br
+        ==Fields: #{version.object}
+        %br
+        %br
 

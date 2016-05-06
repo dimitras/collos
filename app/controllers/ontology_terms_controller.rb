@@ -8,7 +8,9 @@ class OntologyTermsController < ApplicationController
             @ontology_terms = @ontology_terms.where(ontology_id: params[:ontology_id])
         end
     end
-    def new; end
+    def new
+        @ontology_terms = OntologyTerm.all 
+    end
     def create
         if @ontology_term.save
             flash[:success] = "Ontology successfully created"
@@ -18,7 +20,9 @@ class OntologyTermsController < ApplicationController
         end
 
     end
-    def edit; end
+    def edit
+        @ontology_terms = OntologyTerm.all 
+    end
     def update
         if @ontology_term.update_attributes(params[:ontology_term])
             redirect_to @ontology_term, notice: 'OntologyTerm was successfully updated.'

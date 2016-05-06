@@ -1,9 +1,7 @@
-= simple_form_for(@investigation) do |f|
-  = f.error_notification
-
-  .form-inputs
-    = f.input :name
-    = f.input :person_id
-
-  .form-actions
-    = f.button :submit
+= simple_form_for @investigation, :html => {:class => 'form-horizontal'} do |f|
+	= f.input :title
+	= f.input :identifier
+	= f.input :description
+	= f.association :studies, :multiple => true, :include_blank => true, hint: link_to("Create a new study", new_study_url, :target => "_blank")
+	= f.button :submit
+	= link_to 'Cancel', @investigation, class: 'btn btn-warning'

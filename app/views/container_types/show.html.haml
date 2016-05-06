@@ -1,14 +1,25 @@
 %h3 Container Type Information
 
+#buttons
+    - if can? :edit , @container_type
+        =link_to "Edit container type", edit_container_type_path(@container_type), method: 'get', class: 'btn btn-success'
+    - if can? :destroy , @container_type
+        =link_to "Retire container type", container_type_path(@container_type), method: 'get', class: 'btn btn-danger'
+    =link_to "See all container types", container_types_path(), method: 'get', class: 'btn'
+
+%br
+%br
+
 %table.table.table-bordered
     %tr
-        %th.span3 Name
+        %th.span4 Name
         %td=@container_type.name
-    %tr
-        %th Container Type Term
+    -if @type
+        %tr
+            %th Container Type Term
 
-        %td
-            =link_to "#{@type.name} [#{@type.ontology.prefix}: #{@type.accession}]", ontology_term_url(@type)
+            %td
+                =link_to "#{@type.name} [#{@type.ontology.prefix}: #{@type.accession}]", ontology_term_url(@type)
     %tr
         %th X Dimension
         %td=@container_type.x_dimension
@@ -16,17 +27,15 @@
         %th Y Dimension
         %td=@container_type.y_dimension
     %tr
-        %th X Labels
-        %td=@container_type.x_coord_labels
+        %th Can contain other container type
+        %td=@container_type.can_have_children? ? "Yes" : "No"
     %tr
-        %th Y Labels
-        %td=@container_type.y_coord_labels
+        %th Can have an external identifier
+        %td=@container_type.can_have_external_identifier? ? "Yes" : "No"
+    %tr
+        %th Can be shipped
+        %td=@container_type.shipable? ? "Yes" : "No"
     %tr
         %th Retired
         %td=@container_type.retired? ? "Yes" : "No"
 
-- if can? :edit , @container_type
-    =button_to "Edit container type", edit_container_type_path(@container_type), method: 'get', class: 'btn btn-success'
-- if can? :destroy , @container_type
-    =button_to "Retire container type", container_type_path(@container_type), method: 'delete', class: 'btn btn-danger'
-=button_to "See all container types", container_types_path(), class: 'btn', method: 'get'

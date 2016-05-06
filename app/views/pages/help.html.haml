@@ -2,25 +2,65 @@
     
 %ol
 	%li
-		%b How do I add my sample?
+		%b How can I enter one sample in the system?
 		%br
-		I first have to create or make sure there is the 
-		=link_to "container",containers_path()
-		, 
-		=link_to "container type",container_types_path()
-		, 
-		=link_to "taxonomy",taxons_path()
-		and
-		=link_to "ontology term",ontology_terms_path()
-		I need, then I create a new 
+		First I create or make sure the following exist:
+		%ul
+			%li
+				=link_to "investigation",investigations_path()
+			%li
+				=link_to "study",studies_path()	
+			%li
+				=link_to "container type *",container_types_path()
+			%li  
+				=link_to "container *",containers_path()
+			%li
+				=link_to "taxonomy *",taxons_path()
+			%li
+				=link_to "ontology term *",ontology_terms_path()
+		Then I create a new 
 		=link_to "sample",samples_path()
+	%br
 	%li
-		%b How do I ship my sample?
-		%br	
-		yadayada...
+		%b How do I add more than one samples to the database?
+		%br
+		I can use either ISA-Tab formatted files or plain csv ones.
+	%br
+	%li
+		%b How do I ship my sample(s)?
+		%br
+		If there is one or a couple of samples to be shipped, I select their containers, and create a shipment. Each sample can be shipped one or more times.
+	%br
 	%li
 		%b How do I get the barcode sticker for my shipment?
 		%br	
-		Click on show in the sample you wish to ship, and get the Sample Barcode from the	
-		=link_to "samples",samples_path()
-    
+		For your shipment you will need the containers' barcodes. These barcodes can be used for the sticker.
+		You may also print the manifest of the shipment, which includes all the barcoded containers shipped.
+	%br
+	%li
+		%b How do I find a sample or a collection of samples?
+		%br	
+		I can search the database by sample name, barcode, container, investigator, study, organism, tissue and more.
+		For more advanced search, I can define multiple filters to narrow my findings.
+	%br
+	%li
+		%b Which is the recommended ISA-Tab format for the bulk upload?
+		%br	
+		You may download the 
+		=link_to "sample ISA-Tab package"
+	%br
+	%li
+		%b Which is the recommended csv format for the bulk upload?
+		%br	
+		You may download the 
+		=link_to "sample tab-delimited package"
+	%br
+	%li
+		%b Can I tranfer a few samples to another freezer or any other type of container?
+		%br	
+		If you want to transfer multiple samples to another freezer for example, then you can select the containers you want and then do 'Edit selected' and transfer them to another freezer.
+		%br
+		If you want to change the tube of a few samples though, you would have to do it by editing one by one and changing the container. The information about the old container won't be lost, it will be kept in its history.
+
+
+

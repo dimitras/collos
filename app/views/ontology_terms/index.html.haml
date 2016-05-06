@@ -9,15 +9,17 @@
             %th &nbsp;
     %tbody
         -for ontology_term in @ontology_terms
-            %tr
-                %td=link_to ontology_term.name, ontology_term
-                %td=link_to ontology_term.ontology.prefix, ontology_path(ontology_term.ontology)
-                %td=ontology_term.accession
-                %td
-                    =link_to "Show", ontology_term_path(ontology_term), class: 'btn'
-                    - if can?(:edit, ontology_term)
-                        =link_to "Edit", edit_ontology_term_path(ontology_term), class: 'btn btn-success'
-                    -if can?(:destroy, ontology_term)
-                        = link_to "Destroy", ontology_term_path(ontology_term), method: 'delete', class: 'btn btn-danger'
+            / -if ontology_term.parent == nil
+            -if ontology_term.parents_only.include?(ontology_term)
+                %tr
+                    %td=link_to ontology_term.name, ontology_term
+                    %td=link_to ontology_term.ontology.prefix, ontology_path(ontology_term.ontology)
+                    %td=ontology_term.accession
+                    %td
+                        =link_to "Show", ontology_term_path(ontology_term), class: 'btn'
+                        - if can?(:edit, ontology_term)
+                            =link_to "Edit", edit_ontology_term_path(ontology_term), class: 'btn btn-success'
+                        -if can?(:destroy, ontology_term)
+                            =link_to "Delete", ontology_term_path(ontology_term), method: 'delete', class: 'btn btn-danger'
 =will_paginate(@ontology_terms)
-= link_to "Create new ontology term", new_ontology_term_path, class: 'btn btn-primary btn-large'
+=link_to "Create new ontology term", new_ontology_term_path, class: 'btn btn-primary btn-large'

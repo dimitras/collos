@@ -3,6 +3,7 @@
 --
 
 SET statement_timeout = 0;
+SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -67,6 +68,16 @@ ALTER SEQUENCE addresses_id_seq OWNED BY addresses.id;
 
 
 --
+-- Name: addresses_shipments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE addresses_shipments (
+    address_id integer NOT NULL,
+    shipment_id integer NOT NULL
+);
+
+
+--
 -- Name: addresses_users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -109,25 +120,24 @@ ALTER SEQUENCE barcodes_id_seq OWNED BY barcodes.id;
 
 
 --
--- Name: box_types; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: container_changes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE TABLE box_types (
+CREATE TABLE container_changes (
     id integer NOT NULL,
-    label character varying(255),
-    dimension_x integer,
-    dimension_y integer,
-    freezer_id integer,
+    container_id integer,
+    past_ancestry_container_id integer,
+    new_ancestry_container_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
 
 
 --
--- Name: box_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: container_changes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE box_types_id_seq
+CREATE SEQUENCE container_changes_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -136,10 +146,10 @@ CREATE SEQUENCE box_types_id_seq
 
 
 --
--- Name: box_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: container_changes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE box_types_id_seq OWNED BY box_types.id;
+ALTER SEQUENCE container_changes_id_seq OWNED BY container_changes.id;
 
 
 --
@@ -152,14 +162,13 @@ CREATE TABLE container_types (
     name character varying(255),
     x_dimension integer DEFAULT 1,
     y_dimension integer DEFAULT 1,
-    x_coord_labels character varying(255) DEFAULT 'number'::character varying,
-    y_coord_labels character varying(255) DEFAULT 'number'::character varying,
     can_have_children boolean DEFAULT true,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     retired boolean DEFAULT false,
     label character varying(255),
-    box_id integer
+    shipable boolean,
+    can_have_external_identifier boolean DEFAULT false
 );
 
 
@@ -200,7 +209,9 @@ CREATE TABLE containers (
     notes text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    tsv_content tsvector
+    tsv_content tsvector,
+    shipped boolean,
+    external_identifier character varying(255)
 );
 
 
@@ -234,22 +245,22 @@ CREATE TABLE containers_shipments (
 
 
 --
--- Name: freezer_types; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: ethnicities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE TABLE freezer_types (
+CREATE TABLE ethnicities (
     id integer NOT NULL,
-    label character varying(255),
+    name character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
 
 
 --
--- Name: freezer_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: ethnicities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE freezer_types_id_seq
+CREATE SEQUENCE ethnicities_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -258,10 +269,75 @@ CREATE SEQUENCE freezer_types_id_seq
 
 
 --
--- Name: freezer_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: ethnicities_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE freezer_types_id_seq OWNED BY freezer_types.id;
+ALTER SEQUENCE ethnicities_id_seq OWNED BY ethnicities.id;
+
+
+--
+-- Name: external_links; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE external_links (
+    id integer NOT NULL,
+    name character varying(255),
+    url character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    sample_id integer
+);
+
+
+--
+-- Name: external_links_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE external_links_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: external_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE external_links_id_seq OWNED BY external_links.id;
+
+
+--
+-- Name: friendly_id_slugs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE friendly_id_slugs (
+    id integer NOT NULL,
+    slug character varying(255) NOT NULL,
+    sluggable_id integer NOT NULL,
+    sluggable_type character varying(40),
+    created_at timestamp without time zone
+);
+
+
+--
+-- Name: friendly_id_slugs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE friendly_id_slugs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: friendly_id_slugs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE friendly_id_slugs_id_seq OWNED BY friendly_id_slugs.id;
 
 
 --
@@ -270,11 +346,13 @@ ALTER SEQUENCE freezer_types_id_seq OWNED BY freezer_types.id;
 
 CREATE TABLE investigations (
     id integer NOT NULL,
-    name text,
-    person_id integer,
+    title text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    study_id integer
+    identifier character varying(255),
+    tsv_content tsvector,
+    description text,
+    imported boolean
 );
 
 
@@ -295,6 +373,58 @@ CREATE SEQUENCE investigations_id_seq
 --
 
 ALTER SEQUENCE investigations_id_seq OWNED BY investigations.id;
+
+
+--
+-- Name: investigations_people; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE investigations_people (
+    investigation_id integer,
+    person_id integer
+);
+
+
+--
+-- Name: material_types; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE material_types (
+    id integer NOT NULL,
+    name character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    tsv_content tsvector
+);
+
+
+--
+-- Name: material_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE material_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: material_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE material_types_id_seq OWNED BY material_types.id;
+
+
+--
+-- Name: material_types_samples; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE material_types_samples (
+    material_type_id integer,
+    sample_id integer
+);
 
 
 --
@@ -477,13 +607,20 @@ ALTER SEQUENCE ontology_terms_id_seq OWNED BY ontology_terms.id;
 
 CREATE TABLE people (
     id integer NOT NULL,
-    name character varying(255),
+    firstname character varying(255),
     type character varying(255),
     institution character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     email character varying(255),
-    phone integer
+    phone integer,
+    lastname character varying(255),
+    user_id integer,
+    study_id integer,
+    tsv_content tsvector,
+    laboratory character varying(255),
+    identifier character varying(255),
+    container_id integer
 );
 
 
@@ -504,6 +641,16 @@ CREATE SEQUENCE people_id_seq
 --
 
 ALTER SEQUENCE people_id_seq OWNED BY people.id;
+
+
+--
+-- Name: people_studies; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE people_studies (
+    person_id integer,
+    study_id integer
+);
 
 
 --
@@ -679,6 +826,37 @@ ALTER SEQUENCE protocols_id_seq OWNED BY protocols.id;
 
 
 --
+-- Name: races; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE races (
+    id integer NOT NULL,
+    name character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: races_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE races_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: races_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE races_id_seq OWNED BY races.id;
+
+
+--
 -- Name: sample_relationships; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -729,7 +907,27 @@ CREATE TABLE samples (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     tsv_content tsvector,
-    material_type character varying(255)
+    source_name character varying(255),
+    study_id integer,
+    ancestry character varying(500),
+    ancestry_depth integer DEFAULT 0,
+    sex_id integer,
+    material_type_id integer,
+    external_identifier character varying(255),
+    age integer,
+    time_point character varying(255),
+    age_id integer,
+    strain_id integer,
+    tissue_type_id integer,
+    primary_cell_id integer,
+    treatments character varying(255),
+    genotype character varying(255),
+    replicate character varying(255),
+    protocols character varying(255),
+    race_id integer,
+    ethnicity_id integer,
+    confirmed boolean,
+    quantity character varying(255)
 );
 
 
@@ -753,6 +951,16 @@ ALTER SEQUENCE samples_id_seq OWNED BY samples.id;
 
 
 --
+-- Name: samples_studies; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE samples_studies (
+    sample_id integer,
+    study_id integer
+);
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -773,7 +981,13 @@ CREATE TABLE shipments (
     ship_date timestamp without time zone,
     recieve_date timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    past_container character varying(255),
+    new_container character varying(255),
+    complete boolean,
+    past_container_id integer,
+    new_container_id integer,
+    tsv_content tsvector
 );
 
 
@@ -797,6 +1011,37 @@ ALTER SEQUENCE shipments_id_seq OWNED BY shipments.id;
 
 
 --
+-- Name: strains; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE strains (
+    id integer NOT NULL,
+    name character varying(255),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: strains_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE strains_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: strains_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE strains_id_seq OWNED BY strains.id;
+
+
+--
 -- Name: studies; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -806,7 +1051,9 @@ CREATE TABLE studies (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     identifier character varying(255),
-    description text
+    description text,
+    investigation_id integer,
+    tsv_content tsvector
 );
 
 
@@ -837,7 +1084,8 @@ CREATE TABLE taxons (
     id integer NOT NULL,
     ncbi_id integer NOT NULL,
     scientific_name character varying(255),
-    common_name character varying(255)
+    common_name character varying(255),
+    tsv_content tsvector
 );
 
 
@@ -949,7 +1197,7 @@ ALTER TABLE ONLY barcodes ALTER COLUMN id SET DEFAULT nextval('barcodes_id_seq':
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY box_types ALTER COLUMN id SET DEFAULT nextval('box_types_id_seq'::regclass);
+ALTER TABLE ONLY container_changes ALTER COLUMN id SET DEFAULT nextval('container_changes_id_seq'::regclass);
 
 
 --
@@ -970,7 +1218,21 @@ ALTER TABLE ONLY containers ALTER COLUMN id SET DEFAULT nextval('containers_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY freezer_types ALTER COLUMN id SET DEFAULT nextval('freezer_types_id_seq'::regclass);
+ALTER TABLE ONLY ethnicities ALTER COLUMN id SET DEFAULT nextval('ethnicities_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY external_links ALTER COLUMN id SET DEFAULT nextval('external_links_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY friendly_id_slugs ALTER COLUMN id SET DEFAULT nextval('friendly_id_slugs_id_seq'::regclass);
 
 
 --
@@ -978,6 +1240,13 @@ ALTER TABLE ONLY freezer_types ALTER COLUMN id SET DEFAULT nextval('freezer_type
 --
 
 ALTER TABLE ONLY investigations ALTER COLUMN id SET DEFAULT nextval('investigations_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY material_types ALTER COLUMN id SET DEFAULT nextval('material_types_id_seq'::regclass);
 
 
 --
@@ -1061,6 +1330,13 @@ ALTER TABLE ONLY protocols ALTER COLUMN id SET DEFAULT nextval('protocols_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY races ALTER COLUMN id SET DEFAULT nextval('races_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY sample_relationships ALTER COLUMN id SET DEFAULT nextval('sample_relationships_id_seq'::regclass);
 
 
@@ -1076,6 +1352,13 @@ ALTER TABLE ONLY samples ALTER COLUMN id SET DEFAULT nextval('samples_id_seq'::r
 --
 
 ALTER TABLE ONLY shipments ALTER COLUMN id SET DEFAULT nextval('shipments_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY strains ALTER COLUMN id SET DEFAULT nextval('strains_id_seq'::regclass);
 
 
 --
@@ -1123,11 +1406,11 @@ ALTER TABLE ONLY barcodes
 
 
 --
--- Name: box_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: container_changes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY box_types
-    ADD CONSTRAINT box_types_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY container_changes
+    ADD CONSTRAINT container_changes_pkey PRIMARY KEY (id);
 
 
 --
@@ -1147,6 +1430,14 @@ ALTER TABLE ONLY containers
 
 
 --
+-- Name: ethnicities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY ethnicities
+    ADD CONSTRAINT ethnicities_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: experiments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1155,11 +1446,27 @@ ALTER TABLE ONLY investigations
 
 
 --
--- Name: freezer_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: external_links_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY freezer_types
-    ADD CONSTRAINT freezer_types_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY external_links
+    ADD CONSTRAINT external_links_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: friendly_id_slugs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY friendly_id_slugs
+    ADD CONSTRAINT friendly_id_slugs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: material_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY material_types
+    ADD CONSTRAINT material_types_pkey PRIMARY KEY (id);
 
 
 --
@@ -1251,6 +1558,14 @@ ALTER TABLE ONLY protocols
 
 
 --
+-- Name: races_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY races
+    ADD CONSTRAINT races_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: sample_relationships_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1272,6 +1587,14 @@ ALTER TABLE ONLY samples
 
 ALTER TABLE ONLY shipments
     ADD CONSTRAINT shipments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: strains_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY strains
+    ADD CONSTRAINT strains_pkey PRIMARY KEY (id);
 
 
 --
@@ -1304,6 +1627,20 @@ ALTER TABLE ONLY users
 
 ALTER TABLE ONLY versions
     ADD CONSTRAINT versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_addresses_shipments_on_address_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_addresses_shipments_on_address_id ON addresses_shipments USING btree (address_id);
+
+
+--
+-- Name: index_addresses_shipments_on_shipment_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_addresses_shipments_on_shipment_id ON addresses_shipments USING btree (shipment_id);
 
 
 --
@@ -1342,6 +1679,13 @@ CREATE INDEX index_barcodes_on_barcodeable_type_and_barcodeable_id ON barcodes U
 
 
 --
+-- Name: index_container_changes_on_container_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_container_changes_on_container_id ON container_changes USING btree (container_id);
+
+
+--
 -- Name: index_container_types_on_type_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1363,6 +1707,13 @@ CREATE INDEX index_containers_on_container_type_id ON containers USING btree (co
 
 
 --
+-- Name: index_containers_on_external_identifier; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_containers_on_external_identifier ON containers USING btree (external_identifier);
+
+
+--
 -- Name: index_containers_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1381,6 +1732,55 @@ CREATE INDEX index_containers_shipments_on_container_id ON containers_shipments 
 --
 
 CREATE INDEX index_containers_shipments_on_shipment_id ON containers_shipments USING btree (shipment_id);
+
+
+--
+-- Name: index_friendly_id_slugs_on_slug_and_sluggable_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_friendly_id_slugs_on_slug_and_sluggable_type ON friendly_id_slugs USING btree (slug, sluggable_type);
+
+
+--
+-- Name: index_friendly_id_slugs_on_sluggable_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_friendly_id_slugs_on_sluggable_id ON friendly_id_slugs USING btree (sluggable_id);
+
+
+--
+-- Name: index_friendly_id_slugs_on_sluggable_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_friendly_id_slugs_on_sluggable_type ON friendly_id_slugs USING btree (sluggable_type);
+
+
+--
+-- Name: index_investigations_people_on_investigation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_investigations_people_on_investigation_id ON investigations_people USING btree (investigation_id);
+
+
+--
+-- Name: index_investigations_people_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_investigations_people_on_person_id ON investigations_people USING btree (person_id);
+
+
+--
+-- Name: index_material_types_samples_on_material_type_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_material_types_samples_on_material_type_id ON material_types_samples USING btree (material_type_id);
+
+
+--
+-- Name: index_material_types_samples_on_sample_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_material_types_samples_on_sample_id ON material_types_samples USING btree (sample_id);
 
 
 --
@@ -1468,6 +1868,20 @@ CREATE INDEX index_ontology_terms_on_ontology_id ON ontology_terms USING btree (
 
 
 --
+-- Name: index_people_studies_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_people_studies_on_person_id ON people_studies USING btree (person_id);
+
+
+--
+-- Name: index_people_studies_on_study_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_people_studies_on_study_id ON people_studies USING btree (study_id);
+
+
+--
 -- Name: index_protocol_applications_on_operator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1545,10 +1959,52 @@ CREATE INDEX index_sample_relationships_on_descendant_id ON sample_relationships
 
 
 --
+-- Name: index_samples_on_age_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_age_id ON samples USING btree (age_id);
+
+
+--
+-- Name: index_samples_on_ancestry; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_ancestry ON samples USING btree (ancestry);
+
+
+--
 -- Name: index_samples_on_container_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_samples_on_container_id ON samples USING btree (container_id);
+
+
+--
+-- Name: index_samples_on_ethnicity_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_ethnicity_id ON samples USING btree (ethnicity_id);
+
+
+--
+-- Name: index_samples_on_external_identifier; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_external_identifier ON samples USING btree (external_identifier);
+
+
+--
+-- Name: index_samples_on_genotype; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_genotype ON samples USING btree (genotype);
+
+
+--
+-- Name: index_samples_on_material_type_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_material_type_id ON samples USING btree (material_type_id);
 
 
 --
@@ -1559,6 +2015,13 @@ CREATE INDEX index_samples_on_name ON samples USING btree (name);
 
 
 --
+-- Name: index_samples_on_primary_cell_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_primary_cell_id ON samples USING btree (primary_cell_id);
+
+
+--
 -- Name: index_samples_on_protocol_application_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1566,10 +2029,80 @@ CREATE INDEX index_samples_on_protocol_application_id ON samples USING btree (pr
 
 
 --
+-- Name: index_samples_on_protocols; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_protocols ON samples USING btree (protocols);
+
+
+--
+-- Name: index_samples_on_race_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_race_id ON samples USING btree (race_id);
+
+
+--
+-- Name: index_samples_on_sex_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_sex_id ON samples USING btree (sex_id);
+
+
+--
+-- Name: index_samples_on_source_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_source_name ON samples USING btree (source_name);
+
+
+--
+-- Name: index_samples_on_strain_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_strain_id ON samples USING btree (strain_id);
+
+
+--
 -- Name: index_samples_on_taxon_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_samples_on_taxon_id ON samples USING btree (taxon_id);
+
+
+--
+-- Name: index_samples_on_time_point; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_time_point ON samples USING btree (time_point);
+
+
+--
+-- Name: index_samples_on_tissue_type_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_tissue_type_id ON samples USING btree (tissue_type_id);
+
+
+--
+-- Name: index_samples_on_treatments; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_on_treatments ON samples USING btree (treatments);
+
+
+--
+-- Name: index_samples_studies_on_sample_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_studies_on_sample_id ON samples_studies USING btree (sample_id);
+
+
+--
+-- Name: index_samples_studies_on_study_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_samples_studies_on_study_id ON samples_studies USING btree (study_id);
 
 
 --
@@ -1664,6 +2197,27 @@ CREATE TRIGGER containers_tsvupdate BEFORE INSERT OR UPDATE ON containers FOR EA
 
 
 --
+-- Name: investigations_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER investigations_tsvupdate BEFORE INSERT OR UPDATE ON investigations FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'title', 'identifier');
+
+
+--
+-- Name: material_types_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER material_types_tsvupdate BEFORE INSERT OR UPDATE ON material_types FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'name');
+
+
+--
+-- Name: people_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER people_tsvupdate BEFORE INSERT OR UPDATE ON people FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'firstname', 'lastname', 'email', 'institution');
+
+
+--
 -- Name: pg_search_documents_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -1675,6 +2229,27 @@ CREATE TRIGGER pg_search_documents_tsvupdate BEFORE INSERT OR UPDATE ON pg_searc
 --
 
 CREATE TRIGGER samples_tsvupdate BEFORE INSERT OR UPDATE ON samples FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'name', 'barcode_string', 'tags', 'notes');
+
+
+--
+-- Name: shipments_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER shipments_tsvupdate BEFORE INSERT OR UPDATE ON shipments FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'tracking_number');
+
+
+--
+-- Name: studies_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER studies_tsvupdate BEFORE INSERT OR UPDATE ON studies FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'title', 'identifier', 'description');
+
+
+--
+-- Name: taxons_tsvupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER taxons_tsvupdate BEFORE INSERT OR UPDATE ON taxons FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv_content', 'pg_catalog.english', 'scientific_name', 'common_name');
 
 
 --
@@ -1754,3 +2329,119 @@ INSERT INTO schema_migrations (version) VALUES ('20131127213130');
 INSERT INTO schema_migrations (version) VALUES ('20131127213817');
 
 INSERT INTO schema_migrations (version) VALUES ('20131217151108');
+
+INSERT INTO schema_migrations (version) VALUES ('20140114210057');
+
+INSERT INTO schema_migrations (version) VALUES ('20140114210802');
+
+INSERT INTO schema_migrations (version) VALUES ('20140114211515');
+
+INSERT INTO schema_migrations (version) VALUES ('20140114212010');
+
+INSERT INTO schema_migrations (version) VALUES ('20140114212156');
+
+INSERT INTO schema_migrations (version) VALUES ('20140114212244');
+
+INSERT INTO schema_migrations (version) VALUES ('20140114212809');
+
+INSERT INTO schema_migrations (version) VALUES ('20140114213122');
+
+INSERT INTO schema_migrations (version) VALUES ('20140114213400');
+
+INSERT INTO schema_migrations (version) VALUES ('20140114213738');
+
+INSERT INTO schema_migrations (version) VALUES ('20140114214033');
+
+INSERT INTO schema_migrations (version) VALUES ('20140114214125');
+
+INSERT INTO schema_migrations (version) VALUES ('20140114215841');
+
+INSERT INTO schema_migrations (version) VALUES ('20140211154102');
+
+INSERT INTO schema_migrations (version) VALUES ('20140211154515');
+
+INSERT INTO schema_migrations (version) VALUES ('20140211155311');
+
+INSERT INTO schema_migrations (version) VALUES ('20140211192652');
+
+INSERT INTO schema_migrations (version) VALUES ('20140212164913');
+
+INSERT INTO schema_migrations (version) VALUES ('20140219034759');
+
+INSERT INTO schema_migrations (version) VALUES ('20140220155728');
+
+INSERT INTO schema_migrations (version) VALUES ('20140220160531');
+
+INSERT INTO schema_migrations (version) VALUES ('20140220170001');
+
+INSERT INTO schema_migrations (version) VALUES ('20140220170255');
+
+INSERT INTO schema_migrations (version) VALUES ('20140220170559');
+
+INSERT INTO schema_migrations (version) VALUES ('20140226191509');
+
+INSERT INTO schema_migrations (version) VALUES ('20140227070130');
+
+INSERT INTO schema_migrations (version) VALUES ('20140227165540');
+
+INSERT INTO schema_migrations (version) VALUES ('20140227195323');
+
+INSERT INTO schema_migrations (version) VALUES ('20140228023732');
+
+INSERT INTO schema_migrations (version) VALUES ('20140317175031');
+
+INSERT INTO schema_migrations (version) VALUES ('20140317202700');
+
+INSERT INTO schema_migrations (version) VALUES ('20140324192331');
+
+INSERT INTO schema_migrations (version) VALUES ('20140415153903');
+
+INSERT INTO schema_migrations (version) VALUES ('20140415161039');
+
+INSERT INTO schema_migrations (version) VALUES ('20140415164126');
+
+INSERT INTO schema_migrations (version) VALUES ('20140415181154');
+
+INSERT INTO schema_migrations (version) VALUES ('20140429152125');
+
+INSERT INTO schema_migrations (version) VALUES ('20140429152415');
+
+INSERT INTO schema_migrations (version) VALUES ('20140429200120');
+
+INSERT INTO schema_migrations (version) VALUES ('20140429200437');
+
+INSERT INTO schema_migrations (version) VALUES ('20140501145227');
+
+INSERT INTO schema_migrations (version) VALUES ('20140501151246');
+
+INSERT INTO schema_migrations (version) VALUES ('20140515192917');
+
+INSERT INTO schema_migrations (version) VALUES ('20140515201348');
+
+INSERT INTO schema_migrations (version) VALUES ('20140516154718');
+
+INSERT INTO schema_migrations (version) VALUES ('20140516174912');
+
+INSERT INTO schema_migrations (version) VALUES ('20140517173046');
+
+INSERT INTO schema_migrations (version) VALUES ('20140527193107');
+
+INSERT INTO schema_migrations (version) VALUES ('20140528214038');
+
+INSERT INTO schema_migrations (version) VALUES ('20140605183754');
+
+INSERT INTO schema_migrations (version) VALUES ('20140605190459');
+
+INSERT INTO schema_migrations (version) VALUES ('20140606201614');
+
+INSERT INTO schema_migrations (version) VALUES ('20151008195752');
+
+INSERT INTO schema_migrations (version) VALUES ('20151113181658');
+
+INSERT INTO schema_migrations (version) VALUES ('20151113214644');
+
+INSERT INTO schema_migrations (version) VALUES ('20151118211239');
+
+INSERT INTO schema_migrations (version) VALUES ('20160125180840');
+
+INSERT INTO schema_migrations (version) VALUES ('20160321193312');

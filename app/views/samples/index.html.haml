@@ -1,38 +1,59 @@
 %h3 Samples
 
+=link_to "Create a Sample", new_sample_path, class: 'btn btn-primary btn-large'
+%br
+%br
 -if params[:show_all]
     =link_to("Hide Retired Samples", samples_url())
 -else
     =link_to('Show Retired Samples', samples_url(params: {show_all: true}))
-%table.table.table-striped.table-condensed.table-bordered
-    %thead
-        %tr
-            %th.span1 Barcode
-            %th.span1 Name
-            %th.span1 Taxon
-            %th.span1 Container
-            %th.span2 Tags
-            %th.span1 Retired?
-            %th.span2 &nbsp;
-    %tbody
-        -for sample in @samples
-            %tr
-                %td=sample.barcode.barcode
-                %td=link_to(sample.name, sample)
-                %td=sample.taxon.try(:scientific_name)
-                %td
-                    -if sample.container
-                        =link_to sample.container.name, container_url(sample.container)
-                    -else
-                        %i None
-                %td=format_tags(sample.tags)
-                %td= sample.retired? ? "yes" : "no"
-                %td
-                    =link_to "Show", sample_path(sample), class: 'btn'
-                    - if can?(:edit, sample)
-                        =link_to "Edit", edit_sample_path(sample), class: 'btn btn-success'
-                    -if can?(:destroy, sample) and ! sample.retired
-                        = link_to "Retire", sample_path(sample), method: 'delete', class: 'btn btn-danger'
+
 =will_paginate(@samples, params: params)
 
-= link_to "Create a new Sample", new_sample_path, class: 'btn btn-primary btn-large'
+=form_tag edit_multiple_samples_path do
+    %table.table.table-striped.table-condensed.table-bordered
+        %thead
+            %tr
+                %th.span1
+                %th.span1 id
+                %th.span1 Barcode
+                %th.span2 Name
+                %th.span2 Taxon
+                /%th.span1 Container
+                %th.span2 Subject
+                /%th.span2 Material type
+                /%th.span2 Study
+                /%th.span1 Retired?
+                %th.span3 &nbsp;
+        %tbody
+            -for sample in @samples
+                %tr
+                    %td=check_box_tag "sample_ids[]", sample.id
+                    %td=sample.id
+                    %td=sample.barcode.barcode
+                    %td=link_to(sample.name, sample)
+                    %td=link_to(sample.taxon.try(:scientific_name), sample.taxon)
+                    /%td
+                    /    -if sample.container
+                    /        =link_to sample.container.name, container_url(sample.container)
+                    /    -else
+                    /        %i None
+                    %td=sample.source_name
+                    / TODO
+                    / %td
+                    /     -sample.material_types.each do |type|
+                    /         =type.name
+                    /         %br
+                    /%td=link_to(sample.study.try(:title),sample.study) if sample.study
+                    /%td= sample.retired? ? "yes" : "no"
+                    %td
+                        =link_to "Show", sample_path(sample), class: 'btn'
+                        - if can?(:edit, sample)
+                            =link_to "Edit", edit_sample_path(sample), class: 'btn btn-success'
+                        -if can?(:destroy, sample) and !sample.retired
+                            = link_to "Retire", sample_path(sample), method: 'delete', class: 'btn btn-danger'
+    =submit_tag "Edit selected", class: 'btn'
+
+=will_paginate(@samples, params: params)
+
+=link_to "Create a Sample", new_sample_path, class: 'btn btn-primary btn-large'

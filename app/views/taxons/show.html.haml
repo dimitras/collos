@@ -1,5 +1,13 @@
 %h3= @taxon.scientific_name
 
+=link_to "Edit taxon", edit_taxon_path(@taxon), method: 'get', class: 'btn btn-success'
+- if can? :destroy , @taxon
+    =link_to "Delete taxon", taxon_path(@taxon), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
+=link_to "See all taxons", taxons_path, method: 'get', class: 'btn'
+
+%br 
+%br
+
 %table.table.table-bordered
     %tr
         %th.span3 NCBI id
@@ -11,7 +19,3 @@
         %th Common name
         %td=@taxon.common_name
 
-- if can? :edit , @taxon
-    =button_to "Edit Taxon", edit_taxon_path(@taxon), method: 'get', class: 'btn btn-success'
-- if can? :destroy , @taxon
-    =button_to "Delete Taxon", taxon_path(@taxon), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."

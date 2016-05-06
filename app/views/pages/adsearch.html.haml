@@ -1,0 +1,29 @@
+/=form_tag(search_path, method: 'get', class: 'form-inline form-search') do
+/=text_field_tag :query, nil, class: 'span4'
+%h5 Advanced search
+%table.table.table-bordered
+    %tr
+        %td
+            =simple_form_for :searchadv, {url: search_path} do |f|
+                =f.input :name
+                =f.input :barcode_string
+                =f.input :source_name
+                =f.input :scientific_name
+                =f.input :sex_name
+                =f.input :treatments
+                =f.input :time_point
+                =f.input :tissue_type
+                =f.input :material_type 
+                /=f.input :studies
+                =f.input :retired
+                /=f.association :container, collection: Container.shipable.empty_tube.without_children, label_method: :to_s
+                /investigator
+                /laboratory
+                /university
+                /freezer
+                /shipped
+                /retired
+                /created_at
+
+                =f.button :submit, "Search", class:'btn'
+

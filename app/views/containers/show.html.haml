@@ -1,5 +1,12 @@
 %h3= @container.name
 
+- if can? :edit , @container
+    =link_to "Edit container", edit_container_path(@container), method: 'get', class: 'btn btn-success'
+- if can? :destroy , @container and !@container.retired
+    =link_to "Retire container", container_path(@container), method: 'delete', class: 'btn btn-danger'
+=link_to "See all containers", containers_path(), class: 'btn', method: 'get'
+%br
+%br
 %table.table.table-bordered
     %tr
         %th.span3 Name
@@ -11,32 +18,70 @@
         %th Barcode
         %td
             =@container.barcode.barcode
-            [
-            =link_to("Barcode set #{@container.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @container.barcode.barcode_set))
-            ]
+            %br
+                =image_tag(@container.barcode.create_img)
+                /=link_to("Barcode set #{@container.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @container.barcode.barcode_set))
+    -if @container.external_identifier
+        %tr
+            %th External identifier
+            %td=@container.external_identifier
+    %tr
+        %th Parent Containers
+        -if @container.ancestors
+            %td
+                -@container.ancestors.each do |container|
+                    =link_to container.name_for_selects, url_for(container)
+                    %br
+        -else
+            %td None
+    -if @container.children.count > 0
+        %tr
+            %th="Contained Containers (#{@container.children.count})"
+            %td
+                -@container.children.is_not_retired.each do |container|
+                    =link_to container.name_for_selects, url_for(container)
+                    %br
+    %tr
+        -if @container.descendants.count > 0
+            %th="Contained Samples (#{@container.descendants.count})"
+            %td
+                -@container.descendants.each do |container|
+                    -container.samples.each do |sample|
+                        = "[" + sample.barcode_string + "]"
+                        = link_to sample.name, url_for(sample) 
+                        = "(" + sample.scientific_name + ")"
+                        %br
+        -else
+            %th="Contained samples (#{@container.samples.count})"
+            %td
+                -@container.samples.each do |sample|
+                    = "[" + sample.barcode_string + "]"
+                    = link_to sample.name, url_for(sample) 
+                    = "(" + sample.scientific_name + ")"
+                    %br
     %tr
         %th Retired
         %td=@container.retired? ? "Yes" : "No"
-
+    %tr
+        %th Shipped
+        %td=@container.shipped? ? "Yes" : "No"
     %tr
         %th Tags
         %th=format_tags(@container.tags)
     %tr
         %th Notes
         %th=@container.notes
-    %tr
-        %th Contained Samples
-        %th
-            -for sample in @container.samples
-                = link_to sample.name, url_for(sample) 
-                = "[" + sample.barcode_string + "]"
-                = "[" + sample.scientific_name + "] "
-                %br
+%br
 
-
-- if can? :edit , @container
-    =button_to "Edit container", edit_container_path(@container), method: 'get', class: 'btn btn-success'
-- if can? :destroy , @container
-    =button_to "Retire container", container_path(@container), method: 'delete', class: 'btn btn-danger'
-
-=button_to "See all containers", containers_path(), class: 'btn', method: 'get'
+-if @container.versions.count > 0
+    %h5 Audit Trail (History)
+    -@container.versions.each do |version|
+        ==Event: #{version.event}
+        %br
+        ==User: #{User.find_by_id(version.whodunnit).name if version.whodunnit}
+        %br
+        ==Date: #{version.created_at}
+        %br
+        ==Fields: #{version.object}
+        %br
+        %br

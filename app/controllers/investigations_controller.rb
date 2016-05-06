@@ -1,4 +1,5 @@
 class InvestigationsController < ApplicationController
+  load_and_authorize_resource
   # GET /investigations
   # GET /investigations.json
   def index
@@ -72,12 +73,19 @@ class InvestigationsController < ApplicationController
   # DELETE /investigations/1
   # DELETE /investigations/1.json
   def destroy
-    @investigation = Investigation.find(params[:id])
+    # @investigation = Investigation.find(params[:id])
     @investigation.destroy
+    redirect_to investigations_url, notice: "Investigation was deleted"
 
-    respond_to do |format|
-      format.html { redirect_to investigations_url }
-      format.json { head :no_content }
-    end
+    # respond_to do |format|
+    #   format.html { redirect_to investigations_url }
+    #   format.json { head :no_content }
+    # end
   end
+
+  def import
+	Investigation.import(params[:file])
+	redirect_to root_url, notice: "Investigation imported."
+  end
+
 end

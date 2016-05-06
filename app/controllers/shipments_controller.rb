@@ -1,20 +1,63 @@
 class ShipmentsController < ApplicationController
     load_and_authorize_resource
+
     def index
         @shipments = @shipments.includes({:containers => :samples})
         if params.has_key? :open
            @shipments = @shipments.where("ship_date <= ? and recieve_date is NULL",  Time.now())
         end
+
+        unless params[:show_all]
+            @shipments
+        else
+            @shipments = @shipments.where(complete: false)
+        end
     end
     def show
-        @shipment.containers
+        # @shipment.containers
+        @shipment = Shipment.find(params[:id])
+        respond_to do |format|
+            format.html
+            format.pdf do
+                # pdf = render :pdf => "public/manifests/manifest_#{@shipment.tracking_number}.pdf"
+                
+                WickedPdf.new.pdf_from_string(
+                    render_to_string('shipments/show.html.haml', :layout => "public/manifests/manifest_#{@shipment.tracking_number}.pdf")
+                )
+                
+                save_path = Rails.root.join("public/manifests/","manifest_#{@shipment.tracking_number}.pdf")
+                File.open(save_path, 'wb') do |file|
+                    file << pdf
+                end
+            end
+        end
     end
     def new; end
     def create
+        if @shipment.save
+            redirect_to @shipment, success: "Shipment created successfully"
+        else
+            render action: 'new'
+        end
     end
     def edit; end
     def update
+        if @shipment.update_attributes(params[:shipment])
+            redirect_to @shipment, success: "Shipment updated"
+        else
+            render action: 'edit'
+        end
     end
+    def destroy
+        @shipment = Shipment.find(params[:id])
+        @shipment.destroy
+
+        respond_to do |format|
+          format.html { redirect_to shipments_url }
+          format.json { head :no_content }
+        end
+    end
+
     def receive
         if @shipment.received!
             ShipmentMailer.delay.received(@shipment.id)

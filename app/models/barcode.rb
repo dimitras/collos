@@ -19,25 +19,25 @@ class Barcode < ActiveRecord::Base
   # has_many :samples
   # has_many :containers
 
-
   # Generate a single uniq barcode
   def self.generate(barcode_set_id=nil)
-      barcode_set_id ||= Barcode.maximum("barcode_set").to_i + 1
-      retry_count = 0
-      barcode = nil
-      begin
-        bcid = "P#{ rand(16**6).to_s(16).upcase }"
-        barcode = Barcode.create!(barcode: bcid, barcode_set: barcode_set_id)
-      rescue ActiveRecord::RecordInvalid => e
-        logger.error(e.message)
-        retry_count += 1
-        retry if retry_count < 5
-      end
-      barcode
+    barcode_set_id ||= Barcode.maximum("barcode_set").to_i + 1
+    retry_count = 0
+    barcode = nil
+    begin
+      bcid = "P#{ rand(16**6).to_s(16).upcase }"
+      barcode = Barcode.create!(barcode: bcid, barcode_set: barcode_set_id)
+    rescue ActiveRecord::RecordInvalid => e
+      logger.error(e.message)
+      retry_count += 1
+      retry if retry_count < 5
+    end
+    barcode
   end
+
   # Generate a set of random barcode strings
   # @param n Integer The number of barcodes to create (default=1)
-  # @param l Integer The
+  # @param l Integer The barcode_set_id
   # @return Array  An array of random barcode strings.
   def self.generate_barcodes(num,barcode_set_id=nil)
     barcodes = []
@@ -60,4 +60,14 @@ class Barcode < ActiveRecord::Base
   def to_s
     barcode
   end
+  
+	def create_img
+		require 'zint'
+		# qrcode = Zint::Barcode.new(self.barcode, Zint::BARCODE_QRCODE) 
+		qrcode = Zint::Barcode.new(self.barcode, Zint::BARCODE_MICROQR) # :text=self.barcode, :option_2=1, :vers=1
+		png_path = "qr_codes/" + self.barcode + ".png"
+		qrcode.path = "app/assets/images/" + png_path
+		qrcode.print!
+		return png_path
+	end
 end

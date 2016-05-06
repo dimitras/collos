@@ -1,4 +1,4 @@
-%h1 Listing people
+%h1 Listing investigators
 
 %table
   %tr
@@ -11,7 +11,7 @@
 
   - @people.each do |person|
     %tr
-      %td= person.name
+      %td= person.firstname + " " + person.lastname
       %td= person.type
       %td= person.institution
       %td= link_to 'Show', person

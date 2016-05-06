@@ -1,19 +1,30 @@
-%h1 Listing studies
+%h3 Studies
 
-%table
-  %tr
-    %th Name
-    %th
-    %th
-    %th
-
-  - @studies.each do |study|
+%table.table.table-striped.table-condensed.table-bordered
+  %thead
     %tr
-      %td= study.name
-      %td= link_to 'Show', study
-      %td= link_to 'Edit', edit_study_path(study)
-      %td= link_to 'Destroy', study, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
+      %th.span1 ID
+      %th.span3 Title
+      %th.span1 Identifier
+      %th.span2 Investigators
+      %th.span3 &nbsp;
+  %tbody
+    -@studies.each do |study|
+      %tr
+        %td= study.id
+        %td= link_to(study.title, study)
+        %td= study.identifier
+        %td
+          -if study.people
+            -study.people.each do |investigator|
+              ="#{investigator.firstname} #{investigator.lastname}"
+              %br 
+        %td
+          =link_to "Show", study_path(study), class: 'btn'
+          -if can?(:edit, study)
+            =link_to "Edit", edit_study_path(study), class: 'btn btn-success'
+          -if can?(:destroy, study)
+            = link_to "Delete", study_path(study), method: 'delete', class: 'btn btn-danger', confirm: "Are you sure? We can't undo this ..."
 %br
 
-= link_to 'New Study', new_study_path
+=link_to 'Create a new Study', new_study_path, class: 'btn btn-primary btn-large'
