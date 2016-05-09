@@ -4,63 +4,71 @@
 	%li
 		%b How can I enter one sample in the system?
 		%br
-		First I create or make sure the following exist:
+		First you create or make sure the following exist:
 		%ul
 			%li
 				=link_to "investigation",investigations_path()
 			%li
-				=link_to "study",studies_path()	
+				=link_to "study*",studies_path()	
 			%li
-				=link_to "container type *",container_types_path()
+				=link_to "container type*",container_types_path()
 			%li  
-				=link_to "container *",containers_path()
+				=link_to "container*",containers_path()
 			%li
-				=link_to "taxonomy *",taxons_path()
+				=link_to "taxonomy*",taxons_path()
 			%li
-				=link_to "ontology term *",ontology_terms_path()
-		Then I create a new 
-		=link_to "sample",samples_path()
+				=link_to "ontology term*",ontology_terms_path()
+		Then you create a new 
+		=link_to "sample.",samples_path()
 	%br
 	%li
 		%b How do I add more than one samples to the database?
 		%br
-		I can use either ISA-Tab formatted files or plain csv ones.
+		There is a function to upload in bulk 
+		=link_to "\"Import data in bulk\".", root_path
+		Use spreadsheet format (
+		=link_to "template", "/template/data.xlsx"
+		).
 	%br
 	%li
 		%b How do I ship my sample(s)?
 		%br
-		If there is one or a couple of samples to be shipped, I select their containers, and create a shipment. Each sample can be shipped one or more times.
+		If there is one or more samples to be shipped, go to 
+		=link_to "shipment", shipments_path
+		, select the container(s), and create a shipment. There is no limit on how many times a sample can be shipped.
 	%br
 	%li
-		%b How do I get the barcode sticker for my shipment?
-		%br	
-		For your shipment you will need the containers' barcodes. These barcodes can be used for the sticker.
-		You may also print the manifest of the shipment, which includes all the barcoded containers shipped.
+		%b How do I get the label for my shipment?
+		%br
+		TBU
 	%br
 	%li
 		%b How do I find a sample or a collection of samples?
 		%br	
-		I can search the database by sample name, barcode, container, investigator, study, organism, tissue and more.
-		For more advanced search, I can define multiple filters to narrow my findings.
+		You may search the database by sample name, barcode, container, investigator, study, organism, tissue and more, or use the advanced search to define multiple filters and narrow the results.
 	%br
 	%li
-		%b Which is the recommended ISA-Tab format for the bulk upload?
+		%b Which is the recommended file format for the bulk upload?
 		%br	
-		You may download the 
-		=link_to "sample ISA-Tab package"
-	%br
-	%li
-		%b Which is the recommended csv format for the bulk upload?
-		%br	
-		You may download the 
-		=link_to "sample tab-delimited package"
+		Yoy may download the .xlsx template 
+		=link_to "here.", "/template/data.xlsx"
 	%br
 	%li
 		%b Can I tranfer a few samples to another freezer or any other type of container?
 		%br	
 		If you want to transfer multiple samples to another freezer for example, then you can select the containers you want and then do 'Edit selected' and transfer them to another freezer.
 		%br
-		If you want to change the tube of a few samples though, you would have to do it by editing one by one and changing the container. The information about the old container won't be lost, it will be kept in its history.
-
-
+		If you want to change the tube of a few samples though, you would have to do it by editing one by one and changing the container. The information about the old container won't be lost, it will be kept in the audit trail.
+	%br
+	%li
+		%b How do I prepare the data.xlsx?
+		%br
+		TBU
+	%br
+	%li
+		%b How can I print the labels for my samples?
+		%br
+		From a study, you can download the related samples. The downloadable file is in the format needed for the label system. If you click "Print labels", you will be redirected to the labeling system, adjusted from Steve Vitale's original SPS labeling system.
+		%br
+		From a shipment, you can download the respective sample(s) and container(s) and click "Print labels" to go to the labeling system and print the labels. The dowloadable file can serve as a manifest as well.
 
