@@ -6,7 +6,7 @@ This Rails application is a light-weight LIMS that seeks to provide a solution f
 
 The site itself has documentation on usage, refer to `Help` page. This document is mainly concerned about the underlying engineering of the site.
 
-For the barcode labels, we utilize a retouched version of the SPS label system, implemented by Vitale et al.
+For the barcode labels, we utilize a retouched version of the SPS label system (Vitale et al).
 
 ## Compatibility
 
@@ -41,7 +41,7 @@ cd $RAILS_ROOT
 bundle
 ```
 
-Make sure Apache, Postgres Redis-server and Rails-server are running.
+Make sure Apache, Postgres, Redis-server and Rails-server are running.
 
 ```
 service httpd start
@@ -72,11 +72,7 @@ You can find more information about the Sidekiq workers and how to deploy them a
 
 ## PostgreSQL and Full Text Search
 
-We are taking advantage of PostgreSQL's native full-text-search capabilities, with using the pg_search gem.
-
-## Rails Plugins
-
-We use a few rails plugins in this app
+We are taking advantage of PostgreSQL's native full-text-search capabilities, by using the pg_search gem.
 
 ## Doorkeeper
 
@@ -86,7 +82,7 @@ We use Doorkeeper as an oauth provider for the application.
 
 Ancestry is handled with ancestry and acts-as-dag gems.
 
-## Audit trails
+## Audit trail
 
 We use the paper_trail gem to log the history of the database.
 
