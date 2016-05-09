@@ -25,7 +25,7 @@ The site depends on two core technologies:
 
 ## Installation (TBU)
 
-Instructions for CentOS:
+Instructions for CentOS setup:
 
 ```bash
 yum install postgresql93-server
@@ -72,19 +72,19 @@ You can find more information about the Sidekiq workers and how to deploy them a
 
 ## PostgreSQL and Full Text Search
 
-We are taking advantage of PostgreSQL's native full-text-search capabilities, by using the pg_search gem.
+We are taking advantage of PostgreSQL's native full-text-search capabilities, by using the [pg_search gem](https://github.com/Casecommons/pg_search).
 
 ## Doorkeeper
 
-We use Doorkeeper as an oauth provider for the application.
+We use [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper) as an oauth provider for the application.
 
 ## Ancestry
 
-Ancestry is handled with ancestry and acts-as-dag gems.
+Ancestry is handled with [ancestry](https://github.com/stefankroes/ancestry) and [acts-as-dag](https://github.com/mleventi/acts-as-dag).
 
-## Audit trail
+## Auditing
 
-We use the paper_trail gem to log the history of the database.
+We use [paper_trail](https://github.com/airblade/paper_trail) to track the changes to the models' data.
 
 ## License
 
