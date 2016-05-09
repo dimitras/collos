@@ -88,9 +88,9 @@ We use [paper_trail](https://github.com/airblade/paper_trail) to track the chang
 
 ### Contributors
 
-Dimitra Sarantopoulou
-Anand Srinivasan
-Angel Pizarro
+- Dimitra Sarantopoulou
+- Anand Srinivasan
+- Angel Pizarro
 
 ### License
 
