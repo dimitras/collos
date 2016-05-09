@@ -2,10 +2,17 @@
 
 --------------------------------
 
-This site is a light-weight LIMS that seeks to provide a solution for as low-friction as possible biomaterial tracking and annotation. The domain problem does not leave you much room to be completely frictionless, but we strive to minimize busy work and maximize utility.
+This Rails application is a light-weight LIMS that seeks to provide a solution for as low-friction as possible biomaterial tracking and annotation. The domain problem does not leave you much room to be completely frictionless, but we strive to minimize busy work and maximize utility.
 
-The site itself has documentation on usage, refer to the `About` and `Help` pages. This document is mainly concerned about the underlying engineering of the site.
+The site itself has documentation on usage, refer to `Help` page. This document is mainly concerned about the underlying engineering of the site.
 
+For the barcode labels, we utilize a retouched version of the SPS label system, implemented by Vitale et al.
+
+## Compatibility
+
+* Linux
+* Mac OS
+* Windows (not tested)
 
 ## Technologies
 
@@ -13,25 +20,35 @@ The site depends on two core technologies:
 
 * [Rails 3](http://rubyonrails.org/)
 * [PostgreSQL](http://www.postgresql.org/)
-* [redis](http://redis.io/)
-* [GraphViz](http://www.graphviz.org/)
-* zint
+* [Redis server](http://redis.io/)
+* [Zint for barcodes](https://zint.github.io/)
 
+## Installation (TBU)
+
+Instructions for CentOS:
 
 ```bash
-brew install postgresql 
-# Follow the postgresql setup instructions
-brew install graphviz
-brew install zint
-````
+yum install postgresql93-server
+#install redis-server
+rvm install ruby-1.9.3-p448
+gem install rails
+```
 
+Like you would any other Rails application.
 
-In particular we are taking advantage of PostgreSQL's native full-text-search capabilities. The Rails engines and plugins are itemized in the Gemfile. Both are discussed below.
+```
+cd $RAILS_ROOT
+bundle
+```
 
+Make sure Apache, Postgres Redis-server and Rails-server are running.
 
-## Major Application Functionality
-
-There are several major subsystems in CollOS. They are described below.
+```
+service httpd start
+service postgresql-9.3 start
+service redis_6379 start
+rails server --port 3001 -d
+```
 
 ### Environment configuration
 
@@ -55,19 +72,7 @@ You can find more information about the Sidekiq workers and how to deploy them a
 
 ## PostgreSQL and Full Text Search
 
-TODO: finish this section
-
-## INSTALL
-
-Like you would any other Rails application.
-
-```
-cd $RAILS_ROOT
-bundle
-```
-
-Then make sure Postgres and redis are running, etc.
-
+We are taking advantage of PostgreSQL's native full-text-search capabilities, with using the pg_search gem.
 
 ## Rails Plugins
 
@@ -75,7 +80,16 @@ We use a few rails plugins in this app
 
 ## Doorkeeper
 
+We use Doorkeeper as an oauth provider for the application.
+
 ## Ancestry
 
+Ancestry is handled with ancestry and acts-as-dag gems.
+
+## Audit trails
+
+We use the paper_trail gem to log the history of the database.
+
 ## License
+
 Under MIT License
