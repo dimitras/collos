@@ -69,7 +69,8 @@
             /%br
             /== #{@study.samples_for_csv} 
             /%br
-            =link_to "Download #{@study.identifier} samples", study_path(:format=> :csv)
+            =link_to "Download samples", study_path(:format=> :csv), :class => "btn"
+            =link_to "Print labels", "http://sps.itmat.upenn.edu", :target => "_blank", :class => "btn"
 
 -if @study.versions.count > 0
     %h5 Audit Trail (History)
