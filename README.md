@@ -8,13 +8,13 @@ The site itself has documentation on usage, refer to `Help` page. This document 
 
 For the barcode labels, we utilize a retouched version of the SPS label system (Vitale et al).
 
-## Compatibility
+### Compatibility
 
 * Linux
 * Mac OS
 * Windows (not tested)
 
-## Technologies
+### Technologies
 
 The site depends on two core technologies:
 
@@ -23,7 +23,7 @@ The site depends on two core technologies:
 * [Redis server](http://redis.io/)
 * [Zint for barcodes](https://zint.github.io/)
 
-## Installation (TBU)
+### Installation (TBU)
 
 Instructions for CentOS setup:
 
@@ -70,22 +70,28 @@ You can see the processing queue and other Sidekiq information in the dashboard 
 
 You can find more information about the Sidekiq workers and how to deploy them at [the background processing page](doc/background_processing.md)
 
-## PostgreSQL and Full Text Search
+### PostgreSQL and Full Text Search
 
 We are taking advantage of PostgreSQL's native full-text-search capabilities, by using the [pg_search gem](https://github.com/Casecommons/pg_search).
 
-## Doorkeeper
+### Doorkeeper
 
 We use [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper) as an oauth provider for the application.
 
-## Ancestry
+### Ancestry
 
 Ancestry is handled with [ancestry](https://github.com/stefankroes/ancestry) and [acts-as-dag](https://github.com/mleventi/acts-as-dag).
 
-## Auditing
+### Auditing
 
 We use [paper_trail](https://github.com/airblade/paper_trail) to track the changes to the models' data.
 
-## License
+### Contributors
+
+Dimitra Sarantopoulou
+Anand Srinivasan
+Angel Pizarro
+
+### License
 
 Under MIT License
