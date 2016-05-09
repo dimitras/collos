@@ -35,6 +35,8 @@
 #  protocols               :string(255)
 #  race_id                 :integer
 #  ethnicity_id            :integer
+#  confirmed               :boolean
+#  quantity                :string(255)
 #
 
 require 'test_helper'

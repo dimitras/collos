@@ -2,20 +2,21 @@
 #
 # Table name: people
 #
-#  id          :integer          not null, primary key
-#  firstname   :string(255)
-#  type        :string(255)
-#  institution :string(255)
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  email       :string(255)
-#  phone       :integer
-#  lastname    :string(255)
-#  user_id     :integer
-#  study_id    :integer
-#  tsv_content :tsvector
-#  laboratory  :string(255)
-#  identifier  :string(255)
+#  id           :integer          not null, primary key
+#  firstname    :string(255)
+#  type         :string(255)
+#  institution  :string(255)
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  email        :string(255)
+#  phone        :integer
+#  lastname     :string(255)
+#  user_id      :integer
+#  study_id     :integer
+#  tsv_content  :tsvector
+#  laboratory   :string(255)
+#  identifier   :string(255)
+#  container_id :integer
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

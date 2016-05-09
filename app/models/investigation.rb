@@ -9,6 +9,7 @@
 #  identifier  :string(255)
 #  tsv_content :tsvector
 #  description :text
+#  imported    :boolean
 #
 
 class Investigation < ActiveRecord::Base
