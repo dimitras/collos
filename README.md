@@ -68,8 +68,6 @@ Background processing is accomplished using [Sidekiq](http://sidekiq.org/)
 
 You can see the processing queue and other Sidekiq information in the dashboard at `root_url()/sidekiq`. __Note:__ you need to be logged in first.
 
-You can find more information about the Sidekiq workers and how to deploy them at [the background processing page](doc/background_processing.md)
-
 ### PostgreSQL and Full Text Search
 
 We are taking advantage of PostgreSQL's native full-text-search capabilities, by using the [pg_search gem](https://github.com/Casecommons/pg_search).
