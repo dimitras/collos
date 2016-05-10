@@ -27,7 +27,7 @@ class SearchController < ApplicationController
 			format.csv do
 				#res = []
 				#@results.each do |result|
-				#	res << [result.searchable.name, result.searchable.barcode_string]
+				#	res << [rs.name, rs.barcode_string]
 				#end
 				#send_data res.to_csv
 				send_data formatted_results
@@ -44,12 +44,14 @@ class SearchController < ApplicationController
 	def formatted_results
 		res = []
 		@results.each do |result|
-			if result.searchable_type == "Sample"
-				res << [result.searchable_type, result.searchable.name, result.searchable.barcode_string, result.searchable.scientific_name, result.searchable.source_name, result.searchable.tissue_type_name, result.searchable.replicate, result.searchable.treatments, result.searchable.time_point, result.searchable.study_titles, result.searchable.container.ancestors[0]]
-			elsif result.searchable_type == "Container" #&& result.searchable.with_children == true
-				res << [result.searchable_type, result.searchable.name, result.searchable.barcode_string, result.searchable.container_type_name, result.searchable.parent]
-			elsif result.searchable_type == "Study" || result.searchable_type == "Investigation"
-				res << [result.searchable_type, result.searchable.title, result.searchable.identifier, result.searchable.description]
+			rs = result.searchable
+			rst = result.searchable_type
+			if rst == "Sample"
+				res << [rst, rs.name, rs.barcode_string, rs.scientific_name, rs.source_name, rs.tissue_type_name, rs.replicate, rs.treatments, rs.time_point, rs.study_titles, rs.container.ancestors[0]]
+			elsif rst == "Container" #&& rs.with_children == true
+				res << [rst, rs.name, rs.barcode_string, rs.container_type_name, rs.parent]
+			elsif rst == "Study" || rst == "Investigation"
+				res << [rst, rs.title, rs.identifier, rs.description]
 			end
 		end
 		str = CSV.generate do |csv|
