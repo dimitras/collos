@@ -43,7 +43,7 @@ class SearchController < ApplicationController
 	helper_method :formatted_results
 	def formatted_results
 		res = []
-		@results.each do |result|
+		PgSearch.multisearch(params[:query]).all.each do |result|
 			rs = result.searchable
 			rst = result.searchable_type
 			if rst == "Sample"
