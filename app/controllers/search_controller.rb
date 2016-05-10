@@ -5,6 +5,11 @@ class SearchController < ApplicationController
     def index
         authorize! :index, PgSearch::Document
         @results = PgSearch.multisearch(params[:query]).page(params[:page] || 1).per_page(params[:per_page] || 25)
+
+        respond_to do |format|
+        	format.html
+			format.csv {send_data formatted_results, :filename => "#{params[:query]}_results.csv"}
+		end
     end
 
 	def fetch
@@ -16,6 +21,9 @@ class SearchController < ApplicationController
 
 		respond_to do |format|
 			format.html
+			#format.csv {send_data @results.to_csv, :filename => "#{params[:query]}.csv"}
+			#format.csv {send_data formatted_results}#.each_with_index {|val,idx| p "#{val} => #{idx}"} }
+=begin
 			format.csv do
 				#res = []
 				#@results.each do |result|
@@ -24,6 +32,7 @@ class SearchController < ApplicationController
 				#send_data res.to_csv
 				send_data formatted_results
 			end
+=end
 			#format.csv {send_data @results.to_csv}
 			#format.csv {send_data @results.map(&:result)}
 			#format.csv { render file: 'search/fetch.csv.haml', content_type: "text/csv", filename: "#{params[:query]}.csv"}
@@ -35,9 +44,20 @@ class SearchController < ApplicationController
 	def formatted_results
 		res = []
 		@results.each do |result|
-			res << [result.searchable.name, result.searchable.barcode_string].to_csv
+			if result.searchable_type == "Sample"
+				res << [result.searchable_type, result.searchable.name, result.searchable.barcode_string, result.searchable.scientific_name, result.searchable.source_name, result.searchable.tissue_type_name, result.searchable.replicate, result.searchable.treatments, result.searchable.time_point, result.searchable.study_titles, result.searchable.container.ancestors[0]]
+			elsif result.searchable_type == "Container" #&& result.searchable.with_children == true
+				res << [result.searchable_type, result.searchable.name, result.searchable.barcode_string, result.searchable.container_type_name, result.searchable.parent]
+			elsif result.searchable_type == "Study" || result.searchable_type == "Investigation"
+				res << [result.searchable_type, result.searchable.title, result.searchable.identifier, result.searchable.description]
+			end
 		end
-		return res.to_csv
+		str = CSV.generate do |csv|
+			res.each do |r|
+				csv << r
+			end
+		end
+		return str
 	end
 
 end

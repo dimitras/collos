@@ -143,7 +143,7 @@ Collos::Application.routes.draw do
 
   # search page
   match "/search", to: "search#index", as: :search
-  match "/search/fetch", to: "search#fetch", as: :search
+  #match "/search/fetch", to: "search#fetch", as: :search
 
   # Sidekiq background work processor
   require "sidekiq_auth"

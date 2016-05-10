@@ -6,7 +6,7 @@ This Rails application is a light-weight LIMS that seeks to provide a solution f
 
 The site itself has documentation on usage, refer to `Help` page. This document is mainly concerned about the underlying engineering of the site.
 
-For the labeling, we modified and minimalised the SPS labeling system by Vitale et al.
+For the labeling, we modified and minimalised the SPS server by Vitale et al. This version is available at [github](https://github.com/svitale/sps).
 
 ### Compatibility
 
