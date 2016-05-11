@@ -19,7 +19,7 @@ class StudiesController < ApplicationController
       format.html # show.html.erb
       format.json { render json: @study }
       #format.csv {send_data @study.samples.to_csv, :filename => "#{@study.identifier}_samples.csv"}
-      format.csv { send_data @study.samples_for_csv }# :filename => "#{@study.identifier}_samples.csv"}      
+      format.csv { send_data @study.samples_for_csv, :filename => "#{@study.identifier}_samples.csv"}      
       #format.pdf { render :layout => false }
       #format.csv  { send_data @study.samples.to_csv(), :filename => "#{@study.identifier}_samples.csv" }
       #format.tsv  { send_data @study.samples.to_tsv(), :filename => "#{@study.samples}_samples.tsv" }
