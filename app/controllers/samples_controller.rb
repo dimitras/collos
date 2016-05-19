@@ -47,6 +47,15 @@ class SamplesController < ApplicationController
         end
     end
 
+	def confirm
+    	@sample.confirmed = true
+		if @sample.save
+			redirect_to samples_url, success: "Sample was confirmed"
+		else
+			redirect_to samples_url, error: "Sample was not confirmed"
+		end
+	end
+
     def destroy
         @sample.retired = true
         if @sample.save

@@ -6,6 +6,7 @@
                 %th.span1 #{@results.count} entries found
                 %th.span1 Identifier
                 %th.span1 Type
+                %th.span1 
         %tbody
             -for result in @results
                 - o = result.searchable
@@ -13,16 +14,23 @@
                     -if result.searchable_type == "Investigation" || result.searchable_type == "Study"
                         %td= link_to o.title, o
                         %td= o.identifier
-                    -elsif result.searchable_type == "Sample" || result.searchable_type == "Container"
+                        %td= result.searchable_type
+                    -elsif result.searchable_type == "Sample"
                         %td= link_to o.name, o
                         %td= o.barcode
+                        %td= result.searchable_type
+                        -if can? :confirm, o and !o.confirmed
+                            %td=link_to "Confirm", sample_path(o, :sample => {:confirmed => true}), :method => :put, class: 'btn btn-danger'
+                    -elsif result.searchable_type == "Container" #&& o.container_type.can_have_children
+                        %td= link_to o.name, o
+                        %td= o.barcode
+                        %td= result.searchable_type
                         /%td= o.source_name
                         /%td= o.scientific_name
                         /%td= o.time_point
                         /%td= o.treatments
                         /%td= o.tissue_type_name
                         /%td= o.replicate
-                    %td= result.searchable_type
                     
 
                     -#-if o.has_attribute?("name")

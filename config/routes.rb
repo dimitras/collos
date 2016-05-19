@@ -100,6 +100,7 @@ Collos::Application.routes.draw do
     collection do
       get 'search'
       post 'upload'
+      put 'confirm'
       post :edit_multiple
       put :update_multiple
       put :create_multiple
