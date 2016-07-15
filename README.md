@@ -4,7 +4,7 @@
 
 This Rails application is a light-weight LIMS that seeks to provide a solution for as low-friction as possible biomaterial tracking and annotation. The domain problem does not leave you much room to be completely frictionless, but we strive to minimize busy work and maximize utility.
 
-The site itself has documentation on usage, refer to `Help` page. This document is mainly concerned about the underlying engineering of the site.
+The application itself has documentation on usage, refer to `Help` page. This document is mainly concerned about the underlying engineering of the application.
 
 For the labeling, we modified and minimalised the SPS server by Vitale et al. This version is available at [github](https://github.com/svitale/sps).
 
@@ -23,7 +23,7 @@ The site depends on two core technologies:
 * [Redis server](http://redis.io/)
 * [Zint for barcodes](https://zint.github.io/)
 
-### Installation (TBU)
+### Installation (to be updated)
 
 Instructions for CentOS setup:
 
