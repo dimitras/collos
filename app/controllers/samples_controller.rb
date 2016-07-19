@@ -30,7 +30,7 @@ class SamplesController < ApplicationController
         @studies = Study.all
         @material_types = MaterialType.all
         @study = Study.new
-        @container = @sample.container.build
+        @container = @sample.container#.build
         if @sample.save
             redirect_to @sample, success: "Sample created successfully"
         else
