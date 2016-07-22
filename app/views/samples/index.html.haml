@@ -20,7 +20,8 @@
                 %th.span2 Name
                 %th.span2 Taxon
                 /%th.span1 Container
-                %th.span2 Subject
+                %th.span2 Subject 
+                /=link_to("Subject", Sample.order(:source_name))
                 /%th.span2 Material type
                 /%th.span2 Study
                 /%th.span1 Retired?

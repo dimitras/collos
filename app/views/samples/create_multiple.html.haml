@@ -9,11 +9,12 @@
   /autocomplete taxon, subject, materialtype, studies, sex, parent, retired
   /select containertype from dropdown
   /select container of the specific containertype (not used tubes)
-  / = f.fields_for @samples do |builder|
-  /   = builder.label :name, "Sub-sample"
-  /   = builder.text_field :name
-  /   = builder.check_box :_destroy 
-  /   = builder.label :_destroy, "Remove"
+  = f.fields_for :children do |builder|
+    = builder.label :name, @sample.name
+    = builder.input :barcode, disabled: true
+    = builder.text_field :name
+    = builder.check_box :_destroy 
+    = builder.label :_destroy, "Remove"
 
   = f.submit "Submit", class: 'btn'
   = link_to 'Cancel', samples_path(), class: 'btn btn-warning'

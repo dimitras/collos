@@ -69,25 +69,7 @@ class Investigation < ActiveRecord::Base
 # Rake.application.rake_require '../../lib/tasks/metric_fetcher'
 # results = capture_stdout {Rake.application['metric_fetcher'].invoke}
 
-    def self.import(file)
-
-    	# http://railscasts.com/episodes/396-importing-csv-and-excel
-    	# how to upload all info?
-			# if isatab
-			# 	run parser
-			# 	run create tables
-			# 	run rake
-			# if csv or xls
-			#   read all sheets
-			# 	run rake
-
-		# file type?
-
-		# *****************************************
-		# just run the rake file to load everything
-		# make sure I have the correct format
-
-		# parse
+	def self.import(file)
 		spreadsheet = open_spreadsheet(file)
 
 		header = spreadsheet.row(1)

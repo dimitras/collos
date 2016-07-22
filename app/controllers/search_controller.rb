@@ -5,7 +5,17 @@ class SearchController < ApplicationController
     def index
         authorize! :index, PgSearch::Document
         @results = PgSearch.multisearch(params[:query]).page(params[:page] || 1).per_page(params[:per_page] || 25)
+        
+        ## results withouts tubes, but without pagination
+        #@results = PgSearch.multisearch(params[:query]).reject{|r| r.searchable_type == "Container" and !r.searchable.container_type.can_have_children}.page(params[:page] || 1).per_page(params[:per_page] || 25)
 
+=begin
+        @results = PgSearch.multisearch(params[:query]).all
+        @results.reject! do |result|
+			!result.searchable.container_type.can_have_children
+		end
+		@results.page(params[:page] || 1).per_page(params[:per_page] || 25)
+=end
         respond_to do |format|
         	format.html
 			format.csv {send_data formatted_results, :filename => "#{params[:query]}_results.csv"}
@@ -23,19 +33,6 @@ class SearchController < ApplicationController
 			format.html
 			#format.csv {send_data @results.to_csv, :filename => "#{params[:query]}.csv"}
 			#format.csv {send_data formatted_results}#.each_with_index {|val,idx| p "#{val} => #{idx}"} }
-=begin
-			format.csv do
-				#res = []
-				#@results.each do |result|
-				#	res << [rs.name, rs.barcode_string]
-				#end
-				#send_data res.to_csv
-				send_data formatted_results
-			end
-=end
-			#format.csv {send_data @results.to_csv}
-			#format.csv {send_data @results.map(&:result)}
-			#format.csv { render file: 'search/fetch.csv.haml', content_type: "text/csv", filename: "#{params[:query]}.csv"}
 		end
 	end
 
@@ -48,7 +45,7 @@ class SearchController < ApplicationController
 			rst = result.searchable_type
 			if rst == "Sample"
 				res << [rst, rs.name, rs.barcode_string, rs.scientific_name, rs.source_name, rs.tissue_type_name, rs.replicate, rs.treatments, rs.time_point, rs.study_titles, rs.container.ancestors[0]]
-			elsif rst == "Container" #&& rs.with_children == true
+			elsif rst == "Container" && rs.container_type.can_have_children
 				res << [rst, rs.name, rs.barcode_string, rs.container_type_name, rs.parent]
 			elsif rst == "Study" || rst == "Investigation"
 				res << [rst, rs.title, rs.identifier, rs.description]

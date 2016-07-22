@@ -9,9 +9,9 @@
     %br
     -if @sample.children.count == 0 and !@sample.retired
         / TODO: for the number of children to be created
-        / =simple_form_for @sample, html: {class: 'form-horizontal'} do |f|
-        /     =f.number_field :number_of_children, params[:number_of_children], :size => 3, :min => 1
-        /     =f.button :submit, :value => "Create children", class: 'btn btn-primary'
+        /=simple_form_for @sample, html: {class: 'form-horizontal'} do |f|
+        /    =f.number_field :number_of_children, params[:number_of_children], :size => 3, :min => 1
+        /    =f.button :submit, :value => "Create children", class: 'btn btn-primary'
         =link_to "Create child(ren)", create_multiple_samples_path, method: 'get', class: 'btn btn-primary'
     
 %br

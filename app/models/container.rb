@@ -38,6 +38,7 @@ class Container < ActiveRecord::Base
     #validates :name, length: { maximum: 25 } 
     # some handy methods
     alias_method :container, :parent
+    alias_method :container, :children
     
     scope :is_not_retired, where(:retired => false)
     scope :is_retired, where(:retired => true)
@@ -146,20 +147,18 @@ class Container < ActiveRecord::Base
     # Full text search of containers
     include PgSearch
     multisearchable against: [:name, :barcode_string, :tags, :notes, :external_identifier],
+    	#if: Container.with_children, # not working
         using: {
             tsearch: {
                 dictionary: "english",
-                any_word: true,
-                prefix: true,
                 tsvector_column: 'tsv_content'
             }
         }
       pg_search_scope :search, against:  [:name, :barcode_string, :tags, :notes, :external_identifier],
+      	#:if => :with_children, # not working
         using: {
           tsearch: {
             dictionary: "english",
-            any_word: true,
-            prefix: true,
             tsvector_column: 'tsv_content'
           }
         }

@@ -113,7 +113,7 @@ class Sample < ActiveRecord::Base
   #     :conditions => ["COUNT(sample.children.count) == ?", count]
   #   }
   # }
-  #accepts_nested_attributes_for :children, :reject_if => lambda { |a| a[:content].blank? }, :allow_destroy => true
+  #accepts_nested_attributes_for :children#, :reject_if => lambda { |a| a[:child].blank? }, :allow_destroy => true
 
   def scientific_name
     taxon.try(:scientific_name)
