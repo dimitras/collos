@@ -49,7 +49,7 @@ class SamplesController < ApplicationController
 
 	def confirm
     	@sample.confirmed = true
-		if @sample.save
+		if @sample#.save
 			redirect_to samples_url, success: "Sample was confirmed"
 		else
 			redirect_to samples_url, error: "Sample was not confirmed"
