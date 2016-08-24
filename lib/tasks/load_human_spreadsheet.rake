@@ -130,6 +130,7 @@ namespace :db do
 					end
 					if store_container.to_i == 1
 						store_laboratory = container_laboratory
+						p "#STORE LABORATORY is #{store_laboratory.name}."
 					end			
 				end
 
@@ -180,6 +181,9 @@ namespace :db do
 
 		# parse ontology terms file
 		oterms_file = "#{isatab_directory}/oterms.csv"
+		if File.exist?(oterms_file)
+		    puts "ERROR: #{oterms_file} file was not found."
+		end
 		terms_list = Hash.new {|h,k| h[k] = []} 
 		CSV.foreach(oterms_file, {:headers=>:first_row}) do |row|
 			term_name = row[0]
@@ -546,6 +550,7 @@ namespace :db do
 					:notes              => notes,
 					:tags               => tags
 				)
+				puts "Sample #{sample.name} created?"
 				sample.studies << studies[study_identifier]	
 				puts "#NEW SAMPLE #{sample.inspect} added"
 				p "Assigned in study #{sample.studies}"
