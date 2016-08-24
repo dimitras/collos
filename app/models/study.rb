@@ -28,18 +28,18 @@ class Study < ActiveRecord::Base
 	end
 
 	def samples_for_csv
-		label_attrs = ["sample_collos_id", "sample_identifier", "id_barcode", "id_subject", "id_study", "sample_type", "collection-time-point", "treatment", "sample_name", "species","material_type", "quantity", "box_label", "box_barcode", "freezer_label", "freezer_type", "type"]
+		label_attrs = ["sample_collos_id", "sample_identifier", "id_barcode", "id_subject", "id_study", "sample_type", "collection-time-point", "treatment", "sample_name", "species","material_type", "quantity", "gender", "box_label", "box_barcode", "freezer_label", "freezer_type", "type"]
 		CSV.generate do |csv|
 			csv<< label_attrs
 			containers = []
 			samples.each do |sample|
 				if !sample.retired
-					csv << [sample.id, sample.name, sample.barcode_string, sample.source_name, identifier, sample.tissue_type_name, sample.time_point, sample.treatments, sample.replicate, sample.scientific_name, sample.material_type_name, sample.quantity, sample.container.parent.name, sample.container.parent.barcode_string, sample.container.parent.parent.name, sample.container.parent.parent.container_type_name, "sample"]
+					csv << [sample.id, sample.name, sample.barcode_string, sample.source_name, identifier, sample.tissue_type_name, sample.time_point, sample.treatments, sample.replicate, sample.scientific_name, sample.material_type_name, sample.quantity, sample.sex_name, sample.container.parent.name, sample.container.parent.barcode_string, sample.container.parent.parent.name, sample.container.parent.parent.container_type_name, "sample"]
 					containers << sample.container.parent
 				end
 			end
 			containers.uniq.each do |container|
-				csv << [container.id, container.name, container.barcode, "", identifier, container.container_type_name, "","","", "", "", "","","", "container"]
+				csv << [container.id, container.name, container.barcode, "", identifier, container.container_type_name, "","","","","","","","","", "container"]
 			end
 		end
 	end
