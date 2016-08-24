@@ -191,7 +191,7 @@ namespace :db do
 			term_acc = term_uri.split("/")[-1]
 			terms_list[term_name] = [o_name, term_acc, o_uri, o_prefix]
 		end
-
+        p "NOTE: Parsed the oterms."
 	
 		# TODO: fix parent for sample, if the samples.csv is not sorted, the parents are not assigned
 		past_container = ""
@@ -236,6 +236,7 @@ namespace :db do
 			collOS = row[31]
 			study_identifier = row[32]
 
+            p sample_name
 			# check for field length?
 			#puts "# #{treatments} has #{treatments.length} chars"
 			#if tissue_type.length > 25 || treatments.length > 25 || material_type.length > 25 || sample_name.length >25 || primary_cell.length > 25 || box_label.length > 25
@@ -250,6 +251,7 @@ namespace :db do
 			
 			# collOS field  says whether a sample is supposed to be entered in the db or not
 			if collOS == "yes"
+			    puts "Sample must be added to the db."
 				taxon = Taxon.find_by_scientific_name(organism)
 				puts "#TAXON #{taxon.scientific_name} found in the db" if taxon
 				if !taxon
@@ -513,7 +515,7 @@ namespace :db do
 						:parent         => container_box, 
 						:shipped        => shipped
 					)
-					puts "NEW TUBE #{container_tube.inspect} added"
+					puts "#NEW TUBE #{container_tube.inspect} added"
 				end
 
 				# create samples
