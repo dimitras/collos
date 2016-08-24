@@ -84,6 +84,7 @@ class SamplesController < ApplicationController
     #         @sample.children.build
     #     end
     # end
+
     def create_multiple
         @sample = Sample.find(params[:id])
         3.times do
