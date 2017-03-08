@@ -51,7 +51,10 @@
                         /     %br
                     /=link_to "View all samples", samples_url#(params: {study_titles: @study.title})
     %tr
-        %th Samplesheet
+        -if @study.samples.count > 50
+            %th="Samplesheet (#{@study.samples.count})"
+        -else
+            %th Samplesheet
         %td
             /-labels()
             /=link_to "#{@study.id}.pdf", url_for("#{@study.id}.pdf")

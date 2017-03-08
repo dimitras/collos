@@ -31,7 +31,7 @@
                 %br
                 =image_tag(@sample.barcode.create_img)
                 / =link_to("Barcode set #{@sample.barcode.barcode_set}", fetch_barcodes_url(barcode_set: @sample.barcode.barcode_set))
-        -if !@sample.external_identifier.nil?
+        -if @sample.external_identifier
             %tr
                 %th External identifier
                 %td=@sample.external_identifier
@@ -116,11 +116,11 @@
         /                 =link_to elink.try(:name), url_for(elink)
         / 
 
-        -if !@sample.tags.nil?
+        -if @sample.tags
             %tr
                 %th Tags 
                 %td=format_tags(@sample.tags)
-        -if !@sample.notes.nil?
+        -if @sample.notes
             %tr
                 %th Notes
                 %td=@sample.notes
@@ -128,7 +128,7 @@
             %th Retired
             %td=@sample.retired? ? "Yes" : "No"
 
-        -if !@sample.container.nil?
+        -if @sample.container
             %tr
                 %th Shipped
                 %td=@sample.container.shipped? ? "Yes" : "No"
@@ -139,8 +139,7 @@
                     -@sample.container.ancestors.each do |container|
                         =link_to container.name_for_selects, url_for(container)
                         %br  
-                -if @sample.container
-                    - if @sample.container.show_location?
+                    -if @sample.container.show_location?
                         =link_to("#{@sample.container} (#{@sample.container_x}, #{@sample.container_y})", @sample.container)
                     -else
                         =link_to(@sample.container, @sample.container)
