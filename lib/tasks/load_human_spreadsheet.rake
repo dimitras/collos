@@ -181,7 +181,7 @@ namespace :db do
 
 		# parse ontology terms file
 		oterms_file = "#{isatab_directory}/oterms.csv"
-		if File.exist?(oterms_file)
+		if !File.exist?(oterms_file)
 		    puts "ERROR: #{oterms_file} file was not found."
 		end
 		terms_list = Hash.new {|h,k| h[k] = []} 
@@ -359,27 +359,27 @@ namespace :db do
 						puts "WARNING: missing #{tissue_type} in ontology terms"
 						break
 					end
-                                end
+                end
 
 				material = OntologyTerm.find_by_name(material_type)
 				puts "#MATERIAL TYPE #{material.name} found in the db" if material
 				if !material && material_type
-                                        if terms_list.has_key?(material_type)
-						ontology = Ontology.find_by_name(terms_list[material_type][0])
-                                                puts "#ONTOLOGY #{ontology.name} found in the db" if ontology
-                                                if !ontology
-                                                        ontology = Ontology.create(:name => terms_list[material_type][0], :uri => terms_list[material_type][2], :prefix => terms_list[material_type][3])
-                                                        puts "#NEW ONTOLOGY #{ontology.prefix} added"
-                                                end
-                                                ontology_id = ontology.id
-                                                term_accession = terms_list[material_type][1]
-                                                material = OntologyTerm.create(:name => material_type, :ancestry => '26', :ontology_id => ontology_id, :accession => term_accession)
-                                                puts "#MATERIAL TYPE #{material.name} added under #{material.parent.name}"
-                                        elsif
-                                                puts "WARNING: missing #{material_type} in ontology terms"
-                                                break
-                                        end
-                                end
+                        if terms_list.has_key?(material_type)
+						    ontology = Ontology.find_by_name(terms_list[material_type][0])
+                            puts "#ONTOLOGY #{ontology.name} found in the db" if ontology
+                            if !ontology
+                                ontology = Ontology.create(:name => terms_list[material_type][0], :uri => terms_list[material_type][2], :prefix => terms_list[material_type][3])
+                                puts "#NEW ONTOLOGY #{ontology.prefix} added"
+                            end
+                            ontology_id = ontology.id
+                            term_accession = terms_list[material_type][1]
+                            material = OntologyTerm.create(:name => material_type, :ancestry => '26', :ontology_id => ontology_id, :accession => term_accession)
+                            puts "#MATERIAL TYPE #{material.name} added under #{material.parent.name}"
+                        elsif
+                            puts "WARNING: missing #{material_type} in ontology terms"
+                            break
+                        end
+                end
 
 				primary = OntologyTerm.find_by_name(primary_cell)
 				puts "#PRIMARY CELL #{primary.name} found in the db" if primary
