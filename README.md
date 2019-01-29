@@ -49,6 +49,7 @@ Make sure Apache, Postgres, Redis-server and Rails-server are running.
 #service postgresql-9.3 start
 service redis_6379 start
 rails server --port 3001 -d
+bundle exec sidekiq -q high,5 default -d -L log/sidekiq.log
 ```
 
 ### Environment configuration
