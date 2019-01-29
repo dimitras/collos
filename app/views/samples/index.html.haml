@@ -3,6 +3,11 @@
 =link_to "Create a Sample", new_sample_path, class: 'btn btn-primary btn-large'
 %br
 %br
+
+//=form_tag samples_studies_path, :method => :get do
+//=select_tag 'identifier', options_for_select(Study.all.collect(&:identifier), onchange: "$('#filter').submit();")
+//=submit_tag 'Filter'
+
 -if params[:show_all]
     =link_to("Hide Retired Samples", samples_url())
 -else

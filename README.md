@@ -44,8 +44,9 @@ bundle
 Make sure Apache, Postgres, Redis-server and Rails-server are running.
 
 ```
-service httpd start
-service postgresql-9.3 start
+#Apache and postgresql are set to (re)start automatically (in our server).
+#service httpd start
+#service postgresql-9.3 start
 service redis_6379 start
 rails server --port 3001 -d
 ```

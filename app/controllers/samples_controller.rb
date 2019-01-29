@@ -3,6 +3,8 @@ class SamplesController < ApplicationController
 
     def index
         @samples = @samples.includes([:barcode, :container ])
+        #if (params[:identifier] && Study.all.collect(&:identifier).include?(params[:study][:identifier]))
+        #    @samples = Sample.send(params[:study][:identifier].downcase)
         if params[:show_all]
             @samples = @samples.where(retired: true)
 		else
