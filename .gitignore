@@ -68,12 +68,15 @@ rerun.txt
 pickle-email-*.html
 config/database.ymlscratch.txt
 .rake_t_cache
+redis_tmp/*
 
 # Ignore application configuration
 /config/application.yml
 
 # Personal files
 /workspace/
+problems.log
+redis_dump_backup.rdb
 
 # data
 /app/assets/images/qr_codes/
